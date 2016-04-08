@@ -1,0 +1,40 @@
+@import "Reset";
+
+.navarea_tabs {
+  width: 70px;
+  height: 100%;
+  position: absolute;
+  top: -1px;
+  background-color: #CCD1D6;
+
+  button {
+    height: 50px;
+    width: 50px;
+    background-color: transparent;
+    cursor: pointer;
+    border: none;
+
+    margin-left: -6px; /* some kind of padding issue */
+    .switch_nav {
+      background: #0071AA;
+      fill: #9BDDFF;
+      //padding: 10px;
+    }
+
+    svg {
+      fill: rgb(229, 234, 239);
+      height: 50px;
+      width: 50px;
+      padding: 10px;
+    }
+
+    svg:hover {
+      fill: #fff;
+    }
+  }
+  svg:active, .active {
+    svg * {
+      fill: #008CD2;
+    }
+  }
+}

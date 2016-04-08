@@ -1,0 +1,21 @@
+h1, h2, h3, h4, h5, h6, p, span, div {
+  font-family: OpenSans,tahoma,verdana,sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  z-index: 0;
+  text-align: left;
+  color: #33383d;
+  cursor: default;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+h1 {
+  margin-left: 0;
+  color: #b2b7bc;
+  font-size: 2em;
+  clear: right;
+  text-transform: uppercase;
+}

@@ -1,0 +1,48 @@
+.navarea_panel, .navarea_header, .panel_section {
+  width: 380px;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.navarea_panel {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 70px;
+  width: 400px;
+  height: 100%;
+  background-color: #e5eaef;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+
+.navarea_header {
+  height: 50px;
+  background-color: #008cd2;
+  padding: 10px;
+
+  .panelsupertitle {
+    color: #9bddff;
+    font-weight: 400;
+    font-size: 1.3em;
+    margin: 0;
+    width: 390px;
+    height: 24px;
+    overflow: hidden;
+    position: relative;
+    top: -2px;
+    text-transform: uppercase;
+  }
+
+  .paneltitle {
+    color: #fafcff;
+    font-weight: 400;
+    line-height: .78em;
+    text-transform: uppercase;
+  }
+
+  .panel_section {
+    padding: 10px;
+  }
+}
