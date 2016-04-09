@@ -9,8 +9,8 @@ export default React.createClass({
         <TabsNav/>
         <div className="navarea_panel">
           <div className="navarea_header">
-            <h1 className="panelsupertitle">Glyph Edit</h1>
-            <h1 className="paneltitle">{this.props.panelName}</h1>
+            <h1 className="panelsupertitle">{this.props.title}</h1>
+            <h1 className="paneltitle">{this.props.name}</h1>
           </div>
 
           <div className="panel_section" id="glyphchooser">

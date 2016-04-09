@@ -8,12 +8,12 @@ import "./../../../style/default/EditTabsNav";
 export default React.createClass({
   getInitialState: function() {
     var _this = this;
-    return {icons: Icons};
+    return {icons: Icons.panelTabs.tabsNav};
   },  
   getTabs() {
     var tabs = [],
         _this = this;
-    Object.keys(_this.state.icons.panel_tabs).map(function (key, value) {
+    Object.keys(_this.state.icons).map(function (key, value) {
       tabs.push(<NavLink key={value} activeClassName="active_tab" to={config.routes.project_editor_tab(key)}><Tab iconName={key}/></NavLink>)
     });
 

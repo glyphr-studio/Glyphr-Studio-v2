@@ -22,7 +22,7 @@ export default React.createClass({
   },
   render() {
     return (
-      <Panel panelName="Chooser">
+      <Panel name="Chooser" title="glyph edit">
         {/* return _this.state.glyphs.map((glyph, i) => { */}
           {/*  return <Glyph key={i} character={glyph.character} characterName={glyph.characterName}/> */}
         {/* }) */}
