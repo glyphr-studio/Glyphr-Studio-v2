@@ -43,6 +43,8 @@ export default React.createClass({
     // note: example depicts a non-persistent field
     // for persistent fields we need to utilize Storage
     setTimeout(() => {
+      if(! this.isMounted()) return;
+
       var fieldSet = this.state.fields;
       fieldSet.push({
         title: 'on demand field',

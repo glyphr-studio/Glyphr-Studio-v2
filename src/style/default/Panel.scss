@@ -22,6 +22,15 @@
   background-color: #008cd2;
   padding: 10px;
 
+  .settings a {
+    color: #9bddff;
+    float: right;
+    top: -25px;
+    position: relative;
+    left: -20px;
+    text-decoration: none;
+  }
+
   .panelsupertitle {
     color: #9bddff;
     font-weight: 400;
