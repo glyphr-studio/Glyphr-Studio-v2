@@ -41,8 +41,8 @@
     line-height: .78em;
     text-transform: uppercase;
   }
+}
 
-  .panel_section {
-    padding: 10px;
-  }
+.navarea_panel .panel-section:nth-child(n+2){
+    margin-top: 30px;
 }

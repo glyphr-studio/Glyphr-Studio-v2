@@ -1,10 +1,11 @@
 import React from "react";
+import "./../../../style/default/PanelSection";
 
 export default React.createClass({
   render() {
     return (
-      <div className="panel_section">
-        <h1 className="paneltitle">{this.props.title}</h1>
+      <div className="panel-section">
+        <h1 className="panel-title">{this.props.title}</h1>
         <div className="actionsarea">
           {this.props.children}
         </div>

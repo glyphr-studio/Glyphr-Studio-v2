@@ -1,11 +1,15 @@
 import React from "react";
 import Panel from "./../Panel";
 import PanelSection from "./../PanelSection";
+import PanelField from "./../PanelField";
 import {Icons} from "./../../../Icons";
 import PanelButton from "./../PanelButton";
 import Storage from "./../../../../lib/storage/Storage";
 import {config} from "./../../../../config/config";
 import {Navigation} from "react-router";
+
+// todo: in respect to the previous version buttons are added on demand
+// once the feature they represent is available (e.g.: under the available selection).
 
 export default React.createClass({
   contextTypes: {
@@ -13,8 +17,45 @@ export default React.createClass({
   },
   mixins:       [Navigation],
   getInitialState() {
-    var state = Object.assign({}, this.getGlyph(), {icons: Icons.attributesPanel});
-    return  state;
+    return Object.assign({},
+      this.getGlyph(),
+      {icons: Icons.attributesPanel},
+      {
+        fields: [
+          {
+            title: 'glyph width',
+            label: 'auto calculate'
+          },
+          {
+            title: 'left side bearing',
+            label: 'use default'
+          },
+          {
+            title: 'right side bearing',
+            label: 'use default'
+          }
+        ]
+      });
+  },
+  playDemos() {
+
+    // Creating an on demand field
+    // note: example depicts a non-persistent field
+    // for persistent fields we need to utilize Storage
+    setTimeout(() => {
+      var fieldSet = this.state.fields;
+      fieldSet.push({
+        title: 'on demand field',
+        label: 'use default'
+      });
+
+      this.setState({fields: fieldSet});
+
+      console.log(this.state.fields);
+    }, 3000);
+  },
+  componentDidMount() {
+    this.playDemos();
   },
   componentWillMount() {
     if (!this.state.character) this.handleNoSelectedGlyphCase();
@@ -42,56 +83,41 @@ export default React.createClass({
   handleSelectedGlyphCase() {
     return this.context.router.push(config.routes.project_editor_tab('attribute') + '/' + this.getGlyph().character);
   },
-  getAttributesPanelIcons() {
+  getIcons() {
     var _this = this;
-    return Object.keys(this.state.icons).map(function (key, value) {
-        return <PanelSection key={key}>
-          <PanelButton title={key}>
-            {_this.state.icons[key]}
-          </PanelButton>
-        </PanelSection>
-      })
+    return Object.keys(this.state.icons).map((namespace, i) => {
+      return (
+        <PanelField key={i} title={namespace}>
 
+          {Object.keys(_this.state.icons[namespace]).map((key, value) => {
+            return (
+              <PanelButton title={key} key={value}>
+                {_this.state.icons[namespace][key]}
+              </PanelButton>)
+
+          })}
+        </PanelField>)
+    });
+  },
+  getInputFields() {
+    return this.state.fields.map((field, i) => {
+      return (<PanelField title={field.title} key={i}>
+        <label htmlFor={field.title}>{field.label}</label>
+        <input type="text" value="10" readOnly disabled/>
+        <input type="checkbox" id={field.title}/>
+      </PanelField>);
+    });
   },
   render() {
     return (
       <Panel name="attributes" title={'glyph edit >> ' + this.state.characterName}>
-        <div className="panel_section">
-          <table className="detail">
-            <tbody>
-            <tr>
-              <td colSpan={2} className="detailtitle"><h3> glyph width </h3></td>
-            </tr>
-            <tr>
-              <td> auto calculate <span className="unit">(em units)</span></td>
-              <td>
-                <input type="checkbox" defaultChecked id="isautowide"/>
-                <input type="number" disabled="disabled" defaultValue={0}/></td>
-            </tr>
-            <tr>
-              <td colSpan={2} className="detailtitle"><h3> left side bearing </h3></td>
-            </tr>
-            <tr>
-              <td> use default <span className="unit">(em units)</span></td>
-              <td>
-                <input type="checkbox" defaultChecked id="leftsidebearing"/>
-                <input type="number" disabled="disabled" defaultValue={20}/></td>
-            </tr>
-            <tr>
-              <td colSpan={2} className="detailtitle"><h3> right side bearing </h3></td>
-            </tr>
-            <tr>
-              <td> use default <span className="unit">(em units)</span></td>
-              <td>
-                <input type="checkbox" defaultChecked id="rightsidebearing"/>
-                <input type="number" disabled="disabled" defaultValue={20}/></td>
-            </tr>
-            </tbody>
-          </table>
-          <PanelSection title="test">
-            {this.getAttributesPanelIcons()}
-          </PanelSection>
-        </div>
+        <PanelSection title="">
+          {this.getInputFields()}
+        </PanelSection>
+
+        <PanelSection title="Action">
+          {this.getIcons()}
+        </PanelSection>
       </Panel>
     )
   }
