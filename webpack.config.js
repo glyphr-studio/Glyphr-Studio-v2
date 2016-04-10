@@ -27,9 +27,17 @@ module.exports = {
           path.join(__dirname, 'src/style'),
         ],
       },
+      {
+        test: /\.json/,
+        loaders: ['json'],
+        include: [
+          path.join(__dirname, 'src'),
+        ],
+      },
+
     ]
   },
   resolve: {
-    extensions: ['','.js', '.jsx', '.scss']
+    extensions: ['','.js', '.jsx', '.scss', '.json']
   }
 };

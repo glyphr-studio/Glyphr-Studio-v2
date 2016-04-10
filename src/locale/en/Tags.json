@@ -1,0 +1,14 @@
+{
+  "icon": {
+    "undo": "Undo",
+    "paste": "Paste",
+    "getShape": "Get Shape",
+    "addShape": "Add Shape",
+    "addComponent": "Add Component",
+    "flipVertical": "Flip Vertical",
+    "flipHorizontal": "Flip Horizontal"
+  },
+  "letterType": {
+    ""
+  }
+}
