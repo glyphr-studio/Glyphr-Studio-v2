@@ -7,6 +7,7 @@ import PanelButton from "./../PanelButton";
 import Storage from "./../../../../lib/storage/Storage";
 import {config} from "./../../../../config/config";
 import {Navigation} from "react-router";
+import locale from "./../../../../locale/Locale";
 
 // todo: in respect to the previous version buttons are added on demand
 // once the feature they represent is available (e.g.: under the available selection).
@@ -60,7 +61,7 @@ export default React.createClass({
     this.playDemos();
   },
   componentWillMount() {
-    if (!this.state.character) this.handleNoSelectedGlyphCase();
+    if (typeof this.state.character === "undefined") this.handleNoSelectedGlyphCase();
     else this.handleSelectedGlyphCase();
   },
   getGlyph() {
@@ -93,7 +94,7 @@ export default React.createClass({
 
           {Object.keys(_this.state.icons[namespace]).map((key, value) => {
             return (
-              <PanelButton title={key} key={value}>
+              <PanelButton title={[locale.get(`icon.${key}`), locale.get(`shapeAction.${key}`)].join("\n")} key={value}>
                 {_this.state.icons[namespace][key]}
               </PanelButton>)
 

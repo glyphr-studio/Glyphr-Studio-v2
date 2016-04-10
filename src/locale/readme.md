@@ -1,0 +1,1 @@
+note: icons use same keys as in Icons.jsx
