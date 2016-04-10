@@ -30,7 +30,6 @@ class Storage {
       // remove a specific handler
       Object.keys(this.subs).forEach((key, i) => {
         var index = this.subs[key].indexOf(identifier);
-        console.log(index, key, identifier);
         if(index > -1) delete this.subs[key][index];
       })
     } else {
