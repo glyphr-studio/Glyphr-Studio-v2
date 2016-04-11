@@ -5,6 +5,10 @@ import TabsNav from "./../PanelTabs/TabsNav";
 import "./../../../style/default/Panel.scss";
 
 export default React.createClass({
+  propTypes: {
+    title: React.PropTypes.string,
+    name: React.PropTypes.string
+  },
   render() {
     return (
       <div>

@@ -4,7 +4,8 @@ import PanelSection from "./../PanelSection";
 import PanelField from "./../PanelField";
 import {Icons} from "./../../../Icons";
 import PanelButton from "./../PanelButton";
-import Storage from "./../../../../lib/storage/Storage";
+import ChooserStorage from "./../GlyphsPanel/ChooserStorage";
+import Glyph from "./../../../../lib/glyph/Glyph";
 import {config} from "./../../../../config/config";
 import {Navigation} from "react-router";
 import locale from "./../../../../locale/Locale";
@@ -19,7 +20,7 @@ export default React.createClass({
   mixins:       [Navigation],
   getInitialState() {
     return Object.assign({},
-      this.getGlyph(),
+      this.getChooserGlyph() && this.getChooserGlyph().getSkeleton() || {},
       {icons: Icons.attributesPanel},
       {
         fields: [
@@ -39,12 +40,11 @@ export default React.createClass({
       });
   },
   playDemos() {
-
     // Creating an on demand field
     // note: example depicts a non-persistent field
     // for persistent fields we need to utilize Storage
     setTimeout(() => {
-      if(! this.isMounted()) return;
+      if (!this.isMounted()) return;
 
       var fieldSet = this.state.fields;
       fieldSet.push({
@@ -61,22 +61,11 @@ export default React.createClass({
     this.playDemos();
   },
   componentWillMount() {
-    if (typeof this.state.character === "undefined") this.handleNoSelectedGlyphCase();
+    if (typeof this.state.char === "undefined") this.handleNoSelectedGlyphCase();
     else this.handleSelectedGlyphCase();
   },
-  getGlyph() {
-    var clickedGlyph = this.getChooserClickedGlyph();
-    clickedGlyph && this.setLastGlyph(clickedGlyph);
-    return clickedGlyph || this.getLastGlyph();
-  },
-  getChooserClickedGlyph() {
-    return Storage.get('glyph.clicked');
-  },
-  getLastGlyph() {
-    return Storage.get('attributesPanel.lastGlyph');
-  },
-  setLastGlyph(value) {
-    Storage.native().set('attributesPanel.lastGlyph', value);
+  getChooserGlyph() {
+    return ChooserStorage.getLatestGlyph();
   },
   handleNoSelectedGlyphCase() {
     // Redirect to the chooser
@@ -84,7 +73,7 @@ export default React.createClass({
     return this.context.router.push(config.routes.project_editor_tab('chooser'));
   },
   handleSelectedGlyphCase() {
-    return this.context.router.push(config.routes.project_editor_tab('attribute') + '/' + this.getGlyph().character);
+    return this.context.router.push(config.routes.project_editor_tab('attribute') + '/' + this.getChooserGlyph().char());
   },
   getIcons() {
     var _this = this;
@@ -113,7 +102,7 @@ export default React.createClass({
   },
   render() {
     return (
-      <Panel name="attributes" title={'glyph edit >> ' + this.state.characterName}>
+      <Panel name="attributes" title={'glyph edit >> ' + this.state.charName}>
         <PanelSection title="">
           {this.getInputFields()}
         </PanelSection>

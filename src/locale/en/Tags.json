@@ -25,5 +25,8 @@
     "getShape": "Choose another Glyph, and copy all the shapes from that glyph to this one",
     "flipVertical": "Reflects the glyph vertically",
     "flipHorizontal": "Reflects the glyph horizontally"
+  },
+  "layersPanel": {
+    "noShapesExist": "No shapes exist yet.  You can create one with the New Shape tools on the canvas, or by pressing \"add new shape\" below."
   }
 }

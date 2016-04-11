@@ -4,6 +4,7 @@ import {config} from "../config/config";
 import ProjectEditor from "./Editor/ProjectEditor";
 import GlyphsPanel from "./Editor/Panels/GlyphsPanel/GlyphsChoicePanel";
 import AttributesPanel from "./Editor/Panels/AttributesPanel/AttributesPanel";
+import LayersPanel from "./Editor/Panels/LayersPanel/LayersPanel";
 import Panel from "./Editor/Panels/Panel";
 import Index from "./Index";
 
@@ -17,7 +18,9 @@ export default React.createClass({
           <Route path="attribute" component={AttributesPanel}>
             <Route path=":sign" component={AttributesPanel}/>
           </Route>
-          <Route path="layer" component={Panel}/>
+          <Route path="layer" component={LayersPanel}>
+            <Route></Route>
+          </Route>
         </Route>
       </Router>
     );

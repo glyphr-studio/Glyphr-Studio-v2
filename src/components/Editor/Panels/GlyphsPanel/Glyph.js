@@ -3,14 +3,13 @@ import Storage from "./../../../../lib/storage/Storage";
 import "./../../../../style/default/Glyph";
 import {config} from "./../../../../config/config";
 import {NavLink} from "./../../../Navigation";
-
+import {Glyph} from "./../../../../lib/glyph/Glyph";
+import MyStorage from "./ChooserStorage";
 
 export default React.createClass({
   registerWithStorage() {
-    Storage.once('glyph.clicked', {
-      characterName: this.props.characterName,
-      character: this.props.character,
-    })
+    var glyph = new Glyph(this.props.character);
+    MyStorage.set(glyph);
   },
   render() {
     return (

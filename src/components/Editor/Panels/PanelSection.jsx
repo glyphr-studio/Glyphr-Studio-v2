@@ -2,6 +2,9 @@ import React from "react";
 import "./../../../style/default/PanelSection";
 
 export default React.createClass({
+  propTypes: {
+    title: React.PropTypes.string
+  },
   render() {
     return (
       <div className="panel-section">

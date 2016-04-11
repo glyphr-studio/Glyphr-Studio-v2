@@ -1,26 +1,26 @@
 import store from "store2";
 
 class Storage {
-  toDestroy = [];
-  subs = {};
-  store = store;
+  _toDestroy = [];
+  _subs = {};
+  _store = store;
 
   once(key: string, value) {
-    this.store.set(key, value);
-    this.toDestroy.push(key);
+    this._store.set(key, value);
+    this._toDestroy.push(key);
   }
 
   get(key) {
-    var value = this.store.get(key);
-    if(this.toDestroy.includes(key)) this.store.remove(key);
+    var value = this._store.get(key);
+    if(this._toDestroy.includes(key)) this._store.remove(key);
     return value;
   }
 
 
   subscribe(key, handler, context, data) {
-    if(! this.subs[key]) this.subs[key] = [];
+    if(! this._subs[key]) this._subs[key] = [];
     var handler = handler.bind(context || this, data);
-    this.subs[key].push(handler);
+    this._subs[key].push(handler);
 
     return handler;
   }
@@ -28,27 +28,27 @@ class Storage {
   unsubscribe(identifier) {
     if(typeof identifier === "function") {
       // remove a specific handler
-      Object.keys(this.subs).forEach((key, i) => {
-        var index = this.subs[key].indexOf(identifier);
-        if(index > -1) delete this.subs[key][index];
+      Object.keys(this._subs).forEach((key, i) => {
+        var index = this._subs[key].indexOf(identifier);
+        if(index > -1) delete this._subs[key][index];
       })
     } else {
       // removes all handlers for a specific key
-      delete this.subs[identifier];
+      delete this._subs[identifier];
     }
   }
 
-  set(key, value, overwrite=false) {
-    var oldValue = this.store.get(key);
-    this.store.set(key, value, overwrite);
+  set(key, value, overwrite=true) {
+    var oldValue = this._store.get(key);
+    this._store.set(key, value, overwrite);
 
-    this.subs[key].forEach((handler) => {
+    this._subs[key] && this._subs[key].forEach((handler) => {
       handler(key, value, oldValue);
     })
   }
 
   native() {
-    return this.store;
+    return this._store;
   }
 }
 
