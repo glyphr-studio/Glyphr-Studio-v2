@@ -1,0 +1,82 @@
+.tooltipster-base {
+  box-shadow: 0 0 10px 1px #CCD1D6;
+  background: #fff;
+  border-radius: 0;
+  border: none;
+  margin-right: 10px;
+}
+
+span.tooltipster-arrow-border {
+  border-color: #fff !important;
+  margin-left: -1px !important;
+}
+
+.tooltipster-base .tooltipster-content span {
+  font-size: 12px;
+  color: #888;
+}
+
+.tooltipster-base .tooltipster-content .time {
+  display: block;
+  font-family: Consolas;
+  font-size: 10px !important;
+  word-spacing: -2px;
+  text-align: right;
+}
+
+.tooltipster-base .tooltipster-content i {
+  margin-right: 6px;
+}
+
+.tooltipster-base .tooltipster-content i.info {
+  color: #008CD2;
+  padding: 0 0 0 5px;
+  border-radius: 50%;
+  width: 12px;
+  height: 17px;
+  border: 2px solid #9BDDFF;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.tooltipster-base .tooltipster-content i.warning {
+  color: #D26C00;
+  padding: 0 0 0 2px;
+  border-radius: 50%;
+  width: 15px;
+  height: 17px;
+  border: 2px solid rgba(236, 115, 15, 0.8);
+  font-weight: bold;
+  display: inline-block;
+}
+
+.tooltipster-base .tooltipster-content i.danger {
+  color: #D20000;
+  padding: 0 0 0 5px;
+  border-radius: 50%;
+  width: 12px;
+  height: 17px;
+  border: 2px solid rgba(228, 12, 12, 0.71);
+  font-weight: bold;
+  display: inline-block;
+}
+
+.tooltipster-base .tooltipster-content i.loading {
+  color: #008CD2;
+  padding: 0 0 0 0px;
+  border-radius: 50%;
+  width: 17px;
+  height: 17px;
+  border: 1px solid #9BDDFF;
+  margin-right: 7px;
+  font-weight: bold;
+  display: inline-block;
+  animation: 1.3s rotate infinite;
+}
+
+@keyframes rotate {
+  100% {
+    transform: rotate(360deg);
+    border-width: 2px;
+  }
+}

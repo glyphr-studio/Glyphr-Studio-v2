@@ -1,0 +1,21 @@
+{
+  "name": "glyph-studio-2",
+  "description": "",
+  "main": "index.js",
+  "authors": [
+    "Mateusz Zawartka <zuires@gmail.com>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/glyphr-studio/Glyphr-Studio-2",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "tooltipster": "^3.3.0"
+  }
+}

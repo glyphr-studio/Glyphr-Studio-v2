@@ -52,4 +52,5 @@ class Storage {
   }
 }
 
+window.appStorage = new Storage();
 export default new Storage();

@@ -2,7 +2,7 @@ import React from "react";
 import Panel from "./../Panel";
 import PanelSection from "./../PanelSection";
 import PanelField from "./../PanelField";
-import PanelTextInput from "./../PanelTextInput";
+import PanelTextInput from "./../PanelTextInput/PanelTextInput";
 import {Icons} from "./../../../Icons";
 import PanelButton from "./../PanelButton";
 import ChooserStorage from "./../GlyphsPanel/ChooserStorage";
@@ -95,7 +95,7 @@ export default React.createClass({
   getInputFields() {
     return this.state.fields.map((field, i) => {
       return (<PanelField title={field.title} key={i}>
-        <PanelTextInput id={field.title} label={field.label} type="number" step="1"/>
+        <PanelTextInput id={field.title} label={field.label} type="number" step="1" maxLength="4"/>
       </PanelField>);
     });
   },

@@ -11,6 +11,10 @@
       display: inline-block;
     }
 
+    input[disabled] {
+      cursor: not-allowed;
+    }
+
     svg {
       cursor: pointer;
     }

@@ -24,11 +24,15 @@ module.exports = {
         test: /\.scss$/,
         loaders: ['style', 'css', 'sass'],
         include: [
-          path.join(__dirname, 'src/style'),
+          path.join(__dirname, 'src'),
         ],
       },
       {
-        test: /\.json/,
+        test: /\.css$/,
+        loaders: ['style', 'css']
+      },
+      {
+        test: /\.json$/,
         loaders: ['json'],
         include: [
           path.join(__dirname, 'src'),
@@ -38,6 +42,6 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: ['','.js', '.jsx', '.scss', '.json']
+    extensions: ['','.js', '.jsx', '.scss', '.json', '.css']
   }
 };
