@@ -1,0 +1,30 @@
+.access-input.group {
+  overflow: hidden;
+
+  .input {
+    position: relative;
+    display: inline-block;
+    float: right;
+
+    input {
+      height: 26px;
+      display: inline-block;
+    }
+
+    svg {
+      cursor: pointer;
+    }
+
+    i svg {
+      background: #fff;
+    }
+
+    i.disabled svg {
+      background: #ccd1d6;
+    }
+
+    i.disabled svg * {
+      fill: rgb(0, 170, 255);
+    }
+  }
+}

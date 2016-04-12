@@ -129,6 +129,12 @@ export var Icons = {
                                </svg>
 
            }
+         },
+         input:           {
+           access:
+             <svg x="0px" y="0px" width="26px" height="26px" viewBox="0 0 26 26" enable-background="new 0 0 26 26" id="ssylock" className="lockui">
+               <path fill="rgb(229,234,239)" d="M17,12V8h-1V7h-1V6h-4v1h-1v1H9v4H8v8h10v-8H17z M15,12h-4V9h1V8h2v1h1V12z" />
+             </svg>
          }
        }
 
