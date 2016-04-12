@@ -38,12 +38,12 @@ export default React.createClass({
   handleMaxLength() {
     var $input = $(this.refs.input),
         // this.props.maxLength -1 since we're listening on keypress
-        keypressMaxLength = this.props.maxLength - 1;
+        maxLength = this.props.maxLength;
 
     tooltip.get(this.refs.input).tooltipster('destroy');
-    $input.val().length > keypressMaxLength &&
-    tooltip.danger(this.refs.input, `Data too long, max length is ${this.props.maxLength}!`, 2000) &&
-    $input.val($input.val().slice(0, keypressMaxLength));
+    $input.val().length > maxLength &&
+    tooltip.danger(this.refs.input, `Data too long, max length is ${maxLength}!`, 2000) &&
+    $input.val($input.val().slice(0, maxLength));
   },
   getLock() {
     // disableLock property turns off locking the input
@@ -55,7 +55,7 @@ export default React.createClass({
         <label htmlFor={this.props.id}>{this.props.label}</label>
         <div className="access-input input">
           {this.getLock()}
-          <input onKeyPress={this.handleMaxLength} type={this.props.type} step={this.props.step} id={this.props.id}
+          <input onChange={this.handleMaxLength} type={this.props.type} step={this.props.step} id={this.props.id}
                  placeholder={this.props.placeholder} defaultValue={this.props.value}
                  disabled={this.props.disabled} ref="input"/>
         </div>
