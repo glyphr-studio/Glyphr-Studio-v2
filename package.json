@@ -1,14 +1,18 @@
 {
   "name": "glyphr-studio-2-rclient",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.0.1",
+  "description": "A free, web-based typeface designer.",
+  "repository": {
+      "type": "git",
+      "url": "https://github.com/glyphr-studio/Glyphr-Studio-2.git"
+  },
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack-dev-server --inline --content-base ."
   },
   "author": "",
-  "license": "ISC",
+  "license": "GPL 3.0",
   "devDependencies": {
     "babel-cli": "^6.6.5",
     "babel-loader": "^6.2.4",
