@@ -40,6 +40,7 @@ export default React.createClass({
         // this.props.maxLength -1 since we're listening on keypress
         maxLength = this.props.maxLength;
 
+    // note: will allow only x > -999 for maxlength 4 etc.
     tooltip.get(this.refs.input).tooltipster('destroy');
     $input.val().length > maxLength &&
     tooltip.danger(this.refs.input, `Data too long, max length is ${maxLength}!`, 2000) &&
