@@ -30,7 +30,7 @@ export default React.createClass({
     $input.attr('disabled', ! inputIsDisabled);
 
     tooltip.get(this.refs.input).tooltipster('destroy');
-    var tlp = tooltip.info(this.refs.input, 'The input is now locked, to unlock it click at the lock icon.');
+    var tlp = tooltip.info(this.refs.input, 'I am locked now, unlock me by again pressing on the lock.');
 
     if(inputIsDisabled) tlp.tooltipster('hide');
 
@@ -43,12 +43,12 @@ export default React.createClass({
     // note: will allow only x > -999 for maxlength 4 etc.
     tooltip.get(this.refs.input).tooltipster('destroy');
     $input.val().length > maxLength &&
-    tooltip.danger(this.refs.input, `Data too long, max length is ${maxLength}!`, 2000) &&
+    tooltip.danger(this.refs.input, `Too long, sir! I only take up to ${maxLength} characters.`, 2600) &&
     $input.val($input.val().slice(0, maxLength));
   },
   getLock() {
     // disableLock property turns off locking the input
-    if (!this.props.disableLock) return <i onClick={this.toggleInputAccess} ref="lock">{Icons.input.access}</i>;
+    if (!this.props.disableLock) return <i title="Lock" onClick={this.toggleInputAccess} ref="lock">{Icons.input.access}</i>;
   },
   render() {
     return (
