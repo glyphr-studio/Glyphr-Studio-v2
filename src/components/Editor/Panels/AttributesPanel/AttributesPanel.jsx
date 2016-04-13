@@ -102,7 +102,9 @@ export default React.createClass({
   getInputFields() {
     return this.state.fields.map((field, i) => {
       return (<PanelField title={field.title} key={i}>
-        <PanelInput locationPathname={this.props.location.pathname} id={field.title} label={field.label} type="number" step="1" maxLength="4"/>
+        <PanelInput locationPathname={this.props.location.pathname} id={field.title} label={field.label}
+                    disableLock={false} disableCheck={false} isDefaultChecked={true}
+                    type="number" step="1" maxLength="4"/>
       </PanelField>);
     });
   },

@@ -19,31 +19,54 @@ export default React.createClass({
   },
   getInitialState() {
     return {
-      icon: this.getLock()
+      lock: this.getLockIcon(),
+      check: this.getCheckIcon()
     }
   },
   componentDidMount() {
     // sync lock icon with the input state on mount
-    if (typeof this.props.disabled !== "undefined") this.toggleStyle();
+    this.toggleStyle();
   },
   toggleStyle() {
-    $([this.refs.lock, this.refs.input]).toggleClass('disabled');
+    var input = this.getInput();
+    this.refs.input.hasAttribute('disabled') &&
+      $([this.refs.lock, this.refs.input]).removeClass('disabled').addClass('disabled') ||
+      $([this.refs.lock, this.refs.input]).removeClass('disabled');
+
+      ! $(this.refs.check).hasClass('disabled') &&
+      $(this.refs.check).removeClass('disabled').addClass('active') &&
+      $([this.refs.lock || {}, this.refs.input]).show();
+
+    $(this.refs.check).hasClass('disabled') &&
+      $(this.refs.check).removeClass('active').addClass('disabled') &&
+      $([this.refs.lock || {}, this.refs.input]).hide();
+  },
+  handleLockClickEvent() {
+    this.toggleInputAccess();
+    this.perserveInputValue();
+  },
+  handleCheckClickEvent() {
+    $(this.refs.check).toggleClass('disabled');
+    this.toggleStyle();
+    this.perserveInputValue();
   },
   toggleInputAccess() {
-    this.toggleStyle();
     var $input = $(this.refs.input),
         inputIsDisabled = $input.attr('disabled');
     $input.attr('disabled', ! inputIsDisabled);
 
+    this.toggleStyle();
+
     tooltip.get(this.refs.input).tooltipster('destroy');
-    var tlp = tooltip.info(this.refs.input, 'I am locked now, unlock me by again pressing on the lock.');
+    var tlp = tooltip.info(this.refs.input,
+      `I am locked now, unlock me by again pressing on the lock.`);
 
     if(inputIsDisabled) tlp.tooltipster('hide');
 
   },
-  handleChangeEvent(e) {
-    this.handleMaxLength(e);
-    this.perserveInputValue(e);
+  handleChangeEvent() {
+    this.handleMaxLength();
+    this.perserveInputValue();
   },
   handleMaxLength() {
     var $input = $(this.refs.input),
@@ -56,25 +79,38 @@ export default React.createClass({
     tooltip.danger(this.refs.input, `Too long, sir! I only take up to ${maxLength} characters.`, 2600) &&
     $input.val($input.val().slice(0, maxLength));
   },
-  getLock() {
+  getLockIcon() {
     // disableLock property turns off locking the input
-    if (!this.props.disableLock) return <i title="Lock" onClick={this.toggleInputAccess} ref="lock">{Icons.input.access}</i>;
+    if (! this.props.disableLock) return <i title="Lock" onClick={this.handleLockClickEvent} ref="lock">{Icons.input.access}</i>;
   },
-  perserveInputValue(e) {
-    MyStorage.setInput(this.props.locationPathname, this.props.id, e.target.value);
+  getCheckIcon() {
+    // disableLock property turns off locking the input
+    if (! this.props.disableCheck) return (
+      <i title="Check" className={this.getInput().checkClass || (! this.props.isDefaultChecked && "disabled")}
+         onClick={this.handleCheckClickEvent} ref="check">{Icons.input.check}</i>
+    );
+  },
+  perserveInputValue() {
+    var refs = this.refs;
+    MyStorage.setInput(this.props.locationPathname, this.props.id, {
+      value: refs.input.value,
+      disabled: refs.input.hasAttribute('disabled'),
+      checkClass: refs.check && refs.check.getAttribute('class')
+    });
   },
   getInput() {
-    return MyStorage.getInput(this.props.locationPathname, this.props.id);
+    return MyStorage.getInput(this.props.locationPathname, this.props.id) || {};
   },
   render() {
     return (
       <div className="access-input group" ref="root">
         <label htmlFor={this.props.id}>{this.props.label}</label>
         <div className="access-input input">
-          {this.state.icon}
+          {this.state.lock}
           <input onChange={this.handleChangeEvent} type={this.props.type} step={this.props.step} id={this.props.id}
-                 placeholder={this.props.placeholder} defaultValue={this.getInput() || this.props.value}
-                 disabled={this.props.disabled} ref="input"/>
+                 placeholder={this.props.placeholder} defaultValue={this.getInput().value || this.props.value}
+                 disabled={this.getInput().disabled || this.props.disabled} ref="input"/>
+          {this.state.check}
         </div>
       </div>
     )

@@ -130,19 +130,16 @@ export var Icons = {
 
            }
          },
-         input:           {
+
+         input: {
            access:
              <svg x="0px" y="0px" width="26px" height="26px" viewBox="0 0 26 26" enable-background="new 0 0 26 26" id="ssylock" className="lockui">
-               <path fill="rgb(229,234,239)" d="M17,12V8h-1V7h-1V6h-4v1h-1v1H9v4H8v8h10v-8H17z M15,12h-4V9h1V8h2v1h1V12z" />
-             </svg>,
-           loading:
-             <svg x="0px" y="0px" width="30px" height="30px" viewBox="0 0 30 30">
-               <defs />
-               <polygon fill="rgb(0,43,65)" points="6.4,13 1,7.6 1,1 14.7,1 29,9.6 29,13"/>
-               <path fill="rgb(127,134,137)" d="M14.2,2L28,10.1V12H6.8L2,7.2V2h12 M15,0H0v8l6,6h24V9L15,0L15,0z"/>
-               <polygon fill="rgb(0,43,65)" points="1,29 1,22.4 6.4,17 29,17 29,20.4 14.7,29"/>
-               <path fill="rgb(0,170,255)" d="M28,18v1.9L14.4,28H2v-5.2L6.8,18H28 M30,16H6l-6,6v8h15l15-9V16L30,16z"/>
+               <path fill="rgb(229,234,239)" d="M17,12V8h-1V7h-1V6h-4v1h-1v1H9v4H8v8h10v-8H17z M15,12h-4V9h1V8h2v1h1V12z"/>
              </svg>
+           ,
+           check: <svg className="check" height="26px" viewBox="0 0 26 26" width="26px">
+                    <path clip-rule="evenodd" d="M21.652,3.211c-0.293-0.295-0.77-0.295-1.061,0L9.41,14.34  c-0.293,0.297-0.771,0.297-1.062,0L3.449,9.351C3.304,9.203,3.114,9.13,2.923,9.129C2.73,9.128,2.534,9.201,2.387,9.351  l-2.165,1.946C0.078,11.445,0,11.63,0,11.823c0,0.194,0.078,0.397,0.223,0.544l4.94,5.184c0.292,0.296,0.771,0.776,1.062,1.07  l2.124,2.141c0.292,0.293,0.769,0.293,1.062,0l14.366-14.34c0.293-0.294,0.293-0.777,0-1.071L21.652,3.211z" fill-rule="evenodd" />
+                  </svg>
          }
        }
 

@@ -8,11 +8,9 @@
     display: inline-block;
     float: right;
 
-    input, .lockui {
-      transition: background-color 0.05s linear;
-    }
-
     input {
+      float: none;
+      vertical-align: top;
       height: 26px;
       display: inline-block;
     }
@@ -23,15 +21,27 @@
 
     svg {
       cursor: pointer;
-    }
-
-    .loading {
-
-    }
-
-    .lockui {
       background: #fff;
     }
+
+    .active svg.check  {
+      background: transparent;
+      padding: 5px;
+      width: 18px;
+      height: 16px;
+      fill: rgb(0, 170, 255);
+    }
+
+    .disabled svg.check {
+      background: transparent;
+      padding: 5px;
+      width: 18px;
+      height: 16px;
+      & * {
+        fill: #ccd1d6;
+      }
+    }
+
 
     i.disabled svg {
       background: #ccd1d6;

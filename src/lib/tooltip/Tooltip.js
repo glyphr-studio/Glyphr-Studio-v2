@@ -3,6 +3,7 @@ import "./../../../bower_components/tooltipster/css/tooltipster";
 import "./TooltipStyle";
 import "script!./../../../bower_components/tooltipster/js/jquery.tooltipster";
 
+// todo: mute tooltips on demand
 class TooltipNotifier {
   constructor() {
   }
@@ -18,8 +19,12 @@ class TooltipNotifier {
       hideOnClick: true,
       arrowColor:  'rgb(255, 255, 255)',
       position:    'right',
-      content:     $(`<span> <i class="${type}">${iconSign}</i>${message}</span>`)
+      content:     $(this._getContent(type, iconSign, message))
     };
+  }
+
+  _getContent(type, iconSign, message) {
+    return `<span> <i class="${type}">${iconSign}</i>${message}</span>`;
   }
 
   info(el, message, timer, opt) {
