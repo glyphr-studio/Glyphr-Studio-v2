@@ -1,3 +1,5 @@
+@import './animations';
+
 .access-input.group {
   overflow: hidden;
 
@@ -5,6 +7,10 @@
     position: relative;
     display: inline-block;
     float: right;
+
+    input, .lockui {
+      transition: background-color 0.05s linear;
+    }
 
     input {
       height: 26px;
@@ -19,7 +25,11 @@
       cursor: pointer;
     }
 
-    i svg {
+    .loading {
+
+    }
+
+    .lockui {
       background: #fff;
     }
 

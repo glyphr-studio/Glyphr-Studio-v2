@@ -15,11 +15,10 @@ export default React.createClass({
         <Route path="/" component={Index}/>
         <Route path={config.routes.project_editor} component={ProjectEditor}>
           <Route path="chooser" component={GlyphsPanel}/>
-          <Route path="attribute" component={AttributesPanel}>
+          <Route path="attribute" name="attrsPanel" component={AttributesPanel}>
             <Route path=":sign" component={AttributesPanel}/>
           </Route>
           <Route path="layer" component={LayersPanel}>
-            <Route></Route>
           </Route>
         </Route>
       </Router>

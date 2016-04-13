@@ -38,7 +38,7 @@ class TooltipNotifier {
   }
 
   loading(el, message, timer, opt) {
-    var opt = Object.assign({}, this.getDefaults('%', 'loading', message, 0), {timer: 0}, opt);
+    var opt = Object.assign({}, this.getDefaults('%', 'loading', message, timer), opt);
     return $(el).tooltipster(opt).tooltipster('show');
   }
 

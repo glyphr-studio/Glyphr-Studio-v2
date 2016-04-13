@@ -10,6 +10,7 @@ import Glyph from "./../../../../lib/glyph/Glyph";
 import {config} from "./../../../../config/config";
 import {Navigation} from "react-router";
 import locale from "./../../../../locale/Locale";
+import {Router} from "react-router";
 
 // todo: in respect to the previous version buttons are added on demand
 // once the feature they represent is available (e.g.: under the available selection).
@@ -17,6 +18,12 @@ import locale from "./../../../../locale/Locale";
 export default React.createClass({
   contextTypes: {
     router: React.PropTypes.object.isRequired
+  },
+  childContextTypes: {
+    location: React.PropTypes.object.isRequired
+  },
+  getChildContext() {
+    return { location: this.props.location }
   },
   mixins:       [Navigation],
   getInitialState() {
@@ -95,7 +102,7 @@ export default React.createClass({
   getInputFields() {
     return this.state.fields.map((field, i) => {
       return (<PanelField title={field.title} key={i}>
-        <PanelInput id={field.title} label={field.label} type="number" step="1" maxLength="4"/>
+        <PanelInput locationPathname={this.props.location.pathname} id={field.title} label={field.label} type="number" step="1" maxLength="4"/>
       </PanelField>);
     });
   },

@@ -134,6 +134,14 @@ export var Icons = {
            access:
              <svg x="0px" y="0px" width="26px" height="26px" viewBox="0 0 26 26" enable-background="new 0 0 26 26" id="ssylock" className="lockui">
                <path fill="rgb(229,234,239)" d="M17,12V8h-1V7h-1V6h-4v1h-1v1H9v4H8v8h10v-8H17z M15,12h-4V9h1V8h2v1h1V12z" />
+             </svg>,
+           loading:
+             <svg x="0px" y="0px" width="30px" height="30px" viewBox="0 0 30 30">
+               <defs />
+               <polygon fill="rgb(0,43,65)" points="6.4,13 1,7.6 1,1 14.7,1 29,9.6 29,13"/>
+               <path fill="rgb(127,134,137)" d="M14.2,2L28,10.1V12H6.8L2,7.2V2h12 M15,0H0v8l6,6h24V9L15,0L15,0z"/>
+               <polygon fill="rgb(0,43,65)" points="1,29 1,22.4 6.4,17 29,17 29,20.4 14.7,29"/>
+               <path fill="rgb(0,170,255)" d="M28,18v1.9L14.4,28H2v-5.2L6.8,18H28 M30,16H6l-6,6v8h15l15-9V16L30,16z"/>
              </svg>
          }
        }

@@ -3,6 +3,7 @@ import {Icons} from "./../../../Icons";
 import "./../../../../style/default/PanelTextInput";
 import $ from "jquery";
 import {tooltip} from "./../../../../lib/tooltip/Tooltip";
+import MyStorage from "./PanelInputStorage";
 
 export default React.createClass({
   getDefaultProps() {
@@ -14,6 +15,11 @@ export default React.createClass({
       value:       "10",
       step:        "1",
       // for demonstration purposes
+    }
+  },
+  getInitialState() {
+    return {
+      icon: this.getLock()
     }
   },
   componentDidMount() {
@@ -35,6 +41,10 @@ export default React.createClass({
     if(inputIsDisabled) tlp.tooltipster('hide');
 
   },
+  handleChangeEvent(e) {
+    this.handleMaxLength(e);
+    this.perserveInputValue(e);
+  },
   handleMaxLength() {
     var $input = $(this.refs.input),
         // this.props.maxLength -1 since we're listening on keypress
@@ -50,14 +60,20 @@ export default React.createClass({
     // disableLock property turns off locking the input
     if (!this.props.disableLock) return <i title="Lock" onClick={this.toggleInputAccess} ref="lock">{Icons.input.access}</i>;
   },
+  perserveInputValue(e) {
+    MyStorage.setInput(this.props.locationPathname, this.props.id, e.target.value);
+  },
+  getInput() {
+    return MyStorage.getInput(this.props.locationPathname, this.props.id);
+  },
   render() {
     return (
       <div className="access-input group" ref="root">
         <label htmlFor={this.props.id}>{this.props.label}</label>
         <div className="access-input input">
-          {this.getLock()}
-          <input onChange={this.handleMaxLength} type={this.props.type} step={this.props.step} id={this.props.id}
-                 placeholder={this.props.placeholder} defaultValue={this.props.value}
+          {this.state.icon}
+          <input onChange={this.handleChangeEvent} type={this.props.type} step={this.props.step} id={this.props.id}
+                 placeholder={this.props.placeholder} defaultValue={this.getInput() || this.props.value}
                  disabled={this.props.disabled} ref="input"/>
         </div>
       </div>
