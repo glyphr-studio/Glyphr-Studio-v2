@@ -46,6 +46,7 @@ export default React.createClass({
     this.perserveInputValue();
   },
   handleCheckClickEvent() {
+    tooltip.get(this.refs.input).tooltipster('destroy');
     $(this.refs.check).toggleClass('disabled');
     this.toggleStyle();
     this.perserveInputValue();
