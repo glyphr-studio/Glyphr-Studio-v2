@@ -1,3 +1,5 @@
+import * as encoding from "./../encoding/encoding";
+
 export class Glyph {
   _glyph = {
     char: '',
@@ -22,6 +24,10 @@ export class Glyph {
     // todo: implement dynamic character name resolution http://unicode.org/Public/UNIDATA/Index.txt
     // for performance reasons we won't do it in the constructor
     return this._glyph.charName || "(to implement) " + this.char();
+  }
+
+  hex() {
+    return encoding.toHex(this.char());
   }
 
   unicode() {

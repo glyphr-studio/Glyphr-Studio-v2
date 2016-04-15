@@ -29,14 +29,17 @@ export default React.createClass({
   },
   toggleStyle() {
     var input = this.getInput();
+    // Sync lock state with input state
     this.refs.input.hasAttribute('disabled') &&
       $([this.refs.lock, this.refs.input]).removeClass('disabled').addClass('disabled') ||
       $([this.refs.lock, this.refs.input]).removeClass('disabled');
 
-      ! $(this.refs.check).hasClass('disabled') &&
+    // Show lock and input when the checkbox is enabled
+    ! $(this.refs.check).hasClass('disabled') &&
       $(this.refs.check).removeClass('disabled').addClass('active') &&
       $([this.refs.lock || {}, this.refs.input]).show();
 
+    // Hide lock and input when the checkbox is disabled
     $(this.refs.check).hasClass('disabled') &&
       $(this.refs.check).removeClass('active').addClass('disabled') &&
       $([this.refs.lock || {}, this.refs.input]).hide();
@@ -71,7 +74,6 @@ export default React.createClass({
   },
   handleMaxLength() {
     var $input = $(this.refs.input),
-        // this.props.maxLength -1 since we're listening on keypress
         maxLength = this.props.maxLength;
 
     // note: will allow only x > -999 for maxlength 4 etc.
@@ -93,14 +95,14 @@ export default React.createClass({
   },
   perserveInputValue() {
     var refs = this.refs;
-    MyStorage.setInput(this.props.locationPathname, this.props.id, {
+    MyStorage.setInput(this.props.storagePath, this.props.id, {
       value: refs.input.value,
       disabled: refs.input.hasAttribute('disabled'),
       checkClass: refs.check && refs.check.getAttribute('class')
     });
   },
   getInput() {
-    return MyStorage.getInput(this.props.locationPathname, this.props.id) || {};
+    return MyStorage.getInput(this.props.storagePath, this.props.id) || {};
   },
   render() {
     return (

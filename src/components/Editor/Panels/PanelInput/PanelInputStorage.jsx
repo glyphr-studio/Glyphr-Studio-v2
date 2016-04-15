@@ -4,7 +4,7 @@ import storage from "./../../../../lib/storage/Storage";
 class PanelTextInputStorage {
   _path = {
     input (x, y) {
-        return ['input', x, y].join('.');
+        return ['input', x, y].join('.').replace(/[ -]/g, '_');
       }
   };
 

@@ -1,4 +1,5 @@
 import React from "react";
+import ReactDOM from "react-dom";
 import Panel from "./../Panel";
 import PanelSection from "./../PanelSection";
 import PanelField from "./../PanelField";
@@ -11,10 +12,10 @@ import {config} from "./../../../../config/config";
 import {Navigation} from "react-router";
 import locale from "./../../../../locale/Locale";
 import {Router} from "react-router";
+import $ from "jquery";
 
 // todo: in respect to the previous version buttons are added on demand
 // once the feature they represent is available (e.g.: under the available selection).
-
 export default React.createClass({
   contextTypes: {
     router: React.PropTypes.object.isRequired
@@ -69,6 +70,7 @@ export default React.createClass({
     this.playDemos();
   },
   componentWillMount() {
+    var _this = this;
     if (typeof this.state.char === "undefined") this.handleNoSelectedGlyphCase();
     else this.handleSelectedGlyphCase();
   },
@@ -81,7 +83,7 @@ export default React.createClass({
     return this.context.router.push(config.routes.project_editor_tab('chooser'));
   },
   handleSelectedGlyphCase() {
-    return this.context.router.push(config.routes.project_editor_tab('attribute') + '/' + this.getChooserGlyph().char());
+    this.context.router.push(config.routes.project_editor_tab('attribute') + '/' + this.getChooserGlyph().char());
   },
   getIcons() {
     var _this = this;
@@ -102,7 +104,7 @@ export default React.createClass({
   getInputFields() {
     return this.state.fields.map((field, i) => {
       return (<PanelField title={field.title} key={i}>
-        <PanelInput locationPathname={this.props.location.pathname} id={field.title} label={field.label}
+        <PanelInput id={field.title} label={field.label} storagePath={config.storagePath.glyphAttribute(ChooserStorage.getLatestGlyph().hex())}
                     disableLock={false} disableCheck={false} isDefaultChecked={true}
                     type="number" step="1" maxLength="4"/>
       </PanelField>);
@@ -110,7 +112,7 @@ export default React.createClass({
   },
   render() {
     return (
-      <Panel name="attributes" title={'glyph edit >> ' + this.state.charName}>
+      <Panel ref="root" name="attributes" title={'glyph edit >> ' + this.state.charName}>
         <PanelSection title="">
           {this.getInputFields()}
         </PanelSection>
