@@ -15,9 +15,6 @@ export default React.createClass({
     var tabs = [],
         _this = this;
     Object.keys(_this.state.icons).map(function (key, value) {
-      // inupt fields issue when render happens before redirect and input doesn't get populated with data
-      // since render doesn't happen after redirect
-
       tabs.push(<NavLink key={value} activeClassName="active_tab" to={config.routes.project_editor_tab(key)}><Tab iconName={key}/></NavLink>)
     });
 

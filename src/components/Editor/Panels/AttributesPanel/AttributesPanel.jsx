@@ -11,8 +11,6 @@ import Glyph from "./../../../../lib/glyph/Glyph";
 import {config} from "./../../../../config/config";
 import {Navigation} from "react-router";
 import locale from "./../../../../locale/Locale";
-import {Router} from "react-router";
-import $ from "jquery";
 
 // todo: in respect to the previous version buttons are added on demand
 // once the feature they represent is available (e.g.: under the available selection).
@@ -70,7 +68,6 @@ export default React.createClass({
     this.playDemos();
   },
   componentWillMount() {
-    var _this = this;
     if (typeof this.state.char === "undefined") this.handleNoSelectedGlyphCase();
     else this.handleSelectedGlyphCase();
   },
