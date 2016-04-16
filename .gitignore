@@ -1,6 +1,7 @@
 node_modules/
 bower_components/
 dist/bundle.*
+dist/common-*
 .idea/
 .git/
 git

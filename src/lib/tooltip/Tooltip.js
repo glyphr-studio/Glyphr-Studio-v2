@@ -1,7 +1,5 @@
-import "script!./../../../bower_components/jquery/dist/jquery";
 import "./../../../bower_components/tooltipster/css/tooltipster";
 import "./TooltipStyle";
-import "script!./../../../bower_components/tooltipster/js/jquery.tooltipster";
 
 // todo: mute tooltips on demand
 class TooltipNotifier {

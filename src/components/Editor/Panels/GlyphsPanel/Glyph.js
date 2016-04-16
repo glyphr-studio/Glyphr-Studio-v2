@@ -1,4 +1,4 @@
-import React from "react";
+// import React
 import Storage from "./../../../../lib/storage/Storage";
 import "./../../../../style/default/Glyph";
 import {config} from "./../../../../config/config";

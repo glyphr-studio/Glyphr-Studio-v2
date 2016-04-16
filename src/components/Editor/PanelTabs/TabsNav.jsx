@@ -1,4 +1,4 @@
-import React from "react";
+// import React
 import Tab from "./Tab";
 import {Icons} from "./../../Icons";
 import {config} from "./../../../config/config";

@@ -1,5 +1,5 @@
-import React from "react";
-import {Link} from "react-router";
+// import React
+// import ReactRouter
 
 export var NavLink = React.createClass({
   render() {

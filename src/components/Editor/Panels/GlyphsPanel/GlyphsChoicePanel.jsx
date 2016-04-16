@@ -1,11 +1,10 @@
-import React from "react";
-import {Navigation} from "react-router";
+// import React
+// import ReactRouter
 import Panel from "./../Panel";
 import Glyph from "./Glyph";
 import * as helpers from "./../../../../utils/helpers";
 
 export default React.createClass({
-  mixins: [Navigation],
   getInitialState() {
     return {
       glyphs: [

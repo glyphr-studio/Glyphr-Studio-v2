@@ -1,5 +1,5 @@
-import React from "react";
-import ReactDOM from "react-dom";
+// import React
+// import ReactDOM
 import Panel from "./../Panel";
 import PanelSection from "./../PanelSection";
 import PanelField from "./../PanelField";
@@ -9,7 +9,7 @@ import PanelButton from "./../PanelButton";
 import ChooserStorage from "./../GlyphsPanel/ChooserStorage";
 import Glyph from "./../../../../lib/glyph/Glyph";
 import {config} from "./../../../../config/config";
-import {Navigation} from "react-router";
+// import ReactRouter
 import locale from "./../../../../locale/Locale";
 
 // todo: in respect to the previous version buttons are added on demand
@@ -24,7 +24,6 @@ export default React.createClass({
   getChildContext() {
     return { location: this.props.location }
   },
-  mixins:       [Navigation],
   getInitialState() {
     return Object.assign({},
       this.getChooserGlyph() && this.getChooserGlyph().getSkeleton() || {},

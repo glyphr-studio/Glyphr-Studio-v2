@@ -9,7 +9,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack-dev-server --inline --content-base ."
+    "start": "webpack-dev-server --inline --content-base .",
+    "compile-commons": "webpack --config common.webpack.config.js --optimize-minimize"
   },
   "author": "",
   "license": "GPL-3.0",

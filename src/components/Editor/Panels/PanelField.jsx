@@ -1,4 +1,4 @@
-import React from "react";
+// import React
 import "./../../../style/default/PanelField";
 
 export default React.createClass({

@@ -1,4 +1,4 @@
-import React from "react";
+// import React
 import {Icons} from "./../../Icons";
 
 export default React.createClass({

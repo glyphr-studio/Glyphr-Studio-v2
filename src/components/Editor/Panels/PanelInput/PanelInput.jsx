@@ -1,7 +1,7 @@
-import React from "react";
+// import React
 import {Icons} from "./../../../Icons";
 import "./../../../../style/default/PanelTextInput";
-import $ from "jquery";
+// import $
 import {tooltip} from "./../../../../lib/tooltip/Tooltip";
 import MyStorage from "./PanelInputStorage";
 

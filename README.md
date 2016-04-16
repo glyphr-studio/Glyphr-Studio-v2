@@ -14,8 +14,10 @@ We are in the exploration / pre-alpha stage of GSv2 - check back later...
 ## Developer Setup
 Clone the repository, install dependencies and tell webpack to compile the project and start watching for changes (this can take a while):
 ```
-git clone https://github.com/glyphr-studio/Glyphr-Studio-2.git && cd Glyphr-Studio-2 && npm install && bower install && webpack -w
+git clone https://github.com/glyphr-studio/Glyphr-Studio-2.git && cd Glyphr-Studio-2 && npm install && bower install && npm run compile-commons && webpack -w
 ```
+
+When developing, make sure `webpack -w` is running.
 
 ## License
  Copyright (C) 2010 - 2016 Matthew LaGrandeur, released under

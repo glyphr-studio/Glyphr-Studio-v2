@@ -1,5 +1,5 @@
-import React from "react";
-import ReactDOM from "react-dom";
+// import React
+// import ReactDOM
 import Routing from "./components/Routing";
 import "./style/default/General";
 

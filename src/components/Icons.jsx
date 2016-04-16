@@ -1,4 +1,4 @@
-import React from "react";
+// import React
 // html to jsx converter https://facebook.github.io/react/html-jsx.html
 
 export var Icons = {

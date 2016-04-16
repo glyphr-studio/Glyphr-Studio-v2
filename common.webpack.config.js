@@ -1,11 +1,11 @@
 var path = require('path');
 
 module.exports = {
-  entry: "./src/main.jsx",
+  entry: "./src/common.jsx",
   devtool: "source-map",
   output: {
     path: path.join(__dirname, 'dist'),
-    filename: "bundle.js"
+    filename: "common-bundle.min.js"
   },
   module: {
     loaders: [
@@ -13,7 +13,7 @@ module.exports = {
         test: /\.jsx?$/,
         loader: "babel",
         query: {
-          presets: ["es2015"],
+          presets: ["react", "es2015"],
           plugins: ["transform-flow-strip-types", "transform-class-properties"]
         },
         include: [

@@ -1,5 +1,5 @@
-import React from "react";
-import {Router, Route, hashHistory, IndexRoute, Redirect} from "react-router";
+// import React
+// import ReactRouter
 import {config} from "../config/config";
 import ProjectEditor from "./Editor/ProjectEditor";
 import GlyphsPanel from "./Editor/Panels/GlyphsPanel/GlyphsChoicePanel";

@@ -1,4 +1,4 @@
-import React from "react"
+// import React
 import storage from "./../../../../lib/storage/Storage";
 
 class PanelTextInputStorage {

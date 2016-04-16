@@ -1,5 +1,5 @@
-import React from "react";
-import {Link} from "react-router";
+// import React
+// import ReactRouter
 import {config} from "./../../../config/config";
 import TabsNav from "./../PanelTabs/TabsNav";
 import "./../../../style/default/Panel.scss";

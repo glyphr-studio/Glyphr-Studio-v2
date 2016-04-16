@@ -1,6 +1,6 @@
-import React from "react";
+// import React
 import {config} from "./../config/config";
-import {Link} from "react-router";
+// import ReactRouter
 
 export default React.createClass({
   render() {
