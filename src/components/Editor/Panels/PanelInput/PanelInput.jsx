@@ -14,52 +14,56 @@ export default React.createClass({
       placeholder: "",
       value:       "10",
       step:        "1",
-      // for demonstration purposes
+      disableLock: false,
+      disableCheck: false,
+      storagePath: '',
+      isDefaultChecked: false
     }
   },
   getInitialState() {
     return {
-      lock: this.getLockIcon(),
-      check: this.getCheckIcon()
+      lock: ! this.props.disableLock && this.getLockIcon(),
+      check: ! this.props.disableCheck && this.getCheckIcon()
     }
   },
   componentDidMount() {
     // sync lock icon with the input state on mount
-    this.toggleStyle();
+    this.syncStyleWithInputState();
   },
-  toggleStyle() {
-    var input = this.getInput();
+  syncStyleWithInputState() {
+    var input = this.getInputData();
     // Sync lock state with input state
-    this.refs.input.hasAttribute('disabled') &&
-      $([this.refs.lock, this.refs.input]).removeClass('disabled').addClass('disabled') ||
-      $([this.refs.lock, this.refs.input]).removeClass('disabled');
+    this.refs.input && this.refs.input.hasAttribute('disabled') &&
+      $([this.refs.lock || {}, this.refs.input || {}]).removeClass('disabled').addClass('disabled') ||
+      $([this.refs.lock || {}, this.refs.input || {}]).removeClass('disabled');
 
     // Show lock and input when the checkbox is enabled
     ! $(this.refs.check).hasClass('disabled') &&
       $(this.refs.check).removeClass('disabled').addClass('active') &&
-      $([this.refs.lock || {}, this.refs.input]).show();
+      $([this.refs.lock || {}, this.refs.input || {}]).show() &&
+      $(this.refs.input || {}).focus();
 
     // Hide lock and input when the checkbox is disabled
     $(this.refs.check).hasClass('disabled') &&
       $(this.refs.check).removeClass('active').addClass('disabled') &&
-      $([this.refs.lock || {}, this.refs.input]).hide();
+      $([this.refs.lock || {}, this.refs.input || {}]).hide();
   },
   handleLockClickEvent() {
     this.toggleInputAccess();
-    this.perserveInputValue();
+    this.saveInputData();
   },
   handleCheckClickEvent() {
     tooltip.get(this.refs.input).tooltipster('destroy');
     $(this.refs.check).toggleClass('disabled');
-    this.toggleStyle();
-    this.perserveInputValue();
+    this.syncStyleWithInputState();
+    this.saveInputData();
   },
   toggleInputAccess() {
     var $input = $(this.refs.input),
         inputIsDisabled = $input.attr('disabled');
     $input.attr('disabled', ! inputIsDisabled);
 
-    this.toggleStyle();
+    this.syncStyleWithInputState();
 
     tooltip.get(this.refs.input).tooltipster('destroy');
     var tlp = tooltip.info(this.refs.input,
@@ -69,10 +73,10 @@ export default React.createClass({
 
   },
   handleChangeEvent() {
-    this.handleMaxLength();
-    this.perserveInputValue();
+    this.handleInputMaxLength();
+    this.saveInputData();
   },
-  handleMaxLength() {
+  handleInputMaxLength() {
     var $input = $(this.refs.input),
         maxLength = this.props.maxLength;
 
@@ -82,37 +86,39 @@ export default React.createClass({
     tooltip.danger(this.refs.input, `Too long, sir! I only take up to ${maxLength} characters.`, 2600) &&
     $input.val($input.val().slice(0, maxLength));
   },
+  handleLabelClickEvent() {
+    // forward the click to the check
+    this.refs.check && $(this.refs.check).click();
+  },
   getLockIcon() {
     // disableLock property turns off locking the input
-    if (! this.props.disableLock) return <i title="Lock" onClick={this.handleLockClickEvent} ref="lock">{Icons.input.access}</i>;
+    return <i title="Lock" onClick={this.handleLockClickEvent} ref="lock">{Icons.input.access}</i>;
   },
   getCheckIcon() {
     // disableLock property turns off locking the input
-    if (! this.props.disableCheck) return (
-      <i title="Check" className={this.getInput().checkClass || (! this.props.isDefaultChecked && "disabled")}
-         onClick={this.handleCheckClickEvent} ref="check">{Icons.input.check}</i>
-    );
+    return (<i title="Check" className={this.getInputData().checkClass || (! this.props.isDefaultChecked && "disabled")}
+         onClick={this.handleCheckClickEvent} ref="check">{Icons.input.check}</i>)
   },
-  perserveInputValue() {
+  saveInputData() {
     var refs = this.refs;
     MyStorage.setInput(this.props.storagePath, this.props.id, {
-      value: refs.input.value,
-      disabled: refs.input.hasAttribute('disabled'),
+      value: refs.input && refs.input.value,
+      disabled: refs.input && refs.input.hasAttribute('disabled'),
       checkClass: refs.check && refs.check.getAttribute('class')
     });
   },
-  getInput() {
+  getInputData() {
     return MyStorage.getInput(this.props.storagePath, this.props.id) || {};
   },
   render() {
     return (
       <div className="access-input group" ref="root">
-        <label htmlFor={this.props.id}>{this.props.label}</label>
+        <label htmlFor={this.props.id} ref="label" onClick={this.handleLabelClickEvent}>{this.props.label}</label>
         <div className="access-input input">
           {this.state.lock}
           <input onChange={this.handleChangeEvent} type={this.props.type} step={this.props.step} id={this.props.id}
-                 placeholder={this.props.placeholder} defaultValue={this.getInput().value || this.props.value}
-                 disabled={this.getInput().disabled || this.props.disabled} ref="input"/>
+                 placeholder={this.props.placeholder} defaultValue={this.getInputData().value || this.props.value}
+                 disabled={this.getInputData().disabled || this.props.disabled} ref="input"/>
           {this.state.check}
         </div>
       </div>

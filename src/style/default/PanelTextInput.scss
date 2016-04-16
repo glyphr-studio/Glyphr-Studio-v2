@@ -8,11 +8,17 @@
     display: inline-block;
     float: right;
 
+    input:focus {
+      border-bottom: 2px solid #0AF;
+    }
+
     input {
       float: none;
       vertical-align: top;
       height: 26px;
       display: inline-block;
+      font-family: Consolas;
+      font-size: 15px;
     }
 
     input[disabled] {
