@@ -3,7 +3,15 @@ import "./TooltipStyle";
 
 // todo: mute tooltips on demand
 class TooltipNotifier {
+  _el = {};
+
   constructor() {
+    return this.Tooltip.bind(this);
+  }
+
+  Tooltip(element) {
+    this._el = $(element).tooltipster();
+    return this;
   }
 
   getDefaults(iconSign, type, message, timer) {
@@ -25,29 +33,49 @@ class TooltipNotifier {
     return `<span> <i class="${type}">${iconSign}</i>${message}</span>`;
   }
 
-  info(el, message, timer, opt) {
+  info(message, timer, opt) {
     var opt = Object.assign({}, this.getDefaults('i', 'info', message, timer), opt);
-    return $(el).tooltipster(opt).tooltipster('show');
+    $(this._el).tooltipster(opt).tooltipster('show');
+    return this;
   }
 
-  warning(el, message, timer, opt) {
+  warning(message, timer, opt) {
     var opt = Object.assign({}, this.getDefaults('#', 'warning', message, timer), opt);
-    return $(el).tooltipster(opt).tooltipster('show');
+    $(this._el).tooltipster(opt).tooltipster('show');
+    return this;
   }
 
-  danger(el, message, timer, opt) {
+  danger(message, timer, opt) {
     var opt = Object.assign({}, this.getDefaults('!', 'danger', message, timer), opt);
-    return $(el).tooltipster(opt).tooltipster('show');
+    $(this._el).tooltipster(opt).tooltipster('show');
+    return this;
   }
 
-  loading(el, message, timer, opt) {
+  loading(message, timer, opt) {
     var opt = Object.assign({}, this.getDefaults('%', 'loading', message, timer), opt);
-    return $(el).tooltipster(opt).tooltipster('show');
+    $(this._el).tooltipster(opt).tooltipster('show');
+    return this;
   }
 
-  get(el) {
-    return $(el).tooltipster();
+  destroy() {
+    $(this._el).tooltipster('destroy');
+    return this;
+  }
+
+  show() {
+    $(this.el).tooltipster('show');
+    return this;
+  }
+
+  hide() {
+    $(this.el).tooltipster('hide');
+    return this;
+  }
+
+  get() {
+    $(this._el).tooltipster();
+    return this;
   }
 }
 
-export var tooltip = new TooltipNotifier();
+export var Tooltip = new TooltipNotifier();
