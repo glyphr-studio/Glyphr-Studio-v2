@@ -1,5 +1,5 @@
 // import React
-import storage from "./../../../../lib/storage/Storage";
+import {storage} from "./../../../../lib/storage/Storage";
 
 class PanelTextInputStorage {
   _path = {

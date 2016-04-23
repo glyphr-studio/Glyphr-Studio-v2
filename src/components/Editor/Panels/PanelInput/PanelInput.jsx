@@ -4,6 +4,11 @@ import "./../../../../style/default/PanelTextInput";
 // import $
 import {Tooltip} from "./../../../../lib/tooltip/Tooltip";
 import MyStorage from "./PanelInputStorage";
+import PluginEventUnit from "../../../../lib/core/pluginEventStream/PluginEventUnit";
+
+
+// Panel Input Event Emitter
+var piee = new PluginEventUnit('panelInput', 3);
 
 export default React.createClass({
   getDefaultProps() {
@@ -29,6 +34,10 @@ export default React.createClass({
     }
   },
   componentDidMount() {
+    let gesDemoHandler = function(data) {
+      console.log('looks like I mounted', data.component.props.id);
+    };
+    piee.emit('componentDidMount', {component: this});
     // Initialize jQuery refs
     this.$ = {};
     for(var ref in this.refs) {
@@ -93,10 +102,12 @@ export default React.createClass({
     $check.found() && $check.click();
   },
   handleInputFocusEvent() {
+
     MyStorage.setInput(this.props.storagePath, this.props.id,
       Object.assign({}, this.getInputData(), {isFocused: true}));
   },
   handleInputBlurEvent() {
+
     MyStorage.setInput(this.props.storagePath, this.props.id,
       Object.assign({}, this.getInputData(), {isFocused: false}));
   },

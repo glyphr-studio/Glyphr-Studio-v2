@@ -1,9 +1,11 @@
 import store from "store2";
+import PluginEventUnit from "./../core/pluginEventStream/PluginEventUnit";
 
-class Storage {
+export default class Storage {
   _toDestroy = [];
   _subs = {};
   _store = store;
+  _eventUnit = new PluginEventUnit('StoragePlugin', 4);
 
   once(key: string, value) {
     this._store.set(key, value);
@@ -13,6 +15,7 @@ class Storage {
   get(key) {
     var value = this._store.get(key);
     if(this._toDestroy.includes(key)) this._store.remove(key);
+    this._eventUnit.emit(`get`, {key: key, _: this});
     return value;
   }
 
@@ -41,10 +44,11 @@ class Storage {
   set(key, value, overwrite=true) {
     var oldValue = this._store.get(key);
     this._store.set(key, value, overwrite);
-
     this._subs[key] && this._subs[key].forEach((handler) => {
       handler(key, value, oldValue);
-    })
+    });
+
+    this._eventUnit.emit('set');
   }
 
   native() {
@@ -53,4 +57,5 @@ class Storage {
 }
 
 window.appStorage = new Storage();
-export default new Storage();
+window.appStorage._eventUnit.mute();
+export var storage = window.appStorage;

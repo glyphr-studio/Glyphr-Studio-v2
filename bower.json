@@ -16,6 +16,7 @@
     "tests"
   ],
   "dependencies": {
-    "tooltipster": "^3.3.0"
+    "tooltipster": "^3.3.0",
+    "paper": "^0.9.25"
   }
 }

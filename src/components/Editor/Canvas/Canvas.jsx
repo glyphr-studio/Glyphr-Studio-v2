@@ -6,8 +6,10 @@ export default React.createClass({
   },
   render() {
     return (
-      <canvas ref="canvas">
-      </canvas>
+      <div>
+        <canvas ref="canvas" resize>
+        </canvas>
+      </div>
     )
   }
 })

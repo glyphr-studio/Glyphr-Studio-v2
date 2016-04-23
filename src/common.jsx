@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import * as ReactRouter from "react-router";
 import "script!./../bower_components/jquery/dist/jquery";
 import "script!./../bower_components/tooltipster/js/jquery.tooltipster";
+import "script!./../bower_components/paper/dist/paper-full.js";
 
 window.React = React;
 window.ReactDOM = ReactDOM;

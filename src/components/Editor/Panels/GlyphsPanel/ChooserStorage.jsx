@@ -1,4 +1,4 @@
-import storage from "./../../../../lib/storage/Storage";
+import {storage} from "./../../../../lib/storage/Storage";
 import {Glyph} from "./../../../../lib/glyph/Glyph";
 
 // Chooser's dedicated storage
