@@ -1,5 +1,5 @@
 // import React
-import "./../../../style/default/PanelSection";
+import "../style/default/PanelSection";
 
 export default React.createClass({
   propTypes: {

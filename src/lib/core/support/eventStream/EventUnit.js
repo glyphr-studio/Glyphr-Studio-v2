@@ -5,7 +5,7 @@ import WindowRegisterAccess from "./../../windowRegister/WindowRegisterAccess";
 
 export default class EventUnit {
   _rootName = '';
-  _isMuted = true;
+  _isMuted = false;
   _accessLevel = {};
   _windowRegister = {};
   _streamName = {}; // specified by the extending class

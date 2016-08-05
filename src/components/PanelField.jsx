@@ -1,5 +1,5 @@
 // import React
-import "./../../../style/default/PanelField";
+import "../style/default/PanelField";
 
 export default React.createClass({
   render() {

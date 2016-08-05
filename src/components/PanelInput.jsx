@@ -1,10 +1,10 @@
 // import React
-import {Icons} from "./../../../Icons";
-import "./../../../../style/default/PanelTextInput";
+import {Icons} from "./Icons";
+import "./../style/default/PanelTextInput";
 // import $
-import {Tooltip} from "./../../../../lib/tooltip/Tooltip";
+import {Tooltip} from "./../lib/tooltip/Tooltip";
 import MyStorage from "./PanelInputStorage";
-import PluginEventUnit from "../../../../lib/core/pluginEventStream/PluginEventUnit";
+import PluginEventUnit from "./../lib/core/pluginEventStream/PluginEventUnit";
 
 
 // Panel Input Event Emitter

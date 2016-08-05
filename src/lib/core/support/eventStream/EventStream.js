@@ -38,7 +38,7 @@ export default class EventStream {
   }
 
   isMuted(eventName) {
-    return this._muted.indexOf(eventName) < 0;
+    return this._muted.indexOf(eventName) > 0;
   }
 
   mute(eventName) {

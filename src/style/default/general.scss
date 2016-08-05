@@ -1,0 +1,25 @@
+.row  {
+  display: block;
+}
+
+.group {
+  display: inline-block;
+  vertical-align: top;
+
+  &.display-group {
+    & > * {
+      display: block;
+    }
+
+    & > button:nth-child(n+1) {
+      // All buttons equivalently large, of the size of the largest button in the group
+      width: 100%;
+    }
+  }
+
+  &.button-group {
+    & > button:nth-child(n+1) {
+      margin-bottom: 10px;
+    }
+  }
+}

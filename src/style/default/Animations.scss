@@ -1,0 +1,28 @@
+@import './colors';
+
+@keyframes fadein {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes pathoutline {
+  100% { 
+    stroke-dashoffset: 0;
+    stroke: $blue-l85;
+  }
+}
+
+@keyframes fakeload-bar {
+  1% { opacity: 100; }
+  96% { opacity: 100; }
+  100% { opacity: 0; }
+}
+
+@keyframes fakeload-value {
+  0% { width: 0%; }
+  40% { width: 1%; }
+  50% { width: 40%; }
+  60% { width: 50%; }
+  80% { width: 90%; }
+  100% { width: 100%; }
+}

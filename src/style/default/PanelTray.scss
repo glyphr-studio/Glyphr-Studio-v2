@@ -1,0 +1,23 @@
+@import './Panel';
+@import './colors';
+
+.panel-tray {
+  flex: 2 1;
+  overflow-y: auto;
+  height: 100%;
+  padding: 0px 4px 10px 10px;
+  color: $gray-l30;
+  font-size: .87em;
+  
+  .content {
+    padding: 10px 2px 10px 6px;
+  }
+}
+
+.panel-tray-pages {
+  @extend .panel-tray;
+  
+  .content {
+    @extend .pagechoices;
+  }
+}

@@ -1,5 +1,5 @@
 // import React
-import "./../../../style/default/PanelButton";
+import "../style/default/PanelButton";
 
 export default React.createClass({
   render() {

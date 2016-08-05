@@ -1,0 +1,19 @@
+@import './Animations';
+
+.button {
+  // default button size
+  @extend .button.button-md;
+  text-align: center;
+
+  &.button-sm {
+    padding: 3px 8px;
+  }
+
+  &.button-md {
+    padding: 5px 16px;
+  }
+
+  &.button-lg {
+    padding: 8px 26px;
+  }
+}

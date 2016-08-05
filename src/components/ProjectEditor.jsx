@@ -1,6 +1,3 @@
-// import React
-import Canvas from "./Canvas/Canvas";
-
 export default React.createClass({
   render() {
     return (
@@ -8,7 +5,6 @@ export default React.createClass({
         <div>
           {this.props.children}
         </div>
-        <Canvas/>
       </div>
     )
   }

@@ -1,11 +1,8 @@
 // import React
 // import ReactRouter
 import {config} from "../config/config";
-import ProjectEditor from "./Editor/ProjectEditor";
-import GlyphsPanel from "./Editor/Panels/GlyphsPanel/GlyphsChoicePanel";
-import AttributesPanel from "./Editor/Panels/AttributesPanel/AttributesPanel";
-import LayersPanel from "./Editor/Panels/LayersPanel/LayersPanel";
-import Panel from "./Editor/Panels/Panel";
+import ProjectEditor from "./ProjectEditor";
+import Attributes from "./Attributes";
 import Index from "./Index";
 
 export default React.createClass({
@@ -14,12 +11,11 @@ export default React.createClass({
       <Router history={hashHistory}>
         <Route path="/" component={Index}/>
         <Route path={config.routes.project_editor} component={ProjectEditor}>
-          <Route path="chooser" component={GlyphsPanel}/>
-          <Route path="attribute" name="attrsPanel" component={AttributesPanel}>
-            <Route path=":sign" component={AttributesPanel}/>
+          <Route path="attributes" name="attrsPanel" component={Attributes}>
+            <Route path=":sign" component={Attributes}/>
           </Route>
-          <Route path="layer" component={LayersPanel}>
-          </Route>
+          {/*<Route path="layer" component={LayersPanel}>*/}
+          {/*</Route>*/}
         </Route>
       </Router>
     );

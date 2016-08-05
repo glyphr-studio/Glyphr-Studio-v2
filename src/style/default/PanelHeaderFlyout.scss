@@ -1,0 +1,118 @@
+@import './Panel';
+@import './colors';
+@import './Animations';
+
+.flyout {
+  position: absolute;
+  top: 0px;
+  display: flex;
+  flex: 1 1;
+  flex-direction: column;
+  background-color: $offwhite;
+  z-index: 9999;
+  padding: 0px;
+  min-width: 250px;
+  border-left-style: solid;
+  border-left-width: 20px;
+  animation: 0.2s fadein;
+
+  .content {
+    max-height: 90vh;
+    overflow-y: scroll;
+    flex: 1 1;
+    display: block;
+    padding: 0px 0px 12px 10px;
+  }
+
+  .controls {
+    flex: 0 0 24px;
+    text-align: right;
+    height: 24px;
+    background-color: transparent;
+    display: block;
+    width: 100%;
+    margin-bottom: 5px;
+
+    button {
+      height: 24px;
+      width: 24px;
+      background-color: transparent;
+      padding: 6px;
+      font-size: 8px;
+      color: $gray-l80;
+      fill: $gray-l80;
+      border-radius: 0 !important;
+
+      &:hover {
+        color: $blue-l90;
+        fill: $blue-l90;
+        background-color: $blue-l60;
+      }
+    }
+  }
+}
+
+#flyout-primary {
+  border-left-color: $blue-l80;
+}
+
+#flyout-secondary {
+  border-left-color: $blue-l85;
+}
+
+#flyout-tertiary {
+  border-left-color: $blue-l90;
+}
+
+.flyout-pages {
+  @extend .flyout;
+
+  .content {
+    @extend .pagechoices;
+  }
+}
+
+.flyout-glyph {
+  @extend .flyout;
+  max-width: 50%;
+  max-height: 90%;
+
+  .glyphtile {
+    display: inline-block;
+    width: 50px;
+    height: 70px;
+    margin: 0px 10px 10px 0px;
+    border: 2px solid $offwhite;
+    background-color: $offwhite;
+
+    &:hover {
+      border: 2px solid $blue-l80;
+      cursor: pointer;
+    }
+
+    .preview {
+      width: 46px;
+      height: 46px;
+      color: $gray-l90;
+      padding-top: 4px;
+      text-align: center;
+      font-size: 34px;
+      background-color: white;
+    }
+
+    .name {
+      height: 20px;
+      padding: 2px 0px 0px 4px;
+      border-top: 1px solid $offwhite;
+      color: $gray-l60;
+    }
+  }
+
+  .glyphtile.selected {
+    border: 2px solid $blue-l50;
+
+    .preview {
+      color: black;
+    }
+  }
+}
