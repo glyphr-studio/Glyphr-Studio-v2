@@ -1,6 +1,7 @@
-import "./../style/default/PanelHeader"
-import PanelHeaderFlyout from "./PanelHeaderFlyout";
-import PanelHeaderFlyoutGlyph from "./PanelHeaderFlyoutGlyph";
+import "./../style/default/PanelHeader";
+import PanelHeaderFlyoutPages from "./PanelHeaderFlyoutPages";
+import PanelHeaderFlyoutGlyphs from "./PanelHeaderFlyoutGlyphs";
+import PanelHeaderFlyoutTools from "./PanelHeaderFlyoutTools";
 import PluginEventUnit from "./../lib/core/pluginEventStream/PluginEventUnit";
 var flyouteu = new PluginEventUnit("flyout", 3);
 
@@ -31,17 +32,29 @@ toggleFlyout() {
   },
   getFlyout() {
     switch(this.props.flyoutType) {
-        case "glyph":
-          return(
-            <PanelHeaderFlyoutGlyph isOpen={this.state.isFlyoutOpen} toggle={this.toggleFlyout}>
-              {this.props.children}
-            </PanelHeaderFlyoutGlyph>
-          );
+      case "tools":
+        return(
+          <PanelHeaderFlyoutTools isOpen={this.state.isFlyoutOpen} toggle={this.toggleFlyout}>
+            {this.props.children}
+          </PanelHeaderFlyoutTools>
+        );
+      case "glyphs":
+        return(
+          <PanelHeaderFlyoutGlyphs isOpen={this.state.isFlyoutOpen} toggle={this.toggleFlyout}>
+            {this.props.children}
+          </PanelHeaderFlyoutGlyphs>
+        );
+      case "pages":
+        return (
+          <PanelHeaderFlyoutPages isOpen={this.state.isFlyoutOpen} toggle={this.toggleFlyout}>
+            {this.props.children}
+          </PanelHeaderFlyoutPages>
+        );
       default:
         return (
-          <PanelHeaderFlyout isOpen={this.state.isFlyoutOpen} toggle={this.toggleFlyout}>
-            {this.props.children}
-          </PanelHeaderFlyout>
+          <PanelHeaderFlyoutPages isOpen={this.state.isFlyoutOpen} toggle={this.toggleFlyout}>
+            !!! BAD FLYOUT TYPE !!!
+          </PanelHeaderFlyoutPages>
         );
     };
   },

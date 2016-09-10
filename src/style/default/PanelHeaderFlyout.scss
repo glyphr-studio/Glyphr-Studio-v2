@@ -5,6 +5,7 @@
 .flyout {
   position: absolute;
   top: 0px;
+  left: 399px;
   display: flex;
   flex: 1 1;
   flex-direction: column;
@@ -72,7 +73,7 @@
   }
 }
 
-.flyout-glyph {
+.flyout-glyphs {
   @extend .flyout;
   max-width: 50%;
   max-height: 90%;
@@ -114,5 +115,13 @@
     .preview {
       color: black;
     }
+  }
+}
+
+.flyout-tools {
+  @extend .flyout;
+
+  .content {
+    @extend .pagechoices;
   }
 }
