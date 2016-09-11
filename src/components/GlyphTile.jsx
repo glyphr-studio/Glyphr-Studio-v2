@@ -2,14 +2,35 @@
 
 export default React.createClass({
 	render() {
-		var glyphname = unicodeNames[this.props.codepoint] || 'Name not found';
-		var glyphpreview = String.fromCharCode(1*this.props.codepoint);
-		var tooltip = glyphname + this.props.codepoint;
+		var codepoint = this.props.codepoint;
+
+		var glyphname = unicodeNames[codepoint] || 'Name not found';
+		
+		var tooltip = glyphname + '\n' + codepoint;
+
+		var glyphchar = String.fromCharCode(1*codepoint);
+		
+		var glyphpreview = glyphchar;	// In the future this could also be the true thumbnail preview
+
+		if(codepoint === '0x0020') {
+			glyphchar = 'space';
+			glyphpreview = '';
+		}		
+
+		// var breakpoint = (codepoint === '0x005A' || codepoint === '0x007A' || codepoint === '0x0021');
+		var breakpoint = false;
+
+		// console.log('Selected Glyph: ' + this.props.selectedGlyph + ' codepoint: ' + this.props.codepoint + ' are they equal? ');
+
 		return (
-			<div className="glyphtile" title={tooltip}>
-				<div className="preview">{glyphpreview}</div>
-				<div className="name">{glyphname}</div>
+			<div 
+				className={this.props.selectedGlyph == codepoint ? "glyphtileselected" : "glyphtile"} 
+				title={tooltip}
+				style={breakpoint? {marginRight: '3000px'} : {}}>
+					<div className="preview">{glyphpreview}</div>
+					<div className="name">{glyphchar}</div>
 			</div>
+		
 		)
 	}
 });

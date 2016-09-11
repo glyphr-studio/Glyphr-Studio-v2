@@ -108,15 +108,22 @@
       color: $gray-l60;
     }
   }
-
-  .glyphtile.selected {
+  
+  .glyphtileselected {
+    @extend .glyphtile;
     border: 2px solid $blue-l50;
 
     .preview {
-      color: black;
+      color: $blue-l50;
+    }
+
+    .name {
+      background-color: $blue-l50;
+      color: $offwhite;
     }
   }
 }
+
 
 .flyout-tools {
   @extend .flyout;
