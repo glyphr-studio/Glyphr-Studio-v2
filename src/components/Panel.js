@@ -10,7 +10,7 @@ export default React.createClass({
   },
   render() {
     return (
-      <div className="panel" onClick={this.onClick}>
+      <div className={this.props.className} onClick={this.onClick}>
           {this.props.children}
       </div>
     )

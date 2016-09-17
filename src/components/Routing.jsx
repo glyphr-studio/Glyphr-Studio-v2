@@ -2,7 +2,7 @@
 // import ReactRouter
 import {config} from "../config/config";
 import ProjectEditor from "./ProjectEditor";
-import Attributes from "./Attributes";
+import FrameLeft from "./FrameLeft";
 import Index from "./Index";
 
 export default React.createClass({
@@ -11,8 +11,8 @@ export default React.createClass({
       <Router history={hashHistory}>
         <Route path="/" component={Index}/>
         <Route path={config.routes.project_editor} component={ProjectEditor}>
-          <Route path="attributes" name="attrsPanel" component={Attributes}>
-            <Route path=":sign" component={Attributes}/>
+          <Route path="leftframe" name="leftframe" component={FrameLeft}>
+            <Route path=":sign" component={FrameLeft}/>
           </Route>
           {/*<Route path="layer" component={LayersPanel}>*/}
           {/*</Route>*/}

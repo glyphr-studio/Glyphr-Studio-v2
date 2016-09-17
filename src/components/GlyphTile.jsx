@@ -20,11 +20,11 @@ export default React.createClass({
 		// var breakpoint = (codepoint === '0x005A' || codepoint === '0x007A' || codepoint === '0x0021');
 		var breakpoint = false;
 
-		// console.log('Selected Glyph: ' + this.props.selectedGlyph + ' codepoint: ' + this.props.codepoint + ' are they equal? ');
+		// console.log('Selected Glyph: ' + this.props.data.selectedGlyph + ' codepoint: ' + this.props.codepoint + ' are they equal? ');
 
 		return (
 			<div 
-				className={this.props.selectedGlyph == codepoint ? "glyphtileselected" : "glyphtile"} 
+				className={this.props.data.selectedGlyph == codepoint ? "glyphtileselected" : "glyphtile"} 
 				title={tooltip}
 				style={breakpoint? {marginRight: '3000px'} : {}}>
 					<div className="preview">{glyphpreview}</div>
