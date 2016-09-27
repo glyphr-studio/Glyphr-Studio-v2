@@ -10,7 +10,7 @@ export default React.createClass({
 			<div>
 				<h1>ATTRIBUTES</h1>
 				<textarea 
-					style={{width: '100%', height: '500px'}} 
+					style={{width: '90%', height: '500px'}} 
 					value={this.props.data.selectedGlyphPathData}
 					onChange={updatePathData}>
 				</textarea>

@@ -3,13 +3,9 @@
 export default React.createClass({
 	render() {
 		var codepoint = this.props.codepoint;
-
 		var glyphname = unicodeNames[codepoint] || 'Name not found';
-		
 		var tooltip = glyphname + '\n' + codepoint;
-
 		var glyphchar = String.fromCharCode(1*codepoint);
-		
 		var glyphpreview = glyphchar;	// In the future this could also be the true thumbnail preview
 
 		if(codepoint === '0x0020') {

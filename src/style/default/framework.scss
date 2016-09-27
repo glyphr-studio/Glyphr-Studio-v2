@@ -16,7 +16,7 @@
 	flex-direction: column;
 }
 
-body {
+.appwrapper {
 	@extend .flexframe;
 	flex-direction: row;
 }
