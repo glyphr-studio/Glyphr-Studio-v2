@@ -30,7 +30,7 @@ export default React.createClass({
         </Panel>
 
         <Panel className="panel">
-          <PanelHeader title="Latin Capital A" className="panel-header-secondary" flyoutType="glyphs">
+          <PanelHeader title="Latin Capital A" className="panel-header-secondary" flyoutType="glyphs" data={this.props.data}>
             {glyphTileNodes}
           </PanelHeader>
         </Panel>

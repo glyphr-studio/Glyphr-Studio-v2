@@ -99,6 +99,13 @@
       text-align: center;
       font-size: 34px;
       background-color: white;
+
+      svg,
+      canvas {
+        margin-top:-4px;
+        width: 46px;
+        height: 46px;
+      }
     }
 
     .name {

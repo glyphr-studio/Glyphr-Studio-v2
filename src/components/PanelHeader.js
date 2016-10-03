@@ -58,7 +58,7 @@ export default React.createClass({
         );
     };
   },
-  getFlyoutIcon(){
+  getFlyoutIcon(data){
     switch(this.props.flyoutType) {
       case "tools":
         return(
@@ -81,9 +81,9 @@ export default React.createClass({
         );
       case "glyphs":
         return(
-          <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px">
-            <rect x="0" y="0" width="16" height="16" fill="#C0E9FD"></rect>
-            <text x="3" y="13" style={{fontSize:16}}>A</text>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 1000 1000">
+            <rect x="0" y="0" width="1000" height="1000" fill="#C0E9FD"></rect>
+            <path  d={data.glyphs[data.selectedGlyph].svgPathData}/>
           </svg>
         );
       case "pages":
@@ -108,7 +108,7 @@ export default React.createClass({
       <div className={this.props.className}>
         <div className="bar" onClick={this.toggleFlyout}>
           <div className="icon">
-            {this.getFlyoutIcon()}
+            {this.getFlyoutIcon(this.props.data)}
           </div>
           <div className="title">{this.props.title}</div>
           <div className="chevron">

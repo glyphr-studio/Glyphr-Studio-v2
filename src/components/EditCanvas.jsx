@@ -1,12 +1,26 @@
-import "script!./../../bower_components/paper/dist/paper-full.js";
 import "./../style/default/EditCanvas";
 
 export default React.createClass({
+
+	componentDidMount() {
+		console.log('\n\t EditCanvas_componentDidMount');
+		
+		var canvas = document.getElementById('editCanvas');
+		paper.setup(canvas);
+		console.log(paper);
+
+		this.redrawEditCanvas();
+
+		console.log('\t END EditCanvas_componentDidMount');
+	},
+
 	redrawEditCanvas() {
 		console.log('\n\t redrawEditCanvas:');
-		var glyphSVGs = this.props.data.selectedGlyphPathData.split('Z');
+		var data = this.props.data;
+
+		var glyphSVGs = data.glyphs[data.selectedGlyph].svgPathData.split('Z');
 		var path;
-		var glyph = new paper.CompoundPath({children: [], fillRule: 'nonzero'});
+		var glyph = new paper.CompoundPath();
 
 		/*
 			FILL
@@ -16,18 +30,16 @@ export default React.createClass({
 			console.log('\t Compound Fill Path ' + i);
 			if(!v) return;
 
-			path = new paper.Path({pathData: (v+'Z'), data: {}});
+			path = new paper.Path({pathData: (v+'Z')});
 
-/*					// Working with stupid SVG - REMOVE 
-					path.translate(new paper.Point(10, 10));
-					if(i === 0 || i === 1) {
-						// console.log('\t\t Reversing Path, it was \t' + path.pathData);
-						path.reverse();
-						path.clockwise = !path.clockwise;
-						// console.log('\t\t Now its ' + path.pathData);
-					}
-					// End stupid*/
-			
+			if(data.selectedPath !== false && data.selectedPath === i){
+				path.selected = true;
+			}
+
+			path.on('click', function () {
+				this.selected = true;
+			});
+
 			glyph.addChild(path);
 
 			console.log('\t\t clockwise ' + path.clockwise);
@@ -35,14 +47,14 @@ export default React.createClass({
 
 		glyph.fillRule = 'nonzero';
 		glyph.fillColor = 'slategray';
-		glyph.strokeWidth = 1;
-		glyph.strokeColor = 'gray';
+		// glyph.strokeWidth = 1;
+		// glyph.strokeColor = 'gray';
 
 
 		/*
 			STROKE
 		*/
-		console.log('STROKE');
+/*		console.log('STROKE');
 		glyph.children.forEach(function(v, i, a){
 			console.log('\t Stroke Path ' + i);
 			if(!v) return;
@@ -55,7 +67,7 @@ export default React.createClass({
 			console.log('\t\t clockwise ' + path.clockwise);
 			console.log('\t\t strokeColor ' + path.strokeColor);
 		});
-
+*/
 		/*
 			POINTS
 		*/
@@ -63,7 +75,7 @@ export default React.createClass({
 		console.log('POINTS');
 		glyph.children.forEach(function(v, i, a){
 			path = new paper.Path(v.pathData);
-			
+
 			path.segments.forEach(function(v, i, a){
 				text = new paper.PointText(new paper.Point(v.point.x, v.point.y));
 				text.fillColor = 'black';
@@ -71,14 +83,21 @@ export default React.createClass({
 			});
 		});
 
+		// paper.view.draw();
+
 		console.log(glyph);
+		console.log('\t END redrawEditCanvas');
 	},
+
+	clickOn() {
+
+	},
+
 	render() {
 		return (
 			<div className="centerframe">
-				<script type="text/paperscript" data-paper-canvas="editCanvas"></script>
-				<canvas id="editCanvas" 
-					onClick={this.redrawEditCanvas} 
+				<canvas id="editCanvas"
+					onClick={this.clickOn}
 					data-paper-resize={true}
 				></canvas>
 			</div>

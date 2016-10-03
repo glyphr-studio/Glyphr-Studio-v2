@@ -1,19 +1,19 @@
 import "./../style/default/Panel";
 
-function updatePathData(e) {
-	console.log(e);
-}
-
 export default React.createClass({
+	changeOn() {
+
+	}, 
+
 	render() {
 		return (
 			<div>
 				<h1>ATTRIBUTES</h1>
 				<textarea 
-					style={{width: '90%', height: '500px'}} 
-					value={this.props.data.selectedGlyphPathData}
-					onChange={updatePathData}>
-				</textarea>
+					style = {{width: '90%', height: '500px'}} 
+					value = {this.props.data.glyphs[this.props.data.selectedGlyph].svgPathData} 
+					onChange = {this.changeOn}
+				></textarea>
 			</div>
 		)
 	}
