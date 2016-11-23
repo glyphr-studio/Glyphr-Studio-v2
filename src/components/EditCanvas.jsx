@@ -18,37 +18,7 @@ export default React.createClass({
 		console.log('\n\t redrawEditCanvas:');
 		var data = this.props.data;
 
-		var glyphSVGs = data.glyphs[data.selectedGlyph].svgPathData.split('Z');
-		var path;
-		var glyph = new paper.CompoundPath();
 
-		/*
-			FILL
-		*/
-		console.log('FILL');
-		glyphSVGs.forEach(function(v, i, a){
-			console.log('\t Compound Fill Path ' + i);
-			if(!v) return;
-
-			path = new paper.Path({pathData: (v+'Z')});
-
-			if(data.selectedPath !== false && data.selectedPath === i){
-				path.selected = true;
-			}
-
-			path.on('click', function () {
-				this.selected = true;
-			});
-
-			glyph.addChild(path);
-
-			console.log('\t\t clockwise ' + path.clockwise);
-		});
-
-		glyph.fillRule = 'nonzero';
-		glyph.fillColor = 'slategray';
-		// glyph.strokeWidth = 1;
-		// glyph.strokeColor = 'gray';
 
 
 		/*

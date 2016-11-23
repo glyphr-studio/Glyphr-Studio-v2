@@ -13,9 +13,11 @@ export default React.createClass({
     isFlyoutOpen: React.PropTypes.bool,
     flyoutType: React.PropTypes.string
   },
+
   toggleFlyout() {
     flyouteu.emit("toggle", this);
   },
+
   componentDidMount() {
     var _this = this;
 
@@ -25,11 +27,13 @@ export default React.createClass({
       else _this.setState({isFlyoutOpen: false});
     });
   },
+
   getInitialState() {
     return ({
       isFlyoutOpen: this.props.isFlyoutOpen || false
     })
   },
+
   getFlyout() {
     switch(this.props.flyoutType) {
       case "tools":
@@ -58,6 +62,7 @@ export default React.createClass({
         );
     };
   },
+
   getFlyoutIcon(data){
     switch(this.props.flyoutType) {
       case "tools":
@@ -83,7 +88,7 @@ export default React.createClass({
         return(
           <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 1000 1000">
             <rect x="0" y="0" width="1000" height="1000" fill="#C0E9FD"></rect>
-            <path  d={data.glyphs[data.selectedGlyph].svgPathData}/>
+            <path  d={data._GP.glyphs[data._UI.selectedGlyph].svgPathData}/>
           </svg>
         );
       case "pages":
@@ -103,7 +108,9 @@ export default React.createClass({
         );
     };
   },
+  
   render() {
+    console.log(this.props);
     return (
       <div className={this.props.className}>
         <div className="bar" onClick={this.toggleFlyout}>
