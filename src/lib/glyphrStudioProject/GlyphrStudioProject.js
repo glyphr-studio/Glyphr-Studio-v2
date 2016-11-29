@@ -4,7 +4,7 @@ A default project in class form for easy new project creation.
 **/
 
 
-export class GlyphrStudioProject {
+export default class GlyphrStudioProject {
 
 	constructor(vnum, vname){
 		this.projectsettings = {

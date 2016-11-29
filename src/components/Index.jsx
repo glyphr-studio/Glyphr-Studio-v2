@@ -5,14 +5,12 @@ import FrameLeft from "./FrameLeft";
 import EditCanvas from "./EditCanvas";
 import "./../lib/glyph/Glyph";
 import GlyphrStudioProject from "./../lib/glyphrStudioProject/GlyphrStudioProject";
+import Locale from "../locale/Locale";
 
 export default React.createClass({
 	getInitialState() {
 
 		var _UI = {
-			thisGlyphrStudioVersion: '2.0.0',
-			thisGlyphrStudioVersionName: 'Version 2 Alpha',
-
 			selected: {
 				tray: 'attributes',
 				glyph: '0x0041',
@@ -23,10 +21,10 @@ export default React.createClass({
 		};
 
 		window.GlyphrStudio = {};
-		window.GlyphrStudio._GP = new GlyphrStudioProject(_UI.thisGlyphrStudioVersion, _UI.thisGlyphrStudioVersionName);
-		window.GlyphrStudio._GP.glyphrStudioVersion = _UI.thisGlyphrStudioVersion;
-		window.GlyphrStudio._GP.glyphrStudioVersionName = _UI.thisGlyphrStudioVersionName;
-		window.GlyphrStudio._GP.glyphs[this.state.selected.glyph] = new Glyph(_UI.loadSVGPathData);
+		window.GlyphrStudio._GP = new GlyphrStudioProject(Locale.get("app.numericVersion"), Locale.get("app.alphaVersion"));
+		window.GlyphrStudio._GP.glyphrStudioVersion = Locale.get("app.numericVersion");
+		window.GlyphrStudio._GP.glyphrStudioVersionName = Locale.get("app.alphaVersion");
+		// window.GlyphrStudio._GP.glyphs[this.state.selected.glyph] = new Glyph(_UI.loadSVGPathData);
 		
 		return({
 			_UI: _UI,

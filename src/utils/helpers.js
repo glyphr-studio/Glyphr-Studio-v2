@@ -59,3 +59,28 @@ export function unfold_dot_notation(path, bag) {
 
   return container;
 }
+
+/**
+ * @link  https://gist.github.com/mechanicious/9049349947d2985055950c858c870182
+ * @param ob
+ * @returns {{}}
+ */
+export function flatten_object(ob) {
+  var toReturn = {};
+
+  for (var i in ob) {
+    if (!ob.hasOwnProperty(i)) continue;
+
+    if ((typeof ob[i]) == 'object') {
+      var flatObject = flatten_object(ob[i]);
+      for (var x in flatObject) {
+        if (!flatObject.hasOwnProperty(x)) continue;
+
+        toReturn[i + '.' + x] = flatObject[x];
+      }
+    } else {
+      toReturn[i] = ob[i];
+    }
+  }
+  return toReturn;
+};
