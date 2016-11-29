@@ -10,9 +10,9 @@ export function toHex(subject) {
   return result
 }
 
-export function fromHex(subject) {
+export function fromHex(hex) {
   var j;
-  var hexes = subject.match(/.{1,4}/g) || [];
+  var hexes = hex.match(/.{1,4}/g) || [];
   var back = "";
   for (j = 0; j < hexes.length; j++) {
     back += String.fromCharCode(parseInt(hexes[j], 16));
