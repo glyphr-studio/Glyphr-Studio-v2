@@ -88,7 +88,7 @@ export default React.createClass({
         return(
           <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 1000 1000">
             <rect x="0" y="0" width="1000" height="1000" fill="#C0E9FD"></rect>
-            <path  d={data._GP.glyphs[data._UI.selectedGlyph].svgPathData}/>
+            <path  d={data._GP.glyphs[data._UI.selected.glyph].pathData}/>
           </svg>
         );
       case "pages":

@@ -11,7 +11,7 @@ export default React.createClass({
 				<h1>ATTRIBUTES</h1>
 				<textarea 
 					style = {{width: '90%', height: '500px'}} 
-					value = {this.props.data.glyphs[this.props.data.selectedGlyph].svgPathData} 
+					value = {this.props.data.glyphs[this.props.data.selectedGlyph].pathData} 
 					onChange = {this.changeOn}
 				></textarea>
 			</div>

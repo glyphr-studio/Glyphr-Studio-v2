@@ -5,28 +5,28 @@ export default React.createClass({
 	componentWillMount() {
 		var data = this.props.data;
 
-		if(!data.glyphs[this.props.codepoint]) return;
+		if(!data._GP.glyphs[this.props.codepoint]) return;
 		console.log('\n\t GlyphTile_componentDidMount ' + this.props.codepoint);
 
-		var glyphSVGs = data.glyphs[data.selectedGlyph].svgPathData.split('Z');
+		this.svg = data._GP.glyphs[this.props.codepoint].pathData;
 		console.log('\t Parsed Glyph SVG: \n' + glyphSVGs);
 
 
-		// Create Glyph
+		// // Create Glyph
 
-		console.log('Compound Path');
-		var glyph = new paper.CompoundPath({});
-		var path;
-		glyphSVGs.forEach(function(v, i, a){
-			console.log('\t Compound Fill Path ' + i);
-			if(!v) return;
-			path = new paper.Path({pathData: (v+'Z')});
-			glyph.addChild(path);
-			console.log('\t\t clockwise ' + path.clockwise);
-		});
+		// console.log('Compound Path');
+		// var glyph = new paper.CompoundPath({});
+		// var path;
+		// glyphSVGs.forEach(function(v, i, a){
+		// 	console.log('\t Compound Fill Path ' + i);
+		// 	if(!v) return;
+		// 	path = new paper.Path({pathData: (v+'Z')});
+		// 	glyph.addChild(path);
+		// 	console.log('\t\t clockwise ' + path.clockwise);
+		// });
 
-		// Generate SVG
-		// glyph.fitBounds(new paper.Path.Rectangle(0,0,50,50));
+		// // Generate SVG
+		// // glyph.fitBounds(new paper.Path.Rectangle(0,0,50,50));
 		this.svg = glyph.exportSVG({asString: false}).getAttribute('d');
 
 		console.log(this.svg);
@@ -53,7 +53,7 @@ export default React.createClass({
 			glyphpreview = '';
 		}
 
-		if(this.props.data.glyphs[codepoint]){
+		if(this.props.data._GP.glyphs[codepoint]){
 			// glyphpreview = <canvas id={canvasID}></canvas>;
 			glyphpreview = <svg width="46" height="46" viewBox="0 0 1000 1000"><path fill="black" d={this.svg}></path></svg>;
 			console.log('\t this.svg is: \n' + this.svg);
@@ -62,12 +62,12 @@ export default React.createClass({
 		// var breakpoint = (codepoint === '0x005A' || codepoint === '0x007A' || codepoint === '0x0021');
 		var breakpoint = false;
 
-		// console.log('Selected Glyph: ' + this.props.data.selectedGlyph + ' codepoint: ' + this.props.codepoint + ' are they equal? ');
+		// console.log('Selected Glyph: ' + this.props.data._UI.selected.glyph + ' codepoint: ' + this.props.codepoint + ' are they equal? ');
 
 		return (
 			<div
 				onClick={this.clickOn}
-				className={this.props.data.selectedGlyph == codepoint ? "glyphtileselected" : "glyphtile"}
+				className={this.props.data._UI.selected.glyph == codepoint ? "glyphtileselected" : "glyphtile"}
 				title={tooltip}
 				style={breakpoint? {marginRight: '3000px'} : {}}>
 					<div className="preview">{glyphpreview}</div>

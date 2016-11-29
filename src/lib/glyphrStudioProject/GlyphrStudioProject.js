@@ -3,8 +3,14 @@ Glyphr Studio Project
 A default project in class form for easy new project creation.
 **/
 
+/**
+ *  Represents a sinlgle Glyphr Studio project
+ *  @constructor
+ *  @param {string} vnum - Semantic Version Number, like '2.0.0'
+ *	@param {string} vname - Version Name, how you might say it out loud, like 'Version 2.0'
+ */
 
-export class GlyphrStudioProject {
+export default class GlyphrStudioProject {
 
 	constructor(vnum, vname){
 		this.projectsettings = {

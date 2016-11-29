@@ -1,25 +1,45 @@
 import * as encoding from "./../encoding/encoding";
+import * as hlpr from "../../utils/helpers";
+import paper from "../../../bower_components/paper/dist/paper-full.js" 
 
-export class Glyph {
+/**
+ *  Represents one Glyph
+ *  @constructor
+ *  @param {object} oa - optional object argumennt
+ *  @param {string} oa.char - the character representation for this Glyph
+ *  @param {string} [oa.name = 'DEFAULT NAME'] - Name of this glyph.  Should be set on creation, default should never be encountered.
+ *  @param {string} [oa.pathData = false] - SVG style path data (what appears in the 'd' attribute of the <path> tag)
+ *  @param {bool} [oa.isAutoWide = true] - Glyph has a dynamic width, depending on the paths it contains
+ *  @param {number} [oa.glyphWidth = 0] - Manually set width of the glyph (in em units).  Ignored if Glyph.isAutoWide == true.
+ *  @param {number} [oa.leftSideBearing = false] - Width of the Left Side Bearing (in em units). If false, uses default global value.
+ *  @param {number} [oa.rightSideBearing = false] - Width of the Right Side Bearing (in em units). If false, uses default global value.
+ *  @param {bool} [oa.ratioLock = false] - When adjusting the size of the glyph, maintain the aspect ratio of the whole glyph
+ *  @param {array} [oa.children = []] - all the paths that make up this Glyph. These are paper.Path objects, or glyphr.ComponentInstance objects
+ *  @param {array} [oa.usedin =[]] - Pointers to all the other glyphs in which this glyph is used as a Component Instance.
+ */
+
+export default class Glyph {
+  
   _glyph = {
     char: '',
-    unicode: '',
     objtype : 'glyph',
     name : '',
     pathData : false,
-    isautowide : true,
-    glyphwidth : 0,
-    leftsidebearing : false,
-    rightsidebearing : false,
-    ratiolock : false,
-    children : [],  // paper.Path objects, or glyphr.ComponentInstance objects
+    isAutoWide : true,
+    glyphWidth : 0,
+    leftSideBearing : false,
+    rightSideBearing : false,
+    ratioLock : false,
+    children : [],
     usedin : []
   };
 
   constructor(oa) {
-    // debug('\n Glyph - START');
+    hlpr.debug('\n Glyph - START');
+    hlpr.debug(oa);
+    
+    paper.setup();
     oa = oa || {};
-
 
     if(typeof oa.char === "string" || typeof oa.char === "number") {
       this._glyph.char = oa.char;
@@ -27,16 +47,15 @@ export class Glyph {
 
     if(this._glyph.char && this._glyph.char.length && this._glyph.char.length !== 1) throw new TypeError('Glyph: character length must be equal to 1. Given length is: ' + this._glyph.char.length);
 
-    this.name = oa.name || 'DEFAULT NAME';
-    this.pathData = oa.pathData || false;
-    this.isautowide = isval(oa.isautowide)? oa.isautowide : true;
-    this.glyphwidth = isval(oa.glyphwidth)? oa.glyphwidth : 0;
-    this.leftsidebearing = isval(oa.leftsidebearing)? oa.leftsidebearing : false;
-    this.rightsidebearing = isval(oa.rightsidebearing)? oa.rightsidebearing : false;
-    this.ratiolock = isval(oa.ratiolock)? oa.ratiolock : false;
-    this.children = oa.children || [];  // paper.Path objects, or glyphr.ComponentInstance objects
-    this.usedin = oa.usedin || [];
-
+    this._glyph.name = oa.name || 'DEFAULT NAME';
+    this._glyph.pathData = oa.pathData || false;
+    this._glyph.isAutoWide = hlpr.isval(oa.isAutoWide)? oa.isAutoWide : true;
+    this._glyph.glyphWidth = hlpr.isval(oa.glyphWidth)? oa.glyphWidth : 0;
+    this._glyph.leftSideBearing = hlpr.isval(oa.leftSideBearing)? oa.leftSideBearing : false;
+    this._glyph.rightSideBearing = hlpr.isval(oa.rightSideBearing)? oa.rightSideBearing : false;
+    this._glyph.ratioLock = hlpr.isval(oa.ratioLock)? oa.ratioLock : false;
+    this._glyph.children = oa.children || [];  // paper.Path objects, or glyphr.ComponentInstance objects
+    this._glyph.usedin = oa.usedin || [];
 
     // Hydrate paper.Path and glyphr.ComponentInstance children based on existing json
     var lc = 0;
@@ -44,12 +63,12 @@ export class Glyph {
     if(oa.children && oa.children.length){
       for(var i=0; i<oa.children.length; i++) {
         if(oa.children[i].objtype === 'componentinstance'){
-          // debug('\t hydrating ci ' + oa.children[i].name);
-          this.children[i] = new ComponentInstance(oa.children[i]);
+          hlpr.debug('\t hydrating ci ' + oa.children[i].name);
+          this._glyph.children[i] = new ComponentInstance(oa.children[i]);
           lc++;
         } else {
-          // debug('\t hydrating sh ' + oa.children[i].name);
-          this.children[i] = new paper.Path(oa.children[i]);
+          hlpr.debug('\t hydrating sh ' + oa.children[i].name);
+          this._glyph.children[i] = new paper.Path(oa.children[i]);
           cs++;
         }
       }
@@ -59,11 +78,11 @@ export class Glyph {
     if(oa.pathData){
       oa.pathData.split('Z').forEach(function(v, i, a){
         if(!v) return;
-        this.children.push(new paper.Path({pathData: (v+'Z')}));
-      });
+        else this._glyph.children.push(new paper.Path({pathData: (v+'Z')}));
+      }, this);
     }
 
-    // debug(' Glyph - END\n');
+    hlpr.debug(' Glyph - END\n');
   }
 
   char(): string {
@@ -78,6 +97,10 @@ export class Glyph {
 
   hex() {
     return encoding.toHex(this.char());
+  }
+
+  pathData(){
+    return this._glyph.pathData;
   }
 
   unicode() {

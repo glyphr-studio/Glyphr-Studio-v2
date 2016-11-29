@@ -12,7 +12,7 @@
     "start": "webpack-dev-server --inline --content-base .",
     "compile-commons": "webpack --config common.webpack.config.js --optimize-minimize"
   },
-  "author": "",
+  "author": "Matt LaGrandeur <matt@mattlag.com>",
   "license": "GPL-3.0",
   "devDependencies": {
     "babel-cli": "^6.6.5",
