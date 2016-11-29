@@ -130,7 +130,6 @@
     "0x007D": "Right Curly Bracket",
     "0x007E": "Tilde",
 
-    // Controls
     "0x0080": "Padding Character",
     "0x0081": "High Octet Preset",
     "0x0082": "Break Permitted Here",
@@ -164,7 +163,6 @@
     "0x009E": "Private Message",
     "0x009F": "Application Program Command",
 
-    // Latin-1 Suppliment
     "0x00A1": "Inverted Exclamation Mark",
     "0x00A2": "Cent sign",
     "0x00A3": "Pound sign",
@@ -261,7 +259,6 @@
     "0x00FE": "Latin Small Letter Thorn",
     "0x00FF": "Latin Small Letter Y with diaeresis",
 
-    // Latin Extended-A
     "0x0100": "Latin Capital Letter A with macron",
     "0x0101": "Latin Small Letter A with macron",
     "0x0102": "Latin Capital Letter A with breve",
@@ -391,7 +388,6 @@
     "0x017E": "Latin Small Letter Z with caron",
     "0x017F": "Latin Small Letter long S",
 
-    // Latin Extended-B
     "0x0180": "Latin Small Letter B with stroke",
     "0x0181": "Latin Capital Letter B with hook",
     "0x0182": "Latin Capital Letter B with top bar",

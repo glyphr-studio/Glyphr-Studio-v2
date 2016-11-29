@@ -1,32 +1,39 @@
 import "./../style/default/EditCanvas";
+import * as hlpr from "../utils/helpers";
 
 export default React.createClass({
 
 	componentDidMount() {
-		console.log('\n\t EditCanvas_componentDidMount');
+		hlpr.debug('\n\t EditCanvas_componentDidMount');
 		
 		var canvas = document.getElementById('editCanvas');
 		paper.setup(canvas);
-		console.log(paper);
+		hlpr.debug(paper);
 
 		this.redrawEditCanvas();
 
-		console.log('\t END EditCanvas_componentDidMount');
+		hlpr.debug('\t END EditCanvas_componentDidMount');
 	},
 
 	redrawEditCanvas() {
-		console.log('\n\t redrawEditCanvas:');
+		hlpr.debug('\n\t redrawEditCanvas:');
 		var data = this.props.data;
+		var glyph = data._GP.glyphs[data._UI.selected.glyph];
 
+		hlpr.debug(glyph);
+		// glyph.drawOnEditCanvas();
 
+		/**
+			MOVE ALL THIS STUFF TO lib/editCanvas
+		**/
 
 
 		/*
 			STROKE
 		*/
-/*		console.log('STROKE');
+/*		hlpr.debug('STROKE');
 		glyph.children.forEach(function(v, i, a){
-			console.log('\t Stroke Path ' + i);
+			hlpr.debug('\t Stroke Path ' + i);
 			if(!v) return;
 
 			path = new paper.Path(v.pathData);
@@ -34,15 +41,16 @@ export default React.createClass({
 			path.strokeWidth = 2;
 			path.strokeColor = path.clockwise? 'lime' : 'orange';
 
-			console.log('\t\t clockwise ' + path.clockwise);
-			console.log('\t\t strokeColor ' + path.strokeColor);
+			hlpr.debug('\t\t clockwise ' + path.clockwise);
+			hlpr.debug('\t\t strokeColor ' + path.strokeColor);
 		});
 */
 		/*
 			POINTS
 		*/
+/*
 		var text;
-		console.log('POINTS');
+		hlpr.debug('POINTS');
 		glyph.children.forEach(function(v, i, a){
 			path = new paper.Path(v.pathData);
 
@@ -52,11 +60,11 @@ export default React.createClass({
 				text.content = i;
 			});
 		});
+*/
 
 		// paper.view.draw();
 
-		console.log(glyph);
-		console.log('\t END redrawEditCanvas');
+		hlpr.debug('\t END redrawEditCanvas');
 	},
 
 	clickOn() {

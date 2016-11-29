@@ -99,8 +99,32 @@ export default class Glyph {
     return encoding.toHex(this.char());
   }
 
-  pathData(){
-    return this._glyph.pathData;
+  get pathData(){
+    hlpr.debug('\n Glyph.get pathData - START');
+    if(this._glyph.pathData) return this._glyph.pathData;
+    else return "M0,0 L250,500 L500,0 Z"; // A triangle to be replaced with TODO below
+/*  
+
+    TODO: take all the paths from a glyph and return the 
+          compound path equivalent SVG
+
+
+    // Create Glyph
+    hlpr.debug('Compound Path');
+    var glyph = new paper.CompoundPath({});
+    var path;
+    this._glyph.children.forEach(function(v, i, a){
+      hlpr.debug('\t Compound Fill Path ' + i);
+      if(!v) return;
+      path = new paper.Path({pathData: (v+'Z')});
+      glyph.addChild(path);
+      hlpr.debug('\t\t clockwise ' + path.clockwise);
+    }, this);
+
+    // Generate SVG
+    this._glyph.pathData = glyph.exportSVG({asString: false}).getAttribute('d');
+*/
+    hlpr.debug(' Glyph.get pathData - END\n');  
   }
 
   unicode() {
