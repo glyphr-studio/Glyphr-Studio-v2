@@ -3,29 +3,37 @@ import PanelHeaderFlyoutPages from "./PanelHeaderFlyoutPages";
 import PanelHeaderFlyoutGlyphs from "./PanelHeaderFlyoutGlyphs";
 import PanelHeaderFlyoutTools from "./PanelHeaderFlyoutTools";
 import PluginEventUnit from "./../lib/core/pluginEventStream/PluginEventUnit";
+import {storage} from "./../lib/storage/Storage";
 var flyouteu = new PluginEventUnit("flyout", 3);
 
 export default React.createClass({
   propTypes: {
+    id: React.PropTypes.string.isRequired,
     className: React.PropTypes.string.isRequired,
     title: React.PropTypes.string.isRequired,
     customFlyout: React.PropTypes.bool,
     isFlyoutOpen: React.PropTypes.bool,
     flyoutType: React.PropTypes.string
   },
-
   toggleFlyout() {
-    flyouteu.emit("toggle", this);
+    flyouteu.emit("toggle", this.props.id);
+    myStorage.setOpenFlyoutId(this.props.id);
   },
-
+  closeFlyout() {
+    flyouteu.emit("close", this.props.id);
+    myStorage.resetOpenFlyoutId();
+    this.setState({isFlyoutOpen: false});
+  },
   componentDidMount() {
-    var _this = this;
+    let _this = this;
 
-    flyouteu.on("flyout.toggle", (emitSource) => {
+    flyouteu.on("flyout.toggle", (id) => {
       // Close all other flyouts and toggle yourself
-      if(emitSource === _this) _this.setState({isFlyoutOpen: !_this.state.isFlyoutOpen});
+      if(id === _this.props.id) _this.setState({isFlyoutOpen: !_this.state.isFlyoutOpen});
       else _this.setState({isFlyoutOpen: false});
     });
+
+    if(myStorage.getOpenFlyoutId() === this.props.id) _this.setState({isFlyoutOpen: !_this.state.isFlyoutOpen});
   },
 
   getInitialState() {
@@ -38,25 +46,25 @@ export default React.createClass({
     switch(this.props.flyoutType) {
       case "tools":
         return(
-          <PanelHeaderFlyoutTools isOpen={this.state.isFlyoutOpen} toggle={this.toggleFlyout}>
+          <PanelHeaderFlyoutTools isOpen={this.state.isFlyoutOpen} toggle={this.toggleFlyout} closeHandler={this.closeFlyout}>
             {this.props.children}
           </PanelHeaderFlyoutTools>
         );
       case "glyphs":
         return(
-          <PanelHeaderFlyoutGlyphs isOpen={this.state.isFlyoutOpen} toggle={this.toggleFlyout}>
+          <PanelHeaderFlyoutGlyphs isOpen={this.state.isFlyoutOpen} toggle={this.toggleFlyout} closeHandler={this.closeFlyout}>
             {this.props.children}
           </PanelHeaderFlyoutGlyphs>
         );
       case "pages":
         return (
-          <PanelHeaderFlyoutPages isOpen={this.state.isFlyoutOpen} toggle={this.toggleFlyout}>
+          <PanelHeaderFlyoutPages isOpen={this.state.isFlyoutOpen} toggle={this.toggleFlyout} closeHandler={this.closeFlyout}>
             {this.props.children}
           </PanelHeaderFlyoutPages>
         );
       default:
         return (
-          <PanelHeaderFlyoutPages isOpen={this.state.isFlyoutOpen} toggle={this.toggleFlyout}>
+          <PanelHeaderFlyoutPages isOpen={this.state.isFlyoutOpen} toggle={this.toggleFlyout} closeHandler={this.closeFlyout}>
             !!! BAD FLYOUT TYPE !!!
           </PanelHeaderFlyoutPages>
         );
@@ -110,7 +118,6 @@ export default React.createClass({
   },
   
   render() {
-    console.log(this.props);
     return (
       <div className={this.props.className}>
         <div className="bar" onClick={this.toggleFlyout}>
@@ -129,3 +136,34 @@ export default React.createClass({
     )
   }
 })
+
+class PanelHeaderStorage {
+  _path = {
+    input (x) {
+      return ['panelHeaderStorage', x].join('.').replace(/[ -]/g, '_');
+    }
+  };
+
+  set(x, value) {
+    storage.set(this._path.input(x), value);
+  }
+
+  get(x) {
+    return storage.get(this._path.input(x));
+  }
+
+  setOpenFlyoutId(id) {
+    this.set("openFlyoutId", id);
+    return this;
+  }
+
+  getOpenFlyoutId() {
+    return this.get("openFlyoutId");
+  }
+
+  resetOpenFlyoutId() {
+    this.set("openFlyoutId", null);
+  }
+}
+
+let myStorage = new PanelHeaderStorage();

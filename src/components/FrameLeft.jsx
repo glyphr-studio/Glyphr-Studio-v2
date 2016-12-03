@@ -29,20 +29,20 @@ export default React.createClass({
     return (
       <div className="leftframe">
         <Panel className="panel">
-         <PanelHeader title="Glyph Edit" className="panel-header-primary" flyoutType="pages">
+         <PanelHeader title="Glyph Edit" id="pages" className="panel-header-primary" flyoutType="pages">
            <button>Settings</button>
            <button>Help</button>
          </PanelHeader>
         </Panel>
 
         <Panel className="panel">
-          <PanelHeader title="Latin Capital A" className="panel-header-secondary" flyoutType="glyphs" data={this.props.data}>
+          <PanelHeader title="Latin Capital A" id="glyphs" className="panel-header-secondary" flyoutType="glyphs" data={this.props.data}>
             {glyphTileNodes}
           </PanelHeader>
         </Panel>
 
         <Panel className="panel-showtray">
-         <PanelHeader title="Attributes" className="panel-header-tertiary" flyoutType="tools">
+         <PanelHeader title="Attributes" id="tools" className="panel-header-tertiary" flyoutType="tools">
             <button>Attributes</button>
             <button>Actions</button>
             <button>Shapes</button>
