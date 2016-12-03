@@ -1,19 +1,19 @@
 import "./../style/default/Panel";
 
 export default React.createClass({
-	changeOn() {
+  changeOn() {
 
-	}, 
+  },
 
-	render() {
-		return (
-			<div>
-				<h1>ATTRIBUTES</h1>
-				<textarea 
-					style = {{width: '90%', height: '500px'}}
-					onChange = {this.changeOn}
-				></textarea>
-			</div>
-		)
-	}
+  render() {
+    return (
+      <div>
+        <h1>ATTRIBUTES</h1>
+        <textarea
+          style = {{width: '90%', height: '500px'}}
+          onChange = {this.changeOn}
+        ></textarea>
+      </div>
+    )
+  }
 })
