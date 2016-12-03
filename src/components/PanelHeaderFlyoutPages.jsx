@@ -1,10 +1,10 @@
 import "./../style/default/PanelHeaderFlyout"
 import PluginEventUnit from "./../lib/core/pluginEventStream/PluginEventUnit";
-var piee = new PluginEventUnit("flyout", 3);
+let piee = new PluginEventUnit("flyout", 3);
 
 export default React.createClass({
   getInitialState() {
-    var _this = this;
+    let _this = this;
 
     return ({
       isOpen: _this.props.isOpen

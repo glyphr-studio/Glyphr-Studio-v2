@@ -15,7 +15,7 @@ class TooltipNotifier {
   }
 
   getDefaults(iconSign, type, message, timer) {
-    var timer = timer || 4000;
+    let timer = timer || 4000;
     return {
       //<span class="time">${timer ? `(will close in ${timer/1000}s)` : "(won't close)"}</span>
       // multiple:    true,
@@ -34,25 +34,25 @@ class TooltipNotifier {
   }
 
   info(message, timer, opt) {
-    var opt = Object.assign({}, this.getDefaults('i', 'info', message, timer), opt);
+    let opt = Object.assign({}, this.getDefaults('i', 'info', message, timer), opt);
     $(this._el).tooltipster(opt).tooltipster('show');
     return this;
   }
 
   warning(message, timer, opt) {
-    var opt = Object.assign({}, this.getDefaults('#', 'warning', message, timer), opt);
+    let opt = Object.assign({}, this.getDefaults('#', 'warning', message, timer), opt);
     $(this._el).tooltipster(opt).tooltipster('show');
     return this;
   }
 
   danger(message, timer, opt) {
-    var opt = Object.assign({}, this.getDefaults('!', 'danger', message, timer), opt);
+    let opt = Object.assign({}, this.getDefaults('!', 'danger', message, timer), opt);
     $(this._el).tooltipster(opt).tooltipster('show');
     return this;
   }
 
   loading(message, timer, opt) {
-    var opt = Object.assign({}, this.getDefaults('%', 'loading', message, timer), opt);
+    let opt = Object.assign({}, this.getDefaults('%', 'loading', message, timer), opt);
     $(this._el).tooltipster(opt).tooltipster('show');
     return this;
   }
@@ -78,4 +78,4 @@ class TooltipNotifier {
   }
 }
 
-export var Tooltip = new TooltipNotifier();
+export let Tooltip = new TooltipNotifier();

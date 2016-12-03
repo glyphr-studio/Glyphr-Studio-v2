@@ -7,7 +7,7 @@
    * @returns {jQuery}
    */
   $.fn.toggleAttr = function(attr, a, b) {
-    var attrValue = this.attr(attr);
+    let attrValue = this.attr(attr);
 
     if(typeof a === 'undefined' || typeof b === 'undefined') {
       this.attr(attr, ! attrValue);
@@ -67,7 +67,7 @@
    * @returns {boolean}
    */
   $.fn.hasAttr = function(attr) {
-    var hasAttribute = false;
+    let hasAttribute = false;
 
     this.get().forEach(function(el) {
       if(el.hasAttribute(attr)) hasAttribute = true;

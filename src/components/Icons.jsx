@@ -1,7 +1,7 @@
 // import React
 // html to jsx converter https://facebook.github.io/react/html-jsx.html
 
-export var Icons = {
+export let Icons = {
          panelTabs:       {
            tabsNav: {
              /**

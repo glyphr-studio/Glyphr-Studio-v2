@@ -38,7 +38,7 @@ export default class WindowRegister {
   detachStatic(object) {
     return this._windowRegisterAccess.write(() => {
       for(sObject in window[this._rootObjectName][this._staticRootObjectName]) {
-        var current = window[this._rootObjectName][this._staticRootObjectName][sObject];
+        let current = window[this._rootObjectName][this._staticRootObjectName][sObject];
         if(current === object) {
           delete window[this._rootObjectName][this._staticRootObjectName][sObject];
           return current;

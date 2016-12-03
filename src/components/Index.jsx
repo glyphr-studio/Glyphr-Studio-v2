@@ -10,7 +10,7 @@ import Locale from "../locale/Locale";
 export default React.createClass({
 	getInitialState() {
 
-		var _UI = {
+		let _UI = {
 			selected: {
 				tray: 'attributes',
 				glyph: '0x0041',

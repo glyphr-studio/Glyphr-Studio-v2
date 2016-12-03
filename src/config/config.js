@@ -1,6 +1,6 @@
 import {make_path} from "./../utils/helpers";
 
-export var config = {
+export let config = {
   index_url: "/",
   storagePath: {
     glyphAttribute(signHex) {

@@ -8,21 +8,34 @@ import PluginEventUnit from "./../lib/core/pluginEventStream/PluginEventUnit";
 
 
 // Panel Input Event Emitter
-var piee = new PluginEventUnit('panelInput', 3);
+let piee = new PluginEventUnit('panelInput', 3);
 
 export default React.createClass({
+  propTypes:{
+    id: React.PropTypes.string,
+    label: React.PropTypes.string,
+    type: React.PropTypes.string,
+    placeholder: React.PropTypes.string,
+    value: React.PropTypes.number,
+    step: React.PropTypes.number,
+    disableLock: React.PropTypes.bool,
+    disableCheck: React.PropTypes.bool,
+    disableInput: React.PropTypes.bool,
+    storagePath: React.PropTypes.string,
+    isDefaultChecked: React.PropTypes.bool,
+  },
   getDefaultProps() {
     return {
       id:          "",
       label:       "",
       type:        "",
       placeholder: "",
-      value:       "10",
-      step:        "1",
+      value:       10,
+      step:        1,
       disableLock: false,
       disableCheck: false,
       disableInput: false,
-      storagePath: '',
+      storagePath: "",
       isDefaultChecked: false
     }
   },
@@ -40,7 +53,7 @@ export default React.createClass({
     piee.emit('componentDidMount', {component: this});
     // Initialize jQuery refs
     this.$ = {};
-    for(var ref in this.refs) {
+    for(let ref in this.refs) {
       this.$[ref] = $(this.refs[ref]) || {};
     }
 
@@ -49,7 +62,7 @@ export default React.createClass({
     if(this.getInputData().isFocused) this.$.input.focus();
   },
   syncStyleWithInputState() {
-    var input = this.getInputData(),
+    let input = this.getInputData(),
         $input = this.$.input,
         $check = this.$.check,
         $lock = this.$.lock,
@@ -64,7 +77,7 @@ export default React.createClass({
     $check.isActive() && $lockAndInput.show() || $lockAndInput.hide();
   },
   handleLockClickEvent() {
-    var $input = $(this.refs.input),
+    let $input = $(this.refs.input),
         $lock = $(this.refs.lock),
         tooltip = Tooltip(this.refs.input);
     tooltip.destroy();
@@ -75,7 +88,7 @@ export default React.createClass({
     if($lock.isActive()) tooltip.destroy();
   },
   handleCheckClickEvent() {
-    var $check = $(this.refs.check);
+    let $check = $(this.refs.check);
     Tooltip(this.refs.input).destroy();
     $check.switchClass();
     this.syncStyleWithInputState();
@@ -86,7 +99,7 @@ export default React.createClass({
     this.saveInputData();
   },
   handleInputMaxLength() {
-    var $input = $(this.refs.input),
+    let $input = $(this.refs.input),
         maxLength = this.props.maxLength,
         tooltip = Tooltip(this.refs.input);
 
@@ -121,7 +134,7 @@ export default React.createClass({
          onClick={this.handleCheckClickEvent} ref="check">{Icons.input.check}</i>)
   },
   saveInputData() {
-    var $ = this.$;
+    let $ = this.$;
     MyStorage.setInput(this.props.storagePath, this.props.id, Object.assign({}, this.getInputData(), {
       value: $.input.val(),
       disabled: $.input.isDisabled(),

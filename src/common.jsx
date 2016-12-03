@@ -10,6 +10,6 @@ window.ReactDOM = ReactDOM;
 
 window.ReactRouter = ReactRouter;
 // unload router to the global scope
-for(var i in ReactRouter) {
+for(let i in ReactRouter) {
   window[i] = ReactRouter[i];
 }

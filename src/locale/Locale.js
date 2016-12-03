@@ -1,4 +1,4 @@
-var locale = require('./' + 'en' + '/Tags');
+let locale = require('./' + 'en' + '/Tags');
 
 class Locale {
 
@@ -33,7 +33,7 @@ class Locale {
    * @returns {string}
    */
   get(key) {
-    var translation;
+    let translation;
 
     key.split('.').forEach((segment) => {
       translation = translation && translation[segment] || locale[segment];

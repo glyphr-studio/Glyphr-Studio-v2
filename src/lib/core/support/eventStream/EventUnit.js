@@ -43,7 +43,7 @@ export default class EventUnit {
 
   mute() {
     this._accessLevel.mute(() => {
-      for(var i = 0; i < this._emitedEventNames; i++) {
+      for(let i = 0; i < this._emitedEventNames; i++) {
         this._getStream().mute(this._emitedEventNames[i]);
       }
     });
@@ -52,7 +52,7 @@ export default class EventUnit {
 
   unmute() {
     this._accessLevel.mute(() => {
-      for(var i = 0; i < this._emitedEventNames; i++) {
+      for(let i = 0; i < this._emitedEventNames; i++) {
         this._getStream().unmute(this._emitedEventNames[i]);
       }
     });
@@ -72,8 +72,8 @@ export default class EventUnit {
 
   emit(eventName, data) {
     this._accessLevel.emit(() => {
-      var properEventName = [this._rootName, eventName].join('.');
-      var muted = this.isMuted() ? ' (muted)' : '';
+      let properEventName = [this._rootName, eventName].join('.');
+      let muted = this.isMuted() ? ' (muted)' : '';
       console.info(`${this._rootName}: ${properEventName.replace('.', '::')} ${muted}`);
       this._getStream().shout(properEventName, data, this);
     });
@@ -81,12 +81,12 @@ export default class EventUnit {
 
   cascadeEmit(eventName, data) {
     this._accessLevel.emit(() => {
-      var properEventName = [this._rootName, eventName].join('.');
+      let properEventName = [this._rootName, eventName].join('.');
 
       // ges is bound to window in main.jsx
-      for(var i = 0; i <= properEventName.split('.').length; i++) {
+      for(let i = 0; i <= properEventName.split('.').length; i++) {
         this._getStream().shout(properEventName, data, this);
-        var muted = this.isMuted() ? ' (muted)' : '';
+        let muted = this.isMuted() ? ' (muted)' : '';
         console.info(`EventEmitter: ${properEventName.replace('.', '::')} ${muted}`);
         properEventName = properEventName.split('.');
         properEventName.pop();

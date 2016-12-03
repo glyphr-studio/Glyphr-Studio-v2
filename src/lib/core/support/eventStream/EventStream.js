@@ -23,11 +23,11 @@ export default class EventStream {
   }
 
   off(handler, emitter) {
-    var _this = this;
+    let _this = this;
 
     // for instead of forEach for performance reasons
-    for(var handlerKey in this._subs) {
-      for(var i = 0; i < this._subs[handlerKey].length; i++) {
+    for(let handlerKey in this._subs) {
+      for(let i = 0; i < this._subs[handlerKey].length; i++) {
         if(handler === this._subs[handlerKey][i]) this._subs[handlerKey].splice(i, 1);
       }
     }
@@ -46,7 +46,7 @@ export default class EventStream {
   }
 
   unmute(eventName) {
-    var offset = this._muted.indexOf(eventName);
+    let offset = this._muted.indexOf(eventName);
     offset < 0 && this._muted.splice(offset, 1);
   }
 

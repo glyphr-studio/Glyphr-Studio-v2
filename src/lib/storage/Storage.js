@@ -13,7 +13,7 @@ export default class Storage {
   }
 
   get(key) {
-    var value = this._store.get(key);
+    let value = this._store.get(key);
     if(this._toDestroy.includes(key)) this._store.remove(key);
     this._eventUnit.emit(`get`, {key: key, _: this});
     return value;
@@ -22,7 +22,7 @@ export default class Storage {
 
   subscribe(key, handler, context, data) {
     if(! this._subs[key]) this._subs[key] = [];
-    var handler = handler.bind(context || this, data);
+    handler = handler.bind(context || this, data);
     this._subs[key].push(handler);
 
     return handler;
@@ -32,7 +32,7 @@ export default class Storage {
     if(typeof identifier === "function") {
       // remove a specific handler
       Object.keys(this._subs).forEach((key, i) => {
-        var index = this._subs[key].indexOf(identifier);
+        let index = this._subs[key].indexOf(identifier);
         if(index > -1) delete this._subs[key][index];
       })
     } else {
@@ -42,7 +42,7 @@ export default class Storage {
   }
 
   set(key, value, overwrite=true) {
-    var oldValue = this._store.get(key);
+    let oldValue = this._store.get(key);
     this._store.set(key, value, overwrite);
     this._subs[key] && this._subs[key].forEach((handler) => {
       handler(key, value, oldValue);
@@ -58,4 +58,4 @@ export default class Storage {
 
 window.appStorage = new Storage();
 window.appStorage._eventUnit.mute();
-export var storage = window.appStorage;
+export let storage = window.appStorage;
