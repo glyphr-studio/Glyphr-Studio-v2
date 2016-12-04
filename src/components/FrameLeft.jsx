@@ -5,16 +5,15 @@ import PanelTray from "./PanelTray";
 import GlyphTile from "./GlyphTile";
 import PluginEventUnit from "./../lib/core/pluginEventStream/PluginEventUnit";
 let flee = new PluginEventUnit("frameLeft", 3);
-let ptee = new PluginEventUnit("panelTray", 3);
 
 export default React.createClass({
+  contextTypes: {
+    router: React.PropTypes.object.isRequired
+  },
   getInitialState() {
     return {
       selectedTray: "attributes"
     }
-  },
-  setTray(name) {
-    ptee.emit("setTray", name);
   },
   render() {
     const basicLatinOrder = ['0x0041','0x0042','0x0043','0x0044','0x0045','0x0046','0x0047','0x0048','0x0049','0x004A','0x004B',
@@ -53,17 +52,17 @@ export default React.createClass({
 
         <Panel className="panel-showtray">
          <PanelHeader title="Attributes" id="tools" className="panel-header-tertiary" flyoutType="tools">
-            <button onClick={this.setTray.bind(this, "attributes")}>Attributes</button>
-            <button onClick={this.setTray.bind(this, "actions")}>Actions</button>
-            <button onClick={this.setTray.bind(this, "shapes")}>Shapes</button>
-            <button onClick={this.setTray.bind(this, "history")}>History</button>
-            <button onClick={this.setTray.bind(this, "view")}>View</button>
+            <button onClick={this.context.router.push.bind(this, '/project/editor/leftframe/tray/attributes')}>Attributes</button>
+            <button onClick={this.context.router.push.bind(this, '/project/editor/leftframe/tray/actions')}>Actions</button>
+            <button onClick={this.context.router.push.bind(this, '/project/editor/leftframe/tray/shapes')}>Shapes</button>
+            <button onClick={this.context.router.push.bind(this, '/project/editor/leftframe/tray/history')}>History</button>
+            <button onClick={this.context.router.push.bind(this, '/project/editor/leftframe/tray/view')}>View</button>
           </PanelHeader>
 
-          <PanelTray data={this.props.data} selectedTray={this.state.selectedTray}>
+          <PanelTray>
+            {this.props.children}
           </PanelTray>
         </Panel>
-
       </div>
     );
   }
