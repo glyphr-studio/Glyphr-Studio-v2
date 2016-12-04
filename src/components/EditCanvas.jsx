@@ -76,8 +76,7 @@ export default React.createClass({
       <div className="centerframe">
         <canvas id="editCanvas"
           onClick={this.clickOn}
-          data-paper-resize={true}
-        ></canvas>
+          data-paper-resize={true}></canvas>
       </div>
     )
   }

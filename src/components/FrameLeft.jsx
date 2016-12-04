@@ -3,9 +3,19 @@ import Panel from "./Panel";
 import PanelHeader from "./PanelHeader";
 import PanelTray from "./PanelTray";
 import GlyphTile from "./GlyphTile";
-
+import PluginEventUnit from "./../lib/core/pluginEventStream/PluginEventUnit";
+let flee = new PluginEventUnit("frameLeft", 3);
+let ptee = new PluginEventUnit("panelTray", 3);
 
 export default React.createClass({
+  getInitialState() {
+    return {
+      selectedTray: "attributes"
+    }
+  },
+  setTray(name) {
+    ptee.emit("setTray", name);
+  },
   render() {
     const basicLatinOrder = ['0x0041','0x0042','0x0043','0x0044','0x0045','0x0046','0x0047','0x0048','0x0049','0x004A','0x004B',
       '0x004C','0x004D','0x004E','0x004F','0x0050','0x0051','0x0052','0x0053','0x0054','0x0055','0x0056','0x0057','0x0058',
@@ -43,14 +53,14 @@ export default React.createClass({
 
         <Panel className="panel-showtray">
          <PanelHeader title="Attributes" id="tools" className="panel-header-tertiary" flyoutType="tools">
-            <button>Attributes</button>
-            <button>Actions</button>
-            <button>Shapes</button>
-            <button>History</button>
-            <button>View</button>
+            <button onClick={this.setTray.bind(this, "attributes")}>Attributes</button>
+            <button onClick={this.setTray.bind(this, "actions")}>Actions</button>
+            <button onClick={this.setTray.bind(this, "shapes")}>Shapes</button>
+            <button onClick={this.setTray.bind(this, "history")}>History</button>
+            <button onClick={this.setTray.bind(this, "view")}>View</button>
           </PanelHeader>
 
-          <PanelTray data={this.props.data}>
+          <PanelTray data={this.props.data} selectedTray={this.state.selectedTray}>
           </PanelTray>
         </Panel>
 

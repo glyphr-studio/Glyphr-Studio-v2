@@ -2,7 +2,6 @@ import SecurityError from "./../exceptions/SecurityError";
 import WindowRegister from "./../../windowRegister/WindowRegister";
 import WindowRegisterAccess from "./../../windowRegister/WindowRegisterAccess";
 
-
 export default class EventUnit {
   _rootName = '';
   _isMuted = false;
@@ -22,6 +21,11 @@ export default class EventUnit {
     this._accessLevel._id = this._rootName;
     this._windowRegister = new WindowRegister(new WindowRegisterAccess(this._rootName, 2));
     console.info(`EventEmitter: ${eventRootName} (init)`);
+  }
+
+  _getStackTrace() {
+    let err = new Error();
+    return err.stack;
   }
 
   _getStream() {
@@ -82,7 +86,6 @@ export default class EventUnit {
   cascadeEmit(eventName, data) {
     this._accessLevel.emit(() => {
       let properEventName = [this._rootName, eventName].join('.');
-
       // ges is bound to window in main.jsx
       for(let i = 0; i <= properEventName.split('.').length; i++) {
         this._getStream().shout(properEventName, data, this);
