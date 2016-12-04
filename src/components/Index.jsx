@@ -20,7 +20,7 @@ export default React.createClass({
   render() {
     return (
       <div>
-        <h2>We're currently working at</h2> <Link to="/project/editor">project editor</Link>
+        <h2>We're currently working at</h2> <Link to="/project/editor/leftframe/tray/attributes">project editor</Link>
       </div>
     )
   }
