@@ -1,70 +1,53 @@
 import "./../style/default/EditCanvas";
 import * as hlpr from "../utils/helpers";
+import EventUnit from "./../lib/core/pluginEventStream/PluginEventUnit";
+let ecee = new EventUnit("editCanvas", 3);
 
 export default React.createClass({
 
   componentDidMount() {
     hlpr.debug('\n\t EditCanvas_componentDidMount');
 
-    var canvas = document.getElementById('editCanvas');
+    let canvas = document.getElementById('editCanvas');
     paper.setup(canvas);
-    hlpr.debug(paper);
 
-    this.redrawEditCanvas();
+    // Adapted from the following Processing example:
+    // http://processing.org/learning/topics/follow3.html
 
-    hlpr.debug('\t END EditCanvas_componentDidMount');
-  },
+    // The amount of points in the path:
+      let points = 25;
 
-  redrawEditCanvas() {
-    hlpr.debug('\n\t redrawEditCanvas:');
-    var data = this.props.data;
-    var glyph = data._GP.glyphs[data._UI.selected.glyph];
+    // The distance between the points:
+    let length = 35;
 
-    hlpr.debug(glyph);
-    // glyph.drawOnEditCanvas();
-
-    /**
-      MOVE ALL THIS STUFF TO lib/editCanvas
-    **/
-
-
-    /*
-      STROKE
-    */
-/*    hlpr.debug('STROKE');
-    glyph.children.forEach(function(v, i, a){
-      hlpr.debug('\t Stroke Path ' + i);
-      if(!v) return;
-
-      path = new paper.Path(v.pathData);
-      path.fillRule = 'nonzero';
-      path.strokeWidth = 2;
-      path.strokeColor = path.clockwise? 'lime' : 'orange';
-
-      hlpr.debug('\t\t clockwise ' + path.clockwise);
-      hlpr.debug('\t\t strokeColor ' + path.strokeColor);
+    let path = new paper.Path.Circle({
+      center: paper.view.center,
+      radius: 25,
+      fillColor: 'black'
     });
-*/
-    /*
-      POINTS
-    */
-/*
-    var text;
-    hlpr.debug('POINTS');
-    glyph.children.forEach(function(v, i, a){
-      path = new paper.Path(v.pathData);
 
-      path.segments.forEach(function(v, i, a){
-        text = new paper.PointText(new paper.Point(v.point.x, v.point.y));
-        text.fillColor = 'black';
-        text.content = i;
-      });
+    // When the mouse enters the item, set its fill color to red:
+    path.attach('mouseenter', function() {
+      this.fillColor = 'red';
     });
-*/
 
-    // paper.view.draw();
+    let move = function(event) {
+      path.setPosition(event.point);
+      ecee.emit("mousemove",event);
+    };
 
-    hlpr.debug('\t END redrawEditCanvas');
+    path.view.on('mousemove', move);
+
+    // When the mouse leaves the item, set its fill color to black
+    // and remove the mover function:
+    path.on('mouseleave', function() {
+      this.fillColor = 'black';
+      path.detach('mouseenter', move);
+    });
+
+
+
+    paper.view.draw();
   },
 
   clickOn() {

@@ -12,8 +12,6 @@ export default React.createClass({
     return null;
   },
   componentWillMount() {
-    paper.setup();
-    // paper.install(window);
   },
   componentDidMount(){
   },

@@ -10,6 +10,7 @@ import PanelTrayActions from "./PanelTrayActions";
 import PanelTrayHistory from "./PanelTrayHistory";
 import PanelTrayAttributes from "./PanelTrayAttributes";
 import PanelTrayShapes from "./PanelTrayShapes";
+
 import PanelTray from "./PanelTray";
 
 export default React.createClass({

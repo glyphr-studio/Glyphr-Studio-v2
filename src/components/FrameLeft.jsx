@@ -3,6 +3,8 @@ import Panel from "./Panel";
 import PanelHeader from "./PanelHeader";
 import PanelTray from "./PanelTray";
 import GlyphTile from "./GlyphTile";
+import EditCanvas from "./EditCanvas";
+
 import PluginEventUnit from "./../lib/core/pluginEventStream/PluginEventUnit";
 let flee = new PluginEventUnit("frameLeft", 3);
 
@@ -36,33 +38,37 @@ export default React.createClass({
     }, this);
     
     return (
-      <div className="leftframe">
-        <Panel className="panel">
-         <PanelHeader title="Glyph Edit" id="pages" className="panel-header-primary" flyoutType="pages">
-           <button>Settings</button>
-           <button>Help</button>
-         </PanelHeader>
-        </Panel>
+      <div style={{display: "flex"}}>
+        <div className="leftframe">
+          <Panel className="panel">
+           <PanelHeader title="Glyph Edit" id="pages" className="panel-header-primary" flyoutType="pages">
+             <button>Settings</button>
+             <button>Help</button>
+           </PanelHeader>
+          </Panel>
 
-        <Panel className="panel">
-          <PanelHeader title="Latin Capital A" id="glyphs" className="panel-header-secondary" flyoutType="glyphs" data={this.props.data}>
-            {glyphTileNodes}
-          </PanelHeader>
-        </Panel>
+          <Panel className="panel">
+            <PanelHeader title="Latin Capital A" id="glyphs" className="panel-header-secondary" flyoutType="glyphs" data={this.props.data}>
+              {glyphTileNodes}
+            </PanelHeader>
+          </Panel>
 
-        <Panel className="panel-showtray">
-         <PanelHeader title="Attributes" id="tools" className="panel-header-tertiary" flyoutType="tools">
-            <button onClick={this.context.router.push.bind(this, '/project/editor/leftframe/tray/attributes')}>Attributes</button>
-            <button onClick={this.context.router.push.bind(this, '/project/editor/leftframe/tray/actions')}>Actions</button>
-            <button onClick={this.context.router.push.bind(this, '/project/editor/leftframe/tray/shapes')}>Shapes</button>
-            <button onClick={this.context.router.push.bind(this, '/project/editor/leftframe/tray/history')}>History</button>
-            <button onClick={this.context.router.push.bind(this, '/project/editor/leftframe/tray/view')}>View</button>
-          </PanelHeader>
+          <Panel className="panel-showtray">
+           <PanelHeader title="Attributes" id="tools" className="panel-header-tertiary" flyoutType="tools">
+              <button onClick={this.context.router.push.bind(this, '/project/editor/leftframe/tray/attributes')}>Attributes</button>
+              <button onClick={this.context.router.push.bind(this, '/project/editor/leftframe/tray/actions')}>Actions</button>
+              <button onClick={this.context.router.push.bind(this, '/project/editor/leftframe/tray/shapes')}>Shapes</button>
+              <button onClick={this.context.router.push.bind(this, '/project/editor/leftframe/tray/history')}>History</button>
+              <button onClick={this.context.router.push.bind(this, '/project/editor/leftframe/tray/view')}>View</button>
+            </PanelHeader>
 
-          <PanelTray>
-            {this.props.children}
-          </PanelTray>
-        </Panel>
+            <PanelTray>
+              {this.props.children}
+            </PanelTray>
+          </Panel>
+        </div>
+
+        <EditCanvas/>
       </div>
     );
   }
