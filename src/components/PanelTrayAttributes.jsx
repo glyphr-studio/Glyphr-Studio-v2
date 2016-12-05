@@ -6,7 +6,7 @@ export default React.createClass({
   componentDidMount() {
     let _this = this;
     ptaee.on("editCanvas.mousemove", function(event) {
-      _this.refs.text.value = "x/y = "+ event.point.x + "/" + event.point.y;
+      if(_this.refs.text) _this.refs.text.value = "x/y = "+ event.point.x + "/" + event.point.y;
     })
   },
   render() {
