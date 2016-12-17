@@ -45,6 +45,11 @@ export default React.createClass({
       path.detach('mouseenter', move);
     });
 
+    path.on('blur', function() {
+      this.fillColor = 'black';
+      path.detach('mouseenter', move);
+    });
+
 
 
     paper.view.draw();

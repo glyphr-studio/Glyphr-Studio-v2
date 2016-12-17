@@ -16,7 +16,6 @@ export default React.createClass({
         <textarea
           ref="text"
           style = {{width: '90%', height: '500px'}}
-          onChange = {this.changeOn}
         ></textarea>
       </div>
     )

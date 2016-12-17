@@ -21,11 +21,11 @@ export default React.createClass({
         <Route path={config.routes.project_editor} component={ProjectEditor}>
           <Route path="leftframe" name="leftframe" component={FrameLeft}>
             <Route path="tray" component={PanelTray}>
-              <Route path="attributes" component={PanelTrayAttributes}/>
-              <Route path="actions" component={PanelTrayActions}/>
-              <Route path="history" component={PanelTrayHistory}/>
-              <Route path="view" component={PanelTrayView}/>
-              <Route path="shapes" component={PanelTrayShapes}/>
+              <Route path="attributes(/:flyout)" component={PanelTrayAttributes}/>
+              <Route path="actions(/:flyout)" component={PanelTrayActions}/>
+              <Route path="history(/:flyout)" component={PanelTrayHistory}/>
+              <Route path="view(/:flyout)" component={PanelTrayView}/>
+              <Route path="shapes(/:flyout)" component={PanelTrayShapes}/>
             </Route>
           </Route>
           {/*<Route path="layer" component={LayersPanel}>*/}
