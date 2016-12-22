@@ -7,6 +7,9 @@ import "script!./../bower_components/paper/dist/paper-full.js";
 
 window.React = React;
 window.ReactDOM = ReactDOM;
+paper.install(window);
+
+console.log("loading in");
 
 window.ReactRouter = ReactRouter;
 // unload router to the global scope

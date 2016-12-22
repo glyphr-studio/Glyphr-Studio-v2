@@ -7,7 +7,7 @@ export default class Storage {
   _store = store;
   _eventUnit = new PluginEventUnit('StoragePlugin', 4);
 
-  once(key: string, value) {
+  once(key, value) {
     this._store.set(key, value);
     this._toDestroy.push(key);
   }
