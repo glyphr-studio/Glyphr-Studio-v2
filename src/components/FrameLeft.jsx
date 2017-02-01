@@ -1,4 +1,5 @@
 import "./../style/default/framework"
+import "./../style/default/PanelHeader"
 import Panel from "./Panel";
 import PanelHeader from "./PanelHeader";
 import PanelTray from "./PanelTray";
