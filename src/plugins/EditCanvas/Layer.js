@@ -1,4 +1,4 @@
-import CanvasEventUnit from "./../core/canvasEventStream/CanvasEventUnit";
+import CanvasEventUnit from "./../../lib/core/canvasEventStream/CanvasEventUnit";
 
 // demo
 

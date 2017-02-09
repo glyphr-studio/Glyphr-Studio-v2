@@ -1,8 +1,8 @@
-import "EditCanvas";
-import EventUnit from "./../lib/core/canvasEventStream/CanvasEventUnit";
+import "./EditCanvas.scss";
+import EventUnit from "./../../lib/core/canvasEventStream/CanvasEventUnit";
 
-import "PenTool";
-import "Layer";
+import "./PenTool";
+import "./Layer";
 
 let ecee = new EventUnit("editCanvas", 3);
 
