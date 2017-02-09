@@ -1,8 +1,8 @@
 // import React
 // import ReactRouter
 import {config} from "./../config/config";
-import FrameLeft from "./FrameLeft";
-import EditCanvas from "./EditCanvas";
+// import FrameLeft from "./FrameLeft";
+// import EditCanvas from "./EditCanvas";
 import Glyph from "./../lib/glyph/Glyph";
 import GlyphrStudioProject from "./../lib/glyphrStudioProject/GlyphrStudioProject";
 import Locale from "../locale/Locale";

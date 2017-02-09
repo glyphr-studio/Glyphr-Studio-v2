@@ -5,7 +5,7 @@ import PanelHeader from "./PanelHeader";
 import PanelTray from "./PanelTray";
 import PanelHeaderFlyoutGlyphSelect from "./PanelHeaderFlyoutGlyphSelect";
 import PanelHeaderListSelect from "./PanelHeaderFlyoutListSelect";
-import EditCanvas from "./EditCanvas";
+import EditCanvas from "./../plugins/EditCanvas/EditCanvas";
 import routes from "./../config/routes";
 
 import PluginEventUnit from "./../lib/core/pluginEventStream/PluginEventUnit";
