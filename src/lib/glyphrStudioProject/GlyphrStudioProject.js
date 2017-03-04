@@ -4,7 +4,7 @@ A default project in class form for easy new project creation.
 **/
 
 /**
- *  Represents a sinlgle Glyphr Studio project
+ *  Represents a single Glyphr Studio project
  *  @constructor
  *  @param {string} vnum - Semantic Version Number, like '2.0.0'
  *  @param {string} vname - Version Name, how you might say it out loud, like 'Version 2.0'
@@ -165,7 +165,7 @@ export default class GlyphrStudioProject {
 
   genProjectID(){
     var j = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
-    var re = 'g_';
+    var re = 'g2_';
 
     for(var i=0; i<10; i++){
       re += j.charAt(Math.floor(Math.round(Math.random()*j.length)));

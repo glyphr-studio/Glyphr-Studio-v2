@@ -1,4 +1,4 @@
-{
+export let testProject = {
 	"projectsettings": {
 		"version": "Version 2-alpha",
 		"versionnum": "2.0.0-alpha",
@@ -85,10 +85,11 @@
 			"rightsidebearing": false,
 			"ratiolock": false,
 			"usedin": [],
-			children: [
-				"Path",{"applyMatrix":true,"segments":[[[54,125],[-102,99],[102,-99]],[[294,37],[-70,-151],[70,151]],[[227,189],[223,-38],[-223,38]]],"closed":true,"fillColor":["hsb",236.36061,1,1,0.5]}
-				],
+			"children": [
+				["Path",{"applyMatrix":true,"segments":[[[54,125],[-102,99],[102,-99]],[[294,37],[-70,-151],[70,151]],[[227,189],[223,-38],[-223,38]]],"closed":true,"fillColor":["hsb",236.36061,1,1,0.5]}],
+				["Path",{"applyMatrix":true,"segments":[[[372.53125,232],[-99,87],[99,-87]],[[556.53125,231],[-2,-118],[2,118]],[[448.53125,356],[114,73],[-114,-73]]],"closed":true,"fillColor":["hsb",93.51771,1,1,0.5]}]
+			]
 		}
 	},
 	"components": {}
-}
+};

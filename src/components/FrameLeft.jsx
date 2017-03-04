@@ -7,6 +7,7 @@ import PanelHeaderFlyoutGlyphSelect from "./PanelHeaderFlyoutGlyphSelect";
 import PanelHeaderListSelect from "./PanelHeaderFlyoutListSelect";
 import EditCanvas from "./../plugins/EditCanvas/EditCanvas";
 import routes from "./../config/routes";
+import {config} from "./../config/config";
 
 import PluginEventUnit from "./../lib/core/pluginEventStream/PluginEventUnit";
 let flee = new PluginEventUnit("frameLeft", 3);
@@ -18,6 +19,14 @@ export default React.createClass({
   getInitialState() {
     return {
       selectedTray: "attributes"
+    }
+  },
+  componentWillMount(){
+    if(config.devMode) {
+     console.log("DevMode is true");
+     config.devModeSetup();
+    } else {
+     console.log("DevMode is false");
     }
   },
   render() {
@@ -50,7 +59,7 @@ export default React.createClass({
           </Panel>
         </div>
 
-        <EditCanvas/>
+        <EditCanvas selectedGlyph={config.selected.glyph} />
       </div>
     );
   }
