@@ -1,6 +1,6 @@
 import EventUnit from "./EventUnit";
-import WindowRegister from "./../../windowRegister/WindowRegister";
-import WindowRegisterAccess from "./../../windowRegister/WindowRegisterAccess";
+import WindowRegister from "../../windowRegister/WindowRegister";
+import WindowRegisterAccess from "../../windowRegister/WindowRegisterAccess";
 import EventUnitAccess from "./EventUnitAccess";
 
 export default class EventStream {

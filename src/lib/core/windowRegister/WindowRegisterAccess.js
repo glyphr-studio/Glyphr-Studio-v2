@@ -1,4 +1,4 @@
-import Access from "./../security/Access";
+import Access from "../security/Access";
 
 export default class WindowRegisterAccess extends Access {
   constructor(instanceName, accessLevel) {

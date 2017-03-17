@@ -1,6 +1,6 @@
 import SecurityError from "./../exceptions/SecurityError";
-import WindowRegister from "./../../windowRegister/WindowRegister";
-import WindowRegisterAccess from "./../../windowRegister/WindowRegisterAccess";
+import WindowRegister from "../../windowRegister/WindowRegister";
+import WindowRegisterAccess from "../../windowRegister/WindowRegisterAccess";
 
 export default class EventUnit {
   _rootName = '';
