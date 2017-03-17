@@ -57,10 +57,12 @@ export default class EventStream {
   shout(eventName, data, emitter) {
     // todo: restrict valid calls to EventUnit only
 
-    ! this.isMuted(eventName) && this._subs[eventName] && this._subs[eventName].forEach(function(_handler) {
-      // _handler(Object.assingn(data, {_handler: _handler}));
-      _handler(data);
-    });
+    if(this.isMuted(eventName) === false && Object.keys(this._subs).indexOf(eventName) !== -1) {
+      this._subs[eventName].forEach(function(_handler) {
+        // _handler(Object.assingn(data, {_handler: _handler}));
+        _handler(data);
+      });
+    }
   }
 
   teardown() {

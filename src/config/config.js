@@ -5,7 +5,7 @@ import {testProject} from "./../test/test_project.js";
 export let config = {
   version: '2.0.0',
   versionString: 'Glyphr Studio - Version 2 alpha',
-
+  defaultGlyph: "0x0041",
   selected: {
     glyph: '0x0041'
   },
@@ -19,13 +19,13 @@ export let config = {
   },
 
   index_url: "/",
-  
+
   storagePath: {
     glyphAttribute(signHex) {
       return ['glyph', 'attribute', signHex].join('.');
     }
   },
-  
+
   routes: {
     project_editor: '/project/editor',
     project_editor_tab(param) {

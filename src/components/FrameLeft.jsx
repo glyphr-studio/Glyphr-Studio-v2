@@ -59,7 +59,7 @@ export default React.createClass({
           </Panel>
         </div>
 
-        <EditCanvas selectedGlyph={config.selected.glyph} />
+        <EditCanvas/>
       </div>
     );
   }
