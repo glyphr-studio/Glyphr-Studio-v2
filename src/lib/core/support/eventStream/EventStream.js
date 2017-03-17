@@ -55,7 +55,7 @@ export default class EventStream {
   }
 
   shout(eventName, data, emitter) {
-    // todo: restrict valid calls to EventUnit only
+    // todo: restrict valid calls to CanvasEventUnit only
 
     if(this.isMuted(eventName) === false && Object.keys(this._subs).indexOf(eventName) !== -1) {
       this._subs[eventName].forEach(function(_handler) {

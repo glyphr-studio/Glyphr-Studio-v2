@@ -1,7 +1,7 @@
 import store from "store2";
 import PluginEventUnit from "./../core/pluginEventStream/PluginEventUnit";
 
-export default class Storage {
+class Storage {
   _toDestroy = [];
   _subs = {};
   _store = store;

@@ -14,7 +14,7 @@ let flee = new PluginEventUnit("frameLeft", 3);
 
 export default React.createClass({
   contextTypes: {
-    router: React.PropTypes.object.isRequired
+    router: React.PropTypes.object.isRequired,
   },
   getInitialState() {
     return {

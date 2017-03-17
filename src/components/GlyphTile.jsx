@@ -3,6 +3,7 @@ import {storage} from "./../lib/storage/Storage";
 import Locale from "./../locale/Locale";
 import * as encoding from "./../lib/encoding/encoding";
 import PluginEventUnit from "./../lib/core/pluginEventStream/PluginEventUnit";
+import {config} from "./../config/config";
 
 
 // Panel Input Event Emitter
@@ -64,7 +65,6 @@ export default React.createClass({
 
   handleClick() {
     let _this = this;
-
     myStorage.setInput("selectedGlyph", this.props.unicode);
     _this.setState({selectedGlyph: this.props.unicode});
     gtee.emit("glyphSelect", this.props.unicode);
@@ -109,6 +109,12 @@ export default React.createClass({
 });
 
 class GlyphTileStorage {
+  constructor() {
+    if(this.getInput("selectedGlyph") === null) {
+      this.setInput("selectedGlyph", config.defaultGlyph);
+    }
+  }
+
   _path = {
     input (x) {
       return ['glyphTile', x].join('.').replace(/[ -]/g, '_');

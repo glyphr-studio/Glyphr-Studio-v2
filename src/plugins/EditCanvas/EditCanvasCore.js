@@ -48,7 +48,12 @@ export default {
       paper.view.draw();
 
     } else {
-      console.warn('Edit Canvas - no selected glyph');
+      let displayShapes = new paper.CompoundPath();
+      displayShapes.fillRule = 'nonzero';
+      displayShapes.fillColor = 'slategray';
+      displayShapes.strokeWidth = 1;
+      displayShapes.strokeColor = 'gray';
+      paper.view.draw();
     }
   },
 

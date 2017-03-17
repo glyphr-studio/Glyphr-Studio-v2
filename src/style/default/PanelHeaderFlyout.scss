@@ -77,6 +77,8 @@
   @extend .flyout;
   max-width: 50%;
   max-height: 90%;
+  // #3 fix EditCanvas cursor bleeding
+  cursor: default;
 
   .glyphtile {
     display: inline-block;
@@ -115,7 +117,7 @@
       color: $gray-l60;
     }
   }
-  
+
   .glyphtileselected {
     @extend .glyphtile;
     border: 2px solid $blue-l50;

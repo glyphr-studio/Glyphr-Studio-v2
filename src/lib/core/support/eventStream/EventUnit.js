@@ -78,7 +78,7 @@ export default class EventUnit {
     this._accessLevel.emit(() => {
       let properEventName = [this._rootName, eventName].join('.');
       let muted = this.isMuted() ? ' (muted)' : '';
-      console.info(`${this._rootName}: ${properEventName.replace('.', '::')} ${muted}`);
+      console.info(`${this._streamName}/${this._rootName}: ${properEventName.replace('.', '::')} ${muted}`);
       this._getStream().shout(properEventName, data, this);
     });
   }
