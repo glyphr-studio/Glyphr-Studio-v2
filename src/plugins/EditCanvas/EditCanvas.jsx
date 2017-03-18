@@ -32,14 +32,36 @@ export default React.createClass({
 
     let glyphSelectHanlder = (unicode) => {
       settings.handleSize = 10;
+
+      _this.updateCanvasSize(unicode);
       paper.setup(canvas);
+      myStorage.setCurrentGlyphUnicode(unicode);
+
+      let windowResizeHandler = () => {
+       _this.updateCanvasSize(unicode);
+        paper.project.remove();
+        paper.setup(canvas);
+        ecee.emit("canvasReady", {
+          canvas: canvas,
+          unicode: unicode
+        });
+      };
+
+      let glyphChangeHandler = () => {
+        window.removeEventListener("resize", windowResizeHandler);
+        ecep.off(glyphChangeHandler);
+      };
+      ecep.on("glyphTile.glyphSelect", glyphChangeHandler);
+
+      window.addEventListener("resize", windowResizeHandler);
+
       ecee.emit("canvasReady", {
         canvas: canvas,
         unicode: unicode
       });
+
       _this.setState({paperJsInitialized: true});
       _this.setState({glyphSelected: true});
-      myStorage.setCurrentGlyphUnicode(unicode);
     };
 
     ecep.on("glyphTile.glyphSelect", glyphSelectHanlder); // user-to-plugin event
@@ -52,6 +74,14 @@ export default React.createClass({
 
     ecep.emit("ready", canvas);
     ecee.emit("ready", canvas);
+
+
+  },
+
+  updateCanvasSize(unicode) {
+    // todo: calculate 400 and 140 dynamically
+    this.refs.canvas.setAttribute("width", window.innerWidth-400);
+    this.refs.canvas.setAttribute("height", window.innerHeight-140);
   },
 
   resetCanvasView() {
@@ -82,12 +112,14 @@ export default React.createClass({
             <button onClick={this.resetCanvasView}>Reset View</button>
             &nbsp;
           </div>
+          <div className="functionBar">function bar stuff (content depends on the selected tool) ...</div>
           {/* css width/height properties get overwritten by html attributes (paperjs loads defaults if not preset) */}
-          <canvas width="3000" height="2000"
+          <canvas width="3000" height="3000"
                   ref="canvas"
                   id="editCanvas"
                   onClick={this.clickOn}
                   data-paper-resize={true}/>
+          <div className="statusBar">status bar stuff (content depends on the selected tool)...</div>
         </div>
       </div>
     );

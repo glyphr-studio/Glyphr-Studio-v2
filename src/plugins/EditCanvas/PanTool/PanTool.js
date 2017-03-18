@@ -6,10 +6,11 @@ let pan = new CanvasEventUnit("panTool", 3);
 let myStorage;
 let currentGlyphUnicode;
 
-pan.on("editCanvas.ready", () => {
+pan.on("editCanvas.ready", (canvas) => {
+
   pan.on("editCanvas.switchTool.panTool", (unicode) => {
     if (tool) tool.remove();
-    activatePanTool();
+    activatePanTool(canvas);
   });
 
   // ready for the user to use
@@ -17,7 +18,7 @@ pan.on("editCanvas.ready", () => {
 });
 
 pan.on("editCanvas.canvasReady", (data) => {
-  myStorage = new PanToolStorage(data.unicode);
+  myStorage = new PanToolStorage(data.unicode, data.canvas);
   currentGlyphUnicode = data.unicode;
   let glyphPanPosition = myStorage.getGlyphPanPosition(data.unicode);
   view.center = new paper.Point(glyphPanPosition.x, glyphPanPosition.y);
@@ -25,7 +26,7 @@ pan.on("editCanvas.canvasReady", (data) => {
   EditCanvasCore.initCanvas(data.unicode);
 });
 
-function activatePanTool() {
+function activatePanTool(canvas) {
   let pan = new Tool();
   let mouseStart = false;
   let viewStart = false;
