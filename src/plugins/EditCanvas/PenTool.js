@@ -4,18 +4,22 @@ import CanvasEventUnit from "./../../lib/core/canvasEventStream/CanvasEventUnit"
 
 let ppe = new CanvasEventUnit("penTool", 3);
 
-ppe.on("editCanvas.switchTool.penTool", () => {
+ppe.on("editCanvas.ready", (canvas) => {
+  ppe.on("editCanvas.switchTool.penTool", () => {
     if (tool) tool.remove();
-    activatePen();
-});
+    activatePen(canvas);
+  });
 
-function activatePen() {
+  ppe.emit("ready");
+})
+function activatePen(canvas) {
     let pen = new Tool();
     let hitTolerance = 8;
     let path;
     let types = ['point', 'handleIn', 'handleOut'];
 
-    document.body.style.cursor = 'crosshair';
+    // #3
+    canvas.style.cursor = 'crosshair';
 
     function findHandle(point) {
         for (let i = 0, l = path.segments.length; i < l; i++) {

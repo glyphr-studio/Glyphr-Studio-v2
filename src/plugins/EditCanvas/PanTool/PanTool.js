@@ -31,7 +31,8 @@ function activatePanTool(canvas) {
   let mouseStart = false;
   let viewStart = false;
 
-  document.body.style.cursor = 'move';
+  // #3
+  canvas.style.cursor = 'move';
   console.log("Activate PAN Tool");
 
   pan.onMouseDown = function (e) {
