@@ -1,6 +1,7 @@
 import CanvasEventUnit from "../../../lib/core/canvasEventStream/CanvasEventUnit";
 import PanToolStorage from "./PanToolStorage";
-import EditCanvasCore from "./../EditCanvasCore"
+import EditCanvasCore from "./../EditCanvasCore";
+import setCursor from "./../Cursors";
 
 let pan = new CanvasEventUnit("panTool", 3);
 let myStorage;
@@ -32,7 +33,7 @@ function activatePanTool(canvas) {
   let viewStart = false;
 
   // #3
-  canvas.style.cursor = 'move';
+  setCursor('move', canvas);
   console.log("Activate PAN Tool");
 
   pan.onMouseDown = function (e) {
