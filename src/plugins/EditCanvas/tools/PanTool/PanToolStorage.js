@@ -1,19 +1,17 @@
-import {storage} from "./../../../lib/storage/Storage";
-import {config} from "./../../../config/config";
+import {storage} from "./../../../../lib/storage/Storage";
+import {config} from "./../../../../config/config";
 
 export default class PanToolStorage {
   _panPosition = "panPosition";
   _canvas;
+  _unicode;
+
   constructor(unicode, canvas) {
     this._canvas = canvas;
+    this.unicode = unicode;
 
-    if(this.getGlyphPanPosition(unicode) === null) {
-      this.setGlyphPanPosition(unicode,
-        // middle of the canvas {x: 0, y: 0}
-        {
-          x: canvas.getAttribute("width")/3000*1000,
-          y: -canvas.getAttribute("height")/3000*500
-        });
+    if(this.getGlyphPanPosition(this._unicode) === null) {
+      this.setGlyphPanPosition(this._unicode, this.getGlyphPanPosition(this._unicode));
     }
   }
 
@@ -22,6 +20,14 @@ export default class PanToolStorage {
       return ['panTool', x].join('.').replace(/[ -]/g, '_');
     }
   };
+
+  set unicode(unicode) {
+    this._unicode = unicode;
+  }
+
+  get unicode() {
+    return this._unicode;
+  }
 
   /**
    * Set pan position
@@ -44,8 +50,12 @@ export default class PanToolStorage {
    */
   getGlyphPanPosition(unicode) {
     let panData = storage.get(this._path.input([unicode, this._panPosition].join(".")));
+    let _this = this;
+
     if(panData === null) {
-      return null;
+      return {
+        x: _this._canvas.getAttribute("width")/3000*1000,
+        y: -_this._canvas.getAttribute("height")/3000*500};
     } else {
       let panX = this._canvas.getAttribute("width")/panData.canvasWidth * panData.position.x;
       let panY = this._canvas.getAttribute("height")/panData.canvasHeight * panData.position.y;

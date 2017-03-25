@@ -1,5 +1,6 @@
 // import React
 import "../style/default/PanelField";
+import PanelInput from "./PanelInput";
 
 export default React.createClass({
   render() {
@@ -8,6 +9,7 @@ export default React.createClass({
         <h3>{this.props.title}</h3>
         <div>
           {this.props.children}
+          <PanelInput></PanelInput>
         </div>
       </div>
     )

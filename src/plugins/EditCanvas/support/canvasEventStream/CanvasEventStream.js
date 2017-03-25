@@ -1,4 +1,4 @@
-import EventStream from "./../support/eventStream/EventStream";
+import EventStream from "./../../../../lib/core/support/eventStream/EventStream";
 
 export default class CanvasEventStream extends EventStream {
   constructor() {

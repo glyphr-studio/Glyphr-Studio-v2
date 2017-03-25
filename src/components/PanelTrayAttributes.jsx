@@ -1,5 +1,5 @@
 import "./../style/default/Panel";
-import EventUnit from "./../lib/core/canvasEventStream/CanvasEventUnit";
+import EventUnit from "../plugins/EditCanvas/support/canvasEventStream/CanvasEventUnit";
 let ptaee = new EventUnit("panelTrayAttributes", 1);
 
 export default React.createClass({

@@ -5,7 +5,7 @@ import PanelHeader from "./PanelHeader";
 import PanelTray from "./PanelTray";
 import PanelHeaderFlyoutGlyphSelect from "./PanelHeaderFlyoutGlyphSelect";
 import PanelHeaderListSelect from "./PanelHeaderFlyoutListSelect";
-import EditCanvas from "./../plugins/EditCanvas/EditCanvas";
+import EditView from "../plugins/EditCanvas/components/EditView";
 import routes from "./../config/routes";
 import {config} from "./../config/config";
 
@@ -59,7 +59,7 @@ export default React.createClass({
           </Panel>
         </div>
 
-        <EditCanvas/>
+        <EditView/>
       </div>
     );
   }

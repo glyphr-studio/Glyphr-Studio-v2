@@ -1,7 +1,7 @@
-import {storage} from "./../../lib/storage/Storage";
-import {config} from "./../../config/config";
+import {storage} from "../../../lib/storage/Storage";
+import {config} from "../../../config/config";
 
-export default class EditCanvasStorage {
+export default class EditViewStorage {
   _currentGlyphPath = "currentGlyph";
 
   constructor() {

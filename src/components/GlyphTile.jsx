@@ -32,7 +32,7 @@ export default React.createClass({
   componentDidMount() {
     let _this = this;
 
-    // If selected recall some data to EditCanvas
+    // If selected recall some data to CanvasGuideLayer
     gtee.on("editCanvas.ready", () => {
       if(_this.props.unicode === this.state.selectedGlyph) {
         gtee.emit("glyphRecall", this.props.unicode);
