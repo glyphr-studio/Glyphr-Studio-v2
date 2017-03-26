@@ -60,10 +60,13 @@ export default class GlyphCanvas extends CanvasInterface {
 
     let windowResizeHandler = () => {
       this.resize(Math.round(window.innerWidth-400), Math.round(window.innerHeight-140));
-      this._canvasGuideLayer.drawCanvasGrid();
+      // this._canvasGuideLayer.drawCanvasGrid();
       this._panTool.pan(this._unicode);
     };
     window.addEventListener("resize", windowResizeHandler);
+    window.addEventListener("unload", () => {
+      this.save();
+    });
 
     // Clean up
     this.onDestroy(() => {
