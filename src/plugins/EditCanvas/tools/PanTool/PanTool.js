@@ -2,11 +2,13 @@ import CanvasEventUnit from "../../support/canvasEventStream/CanvasEventUnit";
 import PanToolStorage from "./PanToolStorage";
 import ToolInterface from "./../../support/ToolInterface";
 
+
 export default class PanTool extends ToolInterface {
 
   _tool;
   _canvas;
   _paper;
+  // overwriting the inherited _storage
   _storage;
   _unicode;
 
@@ -19,7 +21,7 @@ export default class PanTool extends ToolInterface {
    * @param {HTMLCanvasElement} canvas
    */
   constructor(unicode, paper, canvas) {
-    super();
+    super(canvas);
 
     let _this = this;
     this._tool = new paper.Tool();
@@ -58,12 +60,17 @@ export default class PanTool extends ToolInterface {
 
   activate() {
     // ready for the user to use
+    this.setCursor("pointer");
     this._observer.emit("ready");
     this._tool.activate();
   }
 
-  tool() {
-
+  /**
+   * Get the tool
+   * @return {PaperJS.Tool}
+   */
+  get tool() {
+    return this._tool;
   }
 
   set unicode(unicode) {

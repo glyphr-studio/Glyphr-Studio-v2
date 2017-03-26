@@ -22,20 +22,23 @@ export default React.createClass({
     return {
       paperJsInitialized: false,
       glyphSelected: false,
-      panToolReady: false
+      glyphCanvas: null
     }
   },
   componentDidMount() {
     let _this = this;
     let canvas = this.refs.canvas;
-    let glyphCanvas;
 
     let glyphSelectHanlder = (unicode) => {
-      if(glyphCanvas) {
-        glyphCanvas.destroy();
+      if(this.state.glyphCanvas !== null) {
+        this.state.glyphCanvas.destroy();
       }
-      glyphCanvas = new GlyphCanvas(unicode, window.paper, canvas);
-      console.log(glyphCanvas);
+
+      // temporary fix for #6 (initializing GlyphCanvas twice)
+        let glyphCanvas = new GlyphCanvas(unicode, window.paper, canvas);
+        this.setState({glyphCanvas: glyphCanvas});
+        glyphCanvas.destroy();
+        this.setState({glyphCanvas: new GlyphCanvas(unicode, window.paper, canvas)});
 
       _this.setState({paperJsInitialized: true});
       _this.setState({glyphSelected: true});
@@ -64,7 +67,7 @@ export default React.createClass({
           <div>
             <button onClick={ecee.emit.bind(ecee, "switchTool.penTool")}>Pen Tool</button>
             &nbsp;
-            {this.state.panTool && <button onClick={this.state.panTool.activate.bind(this.state.panTool)}>Pan</button>}
+            {this.state.glyphCanvas !== null && <button onClick={this.state.glyphCanvas.activatePanTool.bind(this.state.glyphCanvas)}>Pan Tool</button>}
             &nbsp;
             <button onClick={this.resetCanvasView}>Reset View</button>
             &nbsp;

@@ -9,7 +9,7 @@ export default class CanvasGuideLayer {
     this._canvas = canvas;
   }
 
-  drawCanvasGrid() {
+  drawCanvasGrid(viewCenter) {
     if(this._grid) return this._paper.view.draw();
     this._grid = new paper.Layer();
     this._grid.name = "grid";
