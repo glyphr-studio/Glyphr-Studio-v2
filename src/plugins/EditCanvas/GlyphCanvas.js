@@ -1,6 +1,7 @@
 import CanvasGuideLayer from "./CanvasGuideLayer";
 import PanTool from "./tools/PanTool/PanTool";
 import CanvasInterface from "./support/CanvasInterface";
+import CanvasEventUnit from "./support/canvasEventStream/CanvasEventUnit";
 import {storage} from "./../../lib/storage/Storage";
 
 export default class GlyphCanvas extends CanvasInterface {
@@ -41,6 +42,7 @@ export default class GlyphCanvas extends CanvasInterface {
     this._paper.setup(this._canvas);
     this.resize(window.innerWidth-400, window.innerHeight-140);
     this._canvasGuideLayer = new CanvasGuideLayer(paper,canvas);
+    this._observer = new CanvasEventUnit("glyphCanvas", 3);
 
     if(this.resumeProject() === false) {
       this._canvasGuideLayer.drawCanvasGrid();
@@ -63,8 +65,11 @@ export default class GlyphCanvas extends CanvasInterface {
       // this._canvasGuideLayer.drawCanvasGrid();
       this._panTool.pan(this._unicode);
     };
+
     window.addEventListener("resize", windowResizeHandler);
-    window.addEventListener("unload", () => {
+
+    // Dirty trick to demo project creation, will get deprecated when PenTool will get converted to current infra.
+    this._observer.on("penTool.save", () => {
       this.save();
     });
 

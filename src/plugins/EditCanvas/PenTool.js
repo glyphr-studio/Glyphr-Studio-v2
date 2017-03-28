@@ -94,5 +94,9 @@ function activatePen(canvas) {
       currentSegment.handleOut = currentSegment.handleOut.subtract(delta);
     }
   }
+
+  pen.onMouseUp = function() {
+    ppe.emit("save");
+  }
 }
 

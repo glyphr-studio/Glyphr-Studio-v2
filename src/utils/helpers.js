@@ -1,14 +1,4 @@
-/**
- *  We should probably organize this 
- *  stuff better! ¯\_(ツ)_/¯ 
- */
-
-
-//-------------------
-// Stuff
-//-------------------
-
-  export function make_path() {
+ export function make_path() {
     var segments = [],
         path;
 
@@ -70,46 +60,6 @@
     return container;
   }
 
-//-------------------
-// Debug
-//-------------------
-
-  export function debug(message, force){
-      if (typeof message === 'object'){
-        console.table(message);
-      } else {
-        console.log(message);
-      }
-
-    // if(!_UI.devmode) return;
-
-    // if(_UI.debug || force){
-    //   if(typeof message === 'string'){
-    //     message = message.replace(/&lt;/gi, '<');
-    //     message = message.replace(/&gt;/gi, '>');
-    
-    //     if(message === 'group') {
-    //       console.group(); 
-    //       return;
-    //     } else if(message === 'groupCollapsed'){
-    //       console.groupCollapsed();
-    //       return;
-    //     } else if(_UI.debugautogroup && message.indexOf('- START') > 0){
-    //       console.group(message.substr(2).replace(' - START', '')); 
-    //       return;
-    //     } else if(message === 'groupEnd'|| (_UI.debugautogroup && message.indexOf('- END') > 0)) {
-    //       console.groupEnd(message); 
-    //       return;
-    //     } else {
-    //       console.log(message);
-    //     }
-
-    //   } else if (typeof message === 'object'){
-    //     console.table(message);
-    //   }
-    // }
-  }
-
   export function json(obj, raw) {
     obj = clone(obj);
     if(raw) return JSON.stringify(obj);
@@ -119,6 +69,52 @@
       else return '';
     }
   }
+
+ /**
+  * http://stackoverflow.com/questions/2897619/using-html5-javascript-to-generate-and-save-a-file
+  * @param filename
+  * @param text
+  */
+  export function download(filename, text) {
+    var pom = document.createElement('a');
+    pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+    pom.setAttribute('download', filename);
+
+    if (document.createEvent) {
+      var event = document.createEvent('MouseEvents');
+      event.initEvent('click', true, true);
+      pom.dispatchEvent(event);
+    }
+    else {
+      pom.click();
+    }
+  }
+
+ /**
+  * Generate a random key
+  * @param {number} length            default length is 10
+  * @param {string} charactersToUse   alphanumeric characters by default
+  * @return {string}
+  */
+ function random_key(length = 10, charactersToUse = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZ") {
+   function number (n) {
+     if (!n) return 10;
+     return (typeof n === 'number') ? n : parseInt(n, 10);
+   }
+   var str = '';
+   if (typeof length === 'object') { // cheap array check
+     var min = number(length[0]);
+     var max = number(length[1]);
+     length = Math.round(Math.random() * (max - min)) + min;
+   } else {
+     length = number(length);
+   }
+   charactersToUse = charactersToUse || randomKey.default;
+   for (var i = 0; i < length; i++) {
+     str += charactersToUse.charAt(Math.floor(Math.random() * charactersToUse.length));
+   }
+   return str;
+ }
 
 //-------------------
 // Common Functions
@@ -206,7 +202,7 @@
       if(!isval(tm.ymin)) tm.ymin = clone(_UI.mins.ymin);
       // debug([tm]);
 
-      // find 
+      // find
       re.xmax = Math.max(re.xmax, tm.xmax);
       re.xmin = Math.min(re.xmin, tm.xmin);
       re.ymax = Math.max(re.ymax, tm.ymax);

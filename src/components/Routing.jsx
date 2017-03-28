@@ -1,9 +1,13 @@
 // import React
 // import ReactRouter
 import {config} from "../config/config";
+import {storage} from "./../lib/storage/Storage";
+
 import ProjectEditor from "./ProjectEditor";
 import FrameLeft from "./FrameLeft";
 import Index from "./Index";
+import CreateProject from "./CreateProject";
+
 
 import PanelTrayView from "./PanelTrayView";
 import PanelTrayActions from "./PanelTrayActions";
@@ -13,11 +17,22 @@ import PanelTrayShapes from "./PanelTrayShapes";
 
 import PanelTray from "./PanelTray";
 
-export default React.createClass({
+let routing = React.createClass({
+  render() {
+    return (
+      <Router history={hashHistory}>
+        <Route path="/" component={CreateProject}/>
+      </Router>
+    );
+  }
+});
+
+let appRouting = React.createClass({
   render() {
     return (
       <Router history={hashHistory}>
         <Route path="/" component={Index}/>
+        <Route path="/projects" component={CreateProject}/>
         <Route path={config.routes.project_editor} component={ProjectEditor}>
           <Route path="leftframe" name="leftframe" component={FrameLeft}>
             <Route path="tray" component={PanelTray}>
@@ -35,3 +50,10 @@ export default React.createClass({
     );
   }
 });
+
+/**
+ * Check whether a project has been intitialized:
+ *  1. project has been not initialized: user is not able to access the app;
+ *  2. project has bene initialized: user is able to access the app.
+ */
+export default (storage.getHead() === null ? routing : appRouting);
