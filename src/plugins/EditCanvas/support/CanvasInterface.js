@@ -1,10 +1,12 @@
 import AbstractImplementationGuard from "./AbstractImplementationGuard";
+import Destroyable from "./Destroyable"
 
-export default class CanvasInterface {
+export default class CanvasInterface extends Destroyable {
   _aig = new AbstractImplementationGuard(this);
 
 
   constructor() {
+    super();
     let _this = this;
 
     /**

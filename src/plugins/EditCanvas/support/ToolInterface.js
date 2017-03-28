@@ -1,9 +1,10 @@
 import AbstractImplementationGuard from "./AbstractImplementationGuard";
+import Destroyable from "./Destroyable"
 import CanvasEventUnit from "./canvasEventStream/CanvasEventUnit";
 import DeveloperError from "./../support/DeveloperError";
 import {storage} from "./../../../lib/storage/Storage";
 
-export default class ToolInterface {
+export default class ToolInterface extends Destroyable {
   _aig = new AbstractImplementationGuard(this);
 
   /**
@@ -15,6 +16,7 @@ export default class ToolInterface {
   _storageKey;
 
   constructor(canvas) {
+    super();
     let _this = this;
     this._canvas = canvas;
 

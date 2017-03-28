@@ -12,8 +12,6 @@ export default class GlyphCanvas extends CanvasInterface {
   _canvasGuideLayer = null;
   _unicode = "";
 
-  _onDestroy = [];
-
   /**
    * Data which another GlyphCanvas instance will need to resume editing (on another glyph)
    *
@@ -77,7 +75,7 @@ export default class GlyphCanvas extends CanvasInterface {
 
     // Clean up
     this.onDestroy(() => {
-      _this._panTool.tool.remove();
+      this._panTool.tool.remove();
       window.removeEventListener("resize", windowResizeHandler);
       this.save();
       this._paper.project.remove();
@@ -113,20 +111,6 @@ export default class GlyphCanvas extends CanvasInterface {
   resize(width, height) {
     this._canvas.setAttribute("width", width);
     this._canvas.setAttribute("height", height);
-  }
-
-  destroy()  {
-    this._onDestroy.forEach((callback) => {
-      callback();
-    })
-  }
-
-  /**
-   * This event will fire when current instance is about to get destroyed
-   * @param {function} callback
-   */
-  onDestroy(callback) {
-    this._onDestroy.push(callback);
   }
 
   /**
