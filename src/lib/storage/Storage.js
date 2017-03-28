@@ -64,10 +64,8 @@ class Storage {
     let result = this._store.getAll();
     let currentProject = {};
     for(let key in result) {
-      if(typeof this.get(key) === "string" && key.indexOf(`${this.getHead()}.`) === 0) {
-        currentProject[key] = this.get(key);
-      } else {
-        currentProject[key] = JSON.stringify(this.get(key));
+      if(key.indexOf(`${this.getHead()}.`) === 0) {
+        currentProject[key] = JSON.stringify(result[key]);
       }
     }
     return JSON.stringify(currentProject);
