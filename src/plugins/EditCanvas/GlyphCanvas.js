@@ -69,9 +69,11 @@ export default class GlyphCanvas extends CanvasInterface {
     window.addEventListener("resize", windowResizeHandler);
 
     // Dirty trick to demo project creation, will get deprecated when PenTool will get converted to current infra.
-    this._observer.on("penTool.save", () => {
+    let saveHandler = () => {
       this.save();
-    });
+    };
+
+    this._observer.on("penTool.save", saveHandler);
 
     // Clean up
     this.onDestroy(() => {
@@ -79,6 +81,7 @@ export default class GlyphCanvas extends CanvasInterface {
       window.removeEventListener("resize", windowResizeHandler);
       this.save();
       this._paper.project.remove();
+      this._observer.off(saveHandler);
     });
 
     this.activateDefaultTool();
