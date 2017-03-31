@@ -1,6 +1,17 @@
-@import './Panel';
 @import './colors';
 @import './Animations';
+
+#flyout-primary {
+  border-left-color: $blue-l80;
+}
+
+#flyout-secondary {
+  border-left-color: $blue-l85;
+}
+
+#flyout-tertiary {
+  border-left-color: $blue-l90;
+}
 
 .flyout {
   position: absolute;
@@ -53,91 +64,37 @@
   }
 }
 
-#flyout-primary {
-  border-left-color: $blue-l80;
-}
-
-#flyout-secondary {
-  border-left-color: $blue-l85;
-}
-
-#flyout-tertiary {
-  border-left-color: $blue-l90;
-}
-
-.flyout-pages {
-  @extend .flyout;
-
+.flyout-pagechoice {
   .content {
-    @extend .pagechoices;
-  }
-}
+    button {
+      display: block;
+      width: 100%;
+      padding: 6px 4px 6px 11px;
+      margin: 0px 0px 5px 0px;
+      font-size: 1.2em;
+      color: $gray-l50;
+      text-align: left;
+      background-color: $offwhite;
+      border-left: 5px solid $offwhite;
+      border-radius: 0;
 
-.flyout-glyphs {
-  @extend .flyout;
-  max-width: 50%;
-  max-height: 90%;
-  // #3 fix CanvasGuideLayer cursor bleeding
-  cursor: default;
+      &:hover {
+        background-color: $blue-l95;
+        color: $blue-l50;
+        border-left-color: $blue-l80;
+      }
 
-  .glyphtile {
-    display: inline-block;
-    width: 50px;
-    height: 70px;
-    margin: 0px 10px 10px 0px;
-    border: 2px solid $offwhite;
-    background-color: $offwhite;
-
-    &:hover {
-      border: 2px solid $blue-l80;
-      cursor: pointer;
     }
 
-    .preview {
-      width: 46px;
-      height: 46px;
-      color: $gray-l90;
-      padding-top: 4px;
-      text-align: center;
-      font-size: 34px;
-      background-color: white;
+    button.selected {
+      color: $blue-l60;
+      border-left: 5px solid $blue-l80;
 
-      svg,
-      canvas {
-        margin-top:-4px;
-        width: 46px;
-        height: 46px;
+      &:hover {
+        color: $blue-l60;
+        cursor: default;
+        background-color: $offwhite;
       }
     }
-
-    .name {
-      height: 20px;
-      padding: 2px 0px 0px 4px;
-      border-top: 1px solid $offwhite;
-      color: $gray-l60;
-    }
-  }
-
-  .glyphtileselected {
-    @extend .glyphtile;
-    border: 2px solid $blue-l50;
-
-    .preview {
-      color: $blue-l50;
-    }
-
-    .name {
-      background-color: $blue-l50;
-      color: $offwhite;
-    }
-  }
-}
-
-
-.flyout-tools {
-  @extend .flyout;
-
-  .content {
-    @extend .pagechoices;
   }
 }

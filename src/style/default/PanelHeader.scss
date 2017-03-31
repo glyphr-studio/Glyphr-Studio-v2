@@ -1,18 +1,17 @@
-@import './Panel';
-@import './colors';
+@import "colors";
 
 .panel-header {
     display: flex;
     flex-direction: row;
     flex: 0 0;
-    
+
     .bar {
         display: flex;
         flex: 1 0;
         flex-direction: row;
         flex-basis: 400px;
         &:hover { cursor: pointer; }
-        
+
         .icon {
             display: flex;
             text-align: center;
@@ -21,7 +20,7 @@
             width:44px;
             svg { margin: auto; }
         }
-        
+
         .title {
             display: flex;
             flex: 2;
@@ -32,7 +31,7 @@
             height: 100%;
             font-family: OpenSansLight, Tahoma, Verdana, sans-serif;
         }
-        
+
         .chevron {
             display: flex;
             text-align: right;
@@ -46,37 +45,37 @@
 
 .panel-header-primary {
     @extend .panel-header;
-    
+
     .bar {
         height:44px;
         flex-basis:44px;
         background-color: $blue-l80;
         &:hover .chevron svg { fill: $blue-l35; }
-        
+
         .icon {
             color: $blue-l35;
             svg { fill: $blue-l35; }
         }
-        
+
         .title {
             color: $blue-l35;
             font-size:24px;
             padding-top:10px;
         }
-        
+
         .chevron svg { fill: $blue-l70; }
     }
 }
 
 .panel-header-secondary {
     @extend .panel-header;
-    
+
     .bar {
         height:40px;
         flex-basis:40px;
         background-color: $blue-l85;
         &:hover .chevron svg { fill: $blue-l40; }
-    
+
         .icon {
             color: $blue-l40;
             svg { fill: $blue-l40; }
@@ -87,7 +86,7 @@
             font-size:20px;
             padding-top:10px;
         }
-        
+
         .chevron svg { fill:$blue-l75; }
     }
 }
@@ -95,24 +94,24 @@
 .panel-header-tertiary {
     @extend .panel-header;
     flex: 0 0 auto;
-    
+
     .bar {
         height:36px;
         flex-basis:36px;
         background-color: $blue-l90;
         &:hover .chevron svg { fill: $blue-l45; }
-        
+
         .icon {
             color: $blue-l45;
             svg { fill: $blue-l45; }
         }
-        
+
         .title {
             color: $blue-l45;
             font-size:16px;
             padding-top:10px;
         }
-        
+
         .chevron svg { fill: $blue-l80; }
     }
 }

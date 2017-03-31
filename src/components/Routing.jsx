@@ -1,13 +1,10 @@
-// import React
-// import ReactRouter
 import {config} from "../config/config";
 import {storage} from "./../lib/storage/Storage";
 
 import ProjectEditor from "./ProjectEditor";
-import FrameLeft from "./FrameLeft";
+import FrameLeft from "./Editor";
 import Index from "./Index";
 import CreateProject from "./CreateProject";
-
 
 import PanelTrayView from "./PanelTrayView";
 import PanelTrayActions from "./PanelTrayActions";

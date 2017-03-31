@@ -1,6 +1,5 @@
 // import React
 import {Icons} from "./Icons";
-import "./../style/default/PanelTextInput";
 // import $
 import {Tooltip} from "./../lib/tooltip/Tooltip";
 import MyStorage from "./PanelInputStorage";

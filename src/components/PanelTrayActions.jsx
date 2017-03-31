@@ -1,5 +1,3 @@
-import "./../style/default/Panel";
-
 export default React.createClass({
   render() {
     return (

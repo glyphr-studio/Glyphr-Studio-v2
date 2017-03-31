@@ -1,0 +1,60 @@
+@import "colors";
+
+.flyout-glyphs {
+  max-width: 50%;
+  max-height: 90%;
+  // #3 fix CanvasGuideLayer cursor bleeding
+  cursor: default;
+
+  .glyphtile {
+    display: inline-block;
+    width: 50px;
+    height: 70px;
+    margin: 0px 10px 10px 0px;
+    border: 2px solid $offwhite;
+    background-color: $offwhite;
+
+    &:hover {
+      border: 2px solid $blue-l80;
+      cursor: pointer;
+    }
+
+    .preview {
+      width: 46px;
+      height: 46px;
+      color: $gray-l90;
+      padding-top: 4px;
+      text-align: center;
+      font-size: 34px;
+      background-color: white;
+
+      svg,
+      canvas {
+        margin-top:-4px;
+        width: 46px;
+        height: 46px;
+      }
+    }
+
+    .name {
+      height: 20px;
+      padding: 2px 0px 0px 4px;
+      border-top: 1px solid $offwhite;
+      color: $gray-l60;
+    }
+  }
+
+  .glyphtileselected {
+    @extend .glyphtile;
+    border: 2px solid $blue-l50;
+
+    .preview {
+      color: $blue-l50;
+    }
+
+    .name {
+      background-color: $blue-l50;
+      color: $offwhite;
+    }
+  }
+}

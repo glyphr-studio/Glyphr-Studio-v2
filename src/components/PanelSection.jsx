@@ -1,6 +1,3 @@
-// import React
-import "../style/default/PanelSection";
-
 export default React.createClass({
   propTypes: {
     title: React.PropTypes.string

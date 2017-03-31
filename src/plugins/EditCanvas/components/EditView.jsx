@@ -1,4 +1,3 @@
-import "../EditCanvas.scss";
 import CanvasEventUnit from "../support/canvasEventStream/CanvasEventUnit";
 import PluginEventUnit from "./../../../lib/core/pluginEventStream/PluginEventUnit";
 import "./../PenTool";
@@ -6,6 +5,7 @@ import "./../tools/PanTool/PanTool";
 import config from "./../../../config/config";
 import EditCanvasStorage from "./EditViewStorage";
 import GlyphCanvas from "./../GlyphCanvas";
+import style from "./../EditCanvas";
 
 // GlyphCanvas Event Stream
 let ecee = new CanvasEventUnit("editCanvas", 3);
@@ -58,6 +58,8 @@ export default React.createClass({
   render() {
     return (
       <div className="centerFrame" ref="root">
+        <style>{`${style}`}</style>
+
         <div style={this.state.paperJsInitialized === false && this.state.glyphSelected === false ? {display: "block"} : {display: "none"}}>
           This is your first time opening the app. Select a glyph tile from the glyph chooser.
         </div>

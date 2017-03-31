@@ -1,12 +1,7 @@
-import "./../style/default/Panel";
-import PanelTrayAttributes from "./PanelTrayAttributes";
-import PanelTrayHistory from "./PanelTrayHistory";
-import PanelTrayView from "./PanelTrayView";
-import PanelTrayShapes from "./PanelTrayShapes";
-import PanelTrayActions from "./PanelTrayActions";
 import PluginEventUnit from "./../lib/core/pluginEventStream/PluginEventUnit";
 let ptee = new PluginEventUnit("panelTray", 3);
 import {storage} from "./../lib/storage/Storage";
+import style from "./../style/default/PanelTray";
 
 export default React.createClass({
   propTypes: {
@@ -27,9 +22,12 @@ export default React.createClass({
   },
   render() {
     return (
-      <div className="panel-tray">
-        <div className="content">
-          {this.props.children}
+      <div>
+        <style>{`${style}`}</style>
+        <div className="panel-tray">
+          <div className="content">
+            {this.props.children}
+          </div>
         </div>
       </div>
     )

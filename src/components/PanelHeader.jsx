@@ -1,7 +1,7 @@
-import "./../style/default/PanelHeader";
 import PluginEventUnit from "./../lib/core/pluginEventStream/PluginEventUnit";
 import {storage} from "./../lib/storage/Storage";
 let flyouteu = new PluginEventUnit("flyout", 3);
+import style from "./../style/default/PanelHeader.scss";
 
 export default React.createClass({
   propTypes: {
@@ -46,22 +46,25 @@ export default React.createClass({
   render() {
     let _this = this;
     return (
-      <div className={this.props.className}>
+      <div>
+        <style>{`${style}`}</style>
+        <div className={this.props.className}>
 
-        <div className="bar" onClick={this.toggleFlyout}>
-          <div className="icon">
-            {this.props.icon}
+          <div className="bar" onClick={this.toggleFlyout}>
+            <div className="icon">
+              {this.props.icon}
+            </div>
+            <div className="title">{this.props.title}</div>
+            <div className="chevron">
+              <svg x="0px" y="0px" width="9px" height="16px" viewBox="0 0 9 16" enable-background="new 0 0 9 16">
+                <polygon points="1,15.707 0.293,15 7.293,8 0.293,1 1,0.293 8.707,8"/>
+              </svg>
+            </div>
           </div>
-          <div className="title">{this.props.title}</div>
-          <div className="chevron">
-            <svg x="0px" y="0px" width="9px" height="16px" viewBox="0 0 9 16" enable-background="new 0 0 9 16">
-              <polygon points="1,15.707 0.293,15 7.293,8 0.293,1 1,0.293 8.707,8"/>
-            </svg>
-          </div>
-        </div>
 
-        <div style={this.state.isFlyoutOpen ? {display: 'flex'} : {display: 'none'}}>
-          {this.props.children}
+          <div style={this.state.isFlyoutOpen ? {display: 'flex'} : {display: 'none'}}>
+            {this.props.children}
+          </div>
         </div>
       </div>
     )

@@ -1,5 +1,3 @@
-// import React
-import "../style/default/PanelField";
 import PanelInput from "./PanelInput";
 
 export default React.createClass({
