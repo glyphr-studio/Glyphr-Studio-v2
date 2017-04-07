@@ -42,8 +42,9 @@ export default class GlyphCanvas extends CanvasInterface {
     this._canvasGuideLayer = new CanvasGuideLayer(paper,canvas);
     this._observer = new CanvasEventUnit("glyphCanvas", 3);
 
+    this._canvasGuideLayer.drawCanvasGrid();
+
     if(this.resumeProject() === false) {
-      this._canvasGuideLayer.drawCanvasGrid();
       alert(`Enjoy your first edits on ${unicode}`)
     }
 
@@ -80,6 +81,8 @@ export default class GlyphCanvas extends CanvasInterface {
       this.save();
       this._paper.project.remove();
       this._observer.off(saveHandler);
+      this._observer.destroy();
+      this._panTool.destroy();
     });
 
     this.activateDefaultTool();
@@ -117,7 +120,9 @@ export default class GlyphCanvas extends CanvasInterface {
    * Save the project to localstorage
    */
   save() {
+    this._canvasGuideLayer.destroy();
     storage.set(`glyphCanvas.${this._unicode}.project`, this._paper.project.exportJSON());
+    this._canvasGuideLayer.drawCanvasGrid();
   }
 
   /**

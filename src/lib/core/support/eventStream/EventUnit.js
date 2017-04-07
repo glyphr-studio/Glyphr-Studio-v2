@@ -9,6 +9,7 @@ export default class EventUnit {
   _windowRegister = {};
   _streamName = {}; // specified by the extending class
   _stream = {}; // specified by the extending class
+  _subs = [];
 
   constructor(eventRootName, AccessLevel) {
     this._rootName = eventRootName;
@@ -100,6 +101,7 @@ export default class EventUnit {
 
   on(eventName, handler) {
     this._accessLevel.subscribe(() => {
+      this._subs.push(handler);
       this._getStream().on(eventName, handler, this);
     });
   }
@@ -107,6 +109,14 @@ export default class EventUnit {
   off(handler) {
     this._accessLevel.subscribe(() => {
       this._getStream().off(handler, this);
+    });
+  }
+
+  destroy() {
+    this._subs.forEach((handler, i) => {
+      this.emit("destroy");
+      this.off(handler);
+      this._subs.splice(i, 1);
     });
   }
 

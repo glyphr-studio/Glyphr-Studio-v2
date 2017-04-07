@@ -19,6 +19,9 @@ export default React.createClass({
   closeFlyout() {
     flyouteu.emit("close", this.props.id);
   },
+  componentWillUnmount() {
+    flyouteu.destroy();
+  },
   componentDidMount() {
     let _this = this;
 
@@ -56,7 +59,7 @@ export default React.createClass({
             </div>
             <div className="title">{this.props.title}</div>
             <div className="chevron">
-              <svg x="0px" y="0px" width="9px" height="16px" viewBox="0 0 9 16" enable-background="new 0 0 9 16">
+              <svg x="0px" y="0px" width="9px" height="16px" viewBox="0 0 9 16" enableBackground="new 0 0 9 16">
                 <polygon points="1,15.707 0.293,15 7.293,8 0.293,1 1,0.293 8.707,8"/>
               </svg>
             </div>

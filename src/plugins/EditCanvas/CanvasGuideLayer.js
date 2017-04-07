@@ -10,11 +10,11 @@ export default class CanvasGuideLayer {
   }
 
   drawCanvasGrid(viewCenter) {
-    if(this._grid) return this._paper.view.draw();
+    let activeTemp = this._paper.project.activeLayer;
+
     this._grid = new paper.Layer();
     this._grid.name = "grid";
     this._guides = new paper.Layer();
-
     this._guides.name = "guides";
 
     this._grid.activate();
@@ -42,6 +42,8 @@ export default class CanvasGuideLayer {
       line(i, false, '#eeeeee');
     }
 
+    this._grid.sendToBack();
+
     this._guides.activate();
 
 
@@ -49,7 +51,15 @@ export default class CanvasGuideLayer {
     line(0, true, '#ff9900');
     line(0, false, '#993300');
 
+    this._guides.sendToBack();
+
+    activeTemp.activate();
     this._paper.view.draw();
+  }
+
+  destroy() {
+    if(this._grid) this._grid.remove();
+    if(this._guides) this._guides.remove();
   }
 
   update() {

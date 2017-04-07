@@ -25,7 +25,7 @@ table, caption, tbody, tfoot, thead, tr, th, td {
   outline: 0;
 }
 
-button {
+a, button {
   outline: none;
   background-color: $blue-l40;
   border: 0;
@@ -38,6 +38,12 @@ button {
     color: $offwhite;
     cursor: pointer;
   }
+}
+
+a {
+  background-color: transparent;
+  text-decoration: none;
+  padding: 0;
 }
 
 body {

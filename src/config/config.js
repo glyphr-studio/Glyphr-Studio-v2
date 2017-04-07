@@ -9,17 +9,7 @@ export let config = {
   selected: {
     glyph: '0x0041'
   },
-
-  devMode: true,
-  devModeSetup() {
-    console.log('devModeSetup()');
-    // storage.set('GlyphrStudio', "hola!");
-    window.GlyphrStudio = { currentProject: false };
-    window.GlyphrStudio.currentProject = testProject;
-  },
-
   index_url: "/",
-
   storagePath: {
     glyphAttribute(signHex) {
       return ['glyph', 'attribute', signHex].join('.');

@@ -25,6 +25,13 @@ export default React.createClass({
       glyphCanvas: null
     }
   },
+  componentWillUnmount() {
+    ecep.destroy();
+    ecee.destroy();
+    if(this.state.glyphCanvas !== null) {
+      this.state.glyphCanvas.destroy();
+    }
+  },
   componentDidMount() {
     let _this = this;
     let canvas = this.refs.canvas;
@@ -36,12 +43,12 @@ export default React.createClass({
 
       // temporary fix for #6 (initializing GlyphCanvas twice)
         let glyphCanvas = new GlyphCanvas(unicode, window.paper, canvas);
-        this.setState({glyphCanvas: glyphCanvas});
         glyphCanvas.destroy();
         this.setState({glyphCanvas: new GlyphCanvas(unicode, window.paper, canvas)});
 
       _this.setState({paperJsInitialized: true});
       _this.setState({glyphSelected: true});
+      console.log("hiszz");
     };
 
     ecep.on("glyphTile.glyphRecall", glyphSelectHanlder); // plugin-to-plugin event

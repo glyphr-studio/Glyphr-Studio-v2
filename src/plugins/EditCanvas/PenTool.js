@@ -8,9 +8,8 @@ ppe.on("editCanvas.ready", (canvas) => {
   ppe.on("editCanvas.switchTool.penTool", () => {
     activatePen(canvas);
   });
-
   ppe.emit("ready");
-})
+});
 function activatePen(canvas) {
   let pen = new Tool();
   pen.activate();

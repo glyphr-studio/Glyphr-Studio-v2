@@ -1,4 +1,4 @@
-import {storage} from "./../lib/storage/Storage";
+import {storage} from "../../lib/storage/Storage";
 
 export default React.createClass({
   componentWillMount() {

@@ -53,7 +53,7 @@ class Storage {
   }
 
   setHead(key) {
-    if(this.headAlreadyExists(key) === false) {
+    if(this.headExists(key) === false) {
       this.addHead(key);
     }
 
@@ -85,7 +85,7 @@ class Storage {
     return this._store.get("head");
   }
 
-  headAlreadyExists(key) {
+  headExists(key) {
     if((this._store.get("projectKey") || []).indexOf(key) === -1) {
       return false
     }

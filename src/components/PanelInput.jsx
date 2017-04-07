@@ -38,12 +38,16 @@ export default React.createClass({
       isDefaultChecked: false
     }
   },
+
   getInitialState() {
     return {
       lock: ! this.props.disableLock && ! this.props.disableInput && this.getLockIcon(),
       check: ! this.props.disableCheck && this.getCheckIcon(),
       input: ! this.disableInput && this.getInput()
     }
+  },
+  componentWillUnmount() {
+    flyouteu.destroy();
   },
   componentDidMount() {
     let gesDemoHandler = function(data) {

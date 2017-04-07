@@ -2,6 +2,9 @@ import EventUnit from "../plugins/EditCanvas/support/canvasEventStream/CanvasEve
 let ptaee = new EventUnit("panelTrayAttributes", 1);
 
 export default React.createClass({
+  componentWillUnmount() {
+    ptaee.destroy();
+  },
   componentDidMount() {
     let _this = this;
     ptaee.on("editCanvas.mousemove", function(event) {

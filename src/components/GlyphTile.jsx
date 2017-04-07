@@ -29,6 +29,9 @@ export default React.createClass({
     }
   },
 
+  componentWillUnmount() {
+    gtee.destroy();
+  },
   componentDidMount() {
     let _this = this;
 

@@ -1,0 +1,228 @@
+@import 'general';
+@import 'colors';
+@import 'Reset';
+@import 'Button';
+@import 'Animations';
+
+.mod.mod-openpage {
+  width: 100vw;
+  height: 100vh;
+  padding: 0px auto;
+  text-align: center;
+
+  .background {
+    background-color: $blue-l55;
+    opacity: 0;
+    animation: fadein 0.1s forwards cubic-bezier(0.6,0,0.7,1);
+    position: absolute;
+    top:0px;
+    left:0px;
+    width:100%;
+    height:100%;
+  }
+
+  #progressbar {
+    opacity: 0;
+    transition: opacity 0.35s ease-in;
+    border-radius: 100%;
+    height:1px;
+    width: 50vw;
+    min-width: 600px;
+    max-width: 820px;
+    margin: auto;
+    background-color: $blue-l50;
+
+    #progressbar-value {
+      width:0%;
+      height:100%;
+      animation:  3s forwards ease-in;
+      background-color: $blue-l85;
+    }
+  }
+
+
+  #glyphrstudio-info.load-in {
+    animation: fadein 0.2s forwards ease-in;
+  }
+
+  #glyphrstudio-info {
+    text-align: right;
+    color: $blue-l85;
+    font-size: 9px;
+    font-smooth: always;
+    -webkit-font-smoothing: subpixel-antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    margin-right: 20px;
+    margin-top: 4vh;
+    margin-left: -100px;
+    line-height: 1.6em;
+    width: 310px;
+    opacity: 0;
+
+    a, a:hover, a:visited, a:active {
+      color: $blue-l85;
+      display: inline;
+    }
+
+    h1 {
+      color: $blue-l90;
+      font-size: 16px;
+      margin: 1px 0px 6px 0px;
+    }
+  }
+
+  #openproject-options.load-in {
+    animation: fadein 0.3s forwards ease-in;
+  }
+
+  #openproject-options {
+    margin-top: 4vh;
+    opacity: 0;
+  }
+
+  .project-button {
+    font-size: 16px;
+    border:1px solid $blue-l80;
+    color: $blue-l95;
+    background-color: $blue-l55;
+    &:hover {
+      background-color: $blue-l60;
+      color: $offwhite;
+    }
+  }
+
+  svg {
+    width:100%;
+    margin-top: 20vh;
+    opacity: 0;
+    animation: fadein 0.4s forwards ease-in;
+  }
+
+  .logo {
+    margin: 0px auto;
+    width: 50vw;
+    min-width: 600px;
+    margin-bottom:4vh;
+
+    .logofill {
+      fill: $blue-l85;
+      stroke: transparent;
+      opacity: 0;
+      animation: fadein 1s forwards ease-in;
+      animation-delay: 0.9s;
+    }
+
+    .logopath {
+      fill: transparent;
+      stroke: $blue-l90;
+    }
+
+    .logopath_glyphr {
+      @extend .logopath;
+      stroke-width: 1.2px;
+      animation-delay: 0.4s;
+      animation: pathoutline 1.2s forwards ease-in;
+    }
+
+    .logopath_studio {
+      @extend .logopath;
+      stroke-width: 1.0px;
+      animation: pathoutline 0.65s forwards ease-in;
+      animation-delay: 0.4s;
+    }
+
+    #letter_G {
+      @extend .logopath_glyphr;
+      stroke-dasharray: 890px;
+      stroke-dashoffset: 890px;
+    }
+
+    #letter_g {
+      @extend .logopath_glyphr;
+      stroke-dasharray: 332px;
+      stroke-dashoffset: 332px;
+    }
+
+    #letter_l {
+      @extend .logopath_glyphr;
+      stroke-dasharray: 403px;
+      stroke-dashoffset: 403px;
+    }
+
+    #letter_y {
+      @extend .logopath_glyphr;
+      stroke-dasharray: 1136px;
+      stroke-dashoffset: 1136px;
+    }
+
+    #letter_P {
+      @extend .logopath_glyphr;
+      stroke-dasharray: 624px;
+      stroke-dashoffset: 624px;
+    }
+
+    #letter_p {
+      @extend #letter_g;
+    }
+
+    #letter_h {
+      @extend .logopath_glyphr;
+      stroke-dasharray: 853px;
+      stroke-dashoffset: 853px;
+    }
+
+    #letter_r {
+      @extend .logopath_glyphr;
+      stroke-dasharray: 573px;
+      stroke-dashoffset: 573px;
+    }
+
+    #letter_s {
+      @extend .logopath_studio;
+      stroke-dasharray: 164px;
+      stroke-dashoffset: 164px;
+    }
+
+    #letter_t {
+      @extend .logopath_studio;
+      stroke-dasharray: 118px;
+      stroke-dashoffset: 118px;
+    }
+
+    #letter_u {
+      @extend .logopath_studio;
+      stroke-dasharray: 148px;
+      stroke-dashoffset: 148px;
+    }
+
+    #letter_D {
+      @extend .logopath_studio;
+      stroke-dasharray: 90px;
+      stroke-dashoffset: 90px;
+    }
+
+    #letter_d {
+      @extend .logopath_studio;
+      stroke-dasharray: 59px;
+      stroke-dashoffset: 59px;
+    }
+
+    #letter_i {
+      @extend .logopath_studio;
+      stroke-dasharray: 153px;
+      stroke-dashoffset: 153px;
+    }
+
+    #letter_O {
+      @extend .logopath_studio;
+      stroke-dasharray: 88px;
+      stroke-dashoffset: 88px;
+    }
+
+    #letter_o {
+      @extend .logopath_studio;
+      stroke-dasharray: 61px;
+      stroke-dashoffset: 61px;
+    }
+  }
+}

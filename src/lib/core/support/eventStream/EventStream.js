@@ -19,7 +19,11 @@ export default class EventStream {
       this._subs[eventName] = [];
     }
 
-    this._subs[eventName].push(handler);
+    this._subs[eventName].push({
+      handler: handler,
+      emitter: emitter,
+      eventRootName: emitter.getName()
+    });
   }
 
   off(handler, emitter) {
@@ -28,7 +32,7 @@ export default class EventStream {
     // for instead of forEach for performance reasons
     for(let handlerKey in this._subs) {
       for(let i = 0; i < this._subs[handlerKey].length; i++) {
-        if(handler === this._subs[handlerKey][i]) this._subs[handlerKey].splice(i, 1);
+        if(handler === this._subs[handlerKey][i]["handler"]) this._subs[handlerKey].splice(i, 1);
       }
     }
   }
@@ -58,9 +62,9 @@ export default class EventStream {
     // todo: restrict valid calls to CanvasEventUnit only
 
     if(this.isMuted(eventName) === false && Object.keys(this._subs).indexOf(eventName) !== -1) {
-      this._subs[eventName].forEach(function(_handler) {
+      this._subs[eventName].forEach((handlerObj) => {
         // _handler(Object.assingn(data, {_handler: _handler}));
-        _handler(data);
+        handlerObj.handler(data);
       });
     }
   }

@@ -82,5 +82,9 @@ export default class PanTool extends ToolInterface {
   pan() {
     this.unicode = this._unicode;
   }
+
+  destroy() {
+    this._observer.destroy();
+  }
 }
 

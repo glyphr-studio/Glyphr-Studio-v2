@@ -8,6 +8,7 @@ import {config} from "./../config/config";
 import resetStyle from "./../style/default/Reset"
 import generalStyle from "./../style/default/general"
 import frameStyle from "./../style/default/Frames"
+import {storage} from "./../lib/storage/Storage";
 
 import PluginEventUnit from "./../lib/core/pluginEventStream/PluginEventUnit";
 let flee = new PluginEventUnit("frameLeft", 3);
@@ -21,14 +22,18 @@ export default React.createClass({
       selectedTray: "attributes"
     }
   },
-  componentWillMount() {
-    if(config.devMode) {
-     console.log("DevMode is true");
-     config.devModeSetup();
-    } else {
-     console.log("DevMode is false");
-    }
+  componenWillUnmount() {
+    flee.destroy();
   },
+  componentWillMount() {
+    let head = this.props.params.project;
+    if (storage.headExists(head) === true) {
+      storage.setHead(head)
+    } else {
+      this.props.router.push('/');
+    }
+  }
+  ,
   render() {
     return (
       <div>

@@ -7,6 +7,9 @@ export default React.createClass({
   propTypes: {
     selectedTray: React.PropTypes.string
   },
+  componentWillUnmount() {
+    ptee.destroy();
+  },
   componentDidMount() {
     let _this = this;
     ptee.on("panelTray.setTray", function(tray) {
