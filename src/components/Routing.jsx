@@ -21,9 +21,9 @@ let appRouting = React.createClass({
       <Router history={hashHistory}>
         <Route path="/" component={Index}/>
         <Route path="/project/new" component={CreateProject}/>
-        <Route path="/project/:project" component={ChooseExistingProject}/>
+        <Route path="/project" component={ChooseExistingProject}/>
 
-        <Route path="/project/:project/editor" component={ProjectEditor}>
+        <Route path="/project/editor" component={ProjectEditor}>
           <Route path="leftframe" name="leftframe" component={FrameLeft}>
             <Route path="tray" component={PanelTray}>
               <Route path="attributes(/:flyout)" component={PanelTrayAttributes}/>

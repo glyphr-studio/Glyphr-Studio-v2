@@ -8,12 +8,6 @@ export default React.createClass({
     return null;
   },
   componentWillMount() {
-    let head = this.props.params.project;
-    if (storage.headExists(head) === true) {
-      storage.setHead(head)
-    } else {
-      this.props.router.push('/');
-    }
   },
   componentDidMount(){
   },
@@ -36,7 +30,7 @@ export default React.createClass({
 
         <Link to="/project/new">Projects...</Link>
 
-        <p>We're currently working at: <Link to={`/project/${storage.getHead()}/editor/leftframe/tray/attributes`}>project editor</Link></p>
+        <p>We're currently working at: <Link to={`/project/editor/leftframe/tray/attributes`}>project editor</Link></p>
       </div>
     )
   }

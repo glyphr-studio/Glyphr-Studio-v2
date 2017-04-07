@@ -130,7 +130,7 @@ export default React.createClass({
               license and its freeness stays intact.
             </div>
             <div className="group button-group display-group load-in" id="openproject-options">
-              {storage.getHead() !== null ? <Link to={`/project/${storage.getHead()}`} className="button project-button">project manager</Link> : ""}
+              {storage.getHead() !== null ? <Link to={`/project`} className="button project-button">project manager</Link> : ""}
               <Link to="/project/new" className="button project-button">start a new project</Link>
             </div>
           </div>

@@ -6,6 +6,9 @@ export default React.createClass({
     route: React.PropTypes.object.isRequired,
   },
   componentWillMount() {
+    if(storage.getHead() === null) {
+      this.props.router.push("/");
+    }
   },
   render() {
     return (

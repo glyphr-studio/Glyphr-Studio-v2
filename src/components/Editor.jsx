@@ -26,12 +26,6 @@ export default React.createClass({
     flee.destroy();
   },
   componentWillMount() {
-    let head = this.props.params.project;
-    if (storage.headExists(head) === true) {
-      storage.setHead(head)
-    } else {
-      this.props.router.push('/');
-    }
   }
   ,
   render() {
