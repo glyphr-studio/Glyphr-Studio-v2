@@ -1,14 +1,16 @@
-import CanvasGuideLayer from "./CanvasGuideLayer";
+import CanvasGuideLayer from "./reactives/CanvasGuide/CanvasGuideLayer";
 import PanTool from "./tools/PanTool/PanTool";
 import CanvasInterface from "./support/CanvasInterface";
 import CanvasEventUnit from "./support/canvasEventStream/CanvasEventUnit";
 import {storage} from "./../../lib/storage/Storage";
+import CanvasCursor from "./support/CanvasCursor";
+import {ToolDispatcher} from "./ToolDispatcher";
 
 export default class GlyphCanvas extends CanvasInterface {
 
   _paper = null;
   _canvas = null;
-  _panTool = null;
+  _toolDispatcher = null;
   _canvasGuideLayer = null;
   _unicode = "";
 
@@ -39,30 +41,13 @@ export default class GlyphCanvas extends CanvasInterface {
 
     this._paper.setup(this._canvas);
     this.resize(window.innerWidth-400, window.innerHeight-140);
-    this._canvasGuideLayer = new CanvasGuideLayer(paper,canvas);
-    this._observer = new CanvasEventUnit("glyphCanvas", 3);
-
+    this._canvasGuideLayer = new CanvasGuideLayer(paper, canvas, unicode);
     this._canvasGuideLayer.drawCanvasGrid();
-
-    if(this.resumeProject() === false) {
-      alert(`Enjoy your first edits on ${unicode}`)
-    }
-
-    this._panTool = new PanTool(unicode, paper, canvas);
-    this._panTool.pan(unicode);
-
-    switch(this._options.activeTool) {
-      case "panTool":
-        this.activatePanTool();
-        break;
-      default:
-        this.activateDefaultTool();
-    }
+    this._observer = new CanvasEventUnit("glyphCanvas", 3);
+    this._cursor = new CanvasCursor(canvas);
 
     let windowResizeHandler = () => {
       this.resize(Math.round(window.innerWidth-400), Math.round(window.innerHeight-140));
-      // this._canvasGuideLayer.drawCanvasGrid();
-      this._panTool.pan(this._unicode);
     };
 
     window.addEventListener("resize", windowResizeHandler);
@@ -72,37 +57,69 @@ export default class GlyphCanvas extends CanvasInterface {
       this.save();
     };
 
-    this._observer.on("penTool.save", saveHandler);
+    let panTool = new PanTool(unicode, paper, canvas);
 
     // Clean up
     this.onDestroy(() => {
-      this._panTool.tool.remove();
       window.removeEventListener("resize", windowResizeHandler);
       this.save();
       this._paper.project.remove();
       this._observer.off(saveHandler);
       this._observer.destroy();
-      this._panTool.destroy();
     });
 
-    this.activateDefaultTool();
-  }
 
-  activateDefaultTool() {
-    this._panTool.activate();
-  }
+    let toolDispatchRegister = [
+      {
+        selectedTool: null,
+        selectedElement: null,
+        hoveredElement: null,
+        keyboardKeyDown: null,
+        keyboardKeyUp: null,
+        mousemove: false,
+        mousedown: false,
+        mouseup: true,
+        handler: () => {
+          console.info("default handler fired");
+        }
+      },
+      {
+        selectedTool: "panTool",
+        selectedElement: null,
+        hoveredElement: null,
+        keyboardKeyDown: null,
+        keyboardKeyUp: null,
+        mousemove: false,
+        mousedown: true,
+        mouseup: false,
+        handler: panTool.handleMouseDown
+      },
+      {
+        selectedTool: "panTool",
+        selectedElement: null,
+        hoveredElement: null,
+        keyboardKeyDown: null,
+        keyboardKeyUp: null,
+        mousemove: true,
+        mousedown: true,
+        mouseup: false,
+        handler: panTool.handleMouseMove
+      },
+      {
+        selectedTool: "panTool",
+        selectedElement: null,
+        hoveredElement: null,
+        keyboardKeyDown: null,
+        keyboardKeyUp: null,
+        mousemove: false,
+        mousedown: false,
+        mouseup: true,
+        handler: panTool.handleMouseUp
+      }
+    ];
 
-  activatePanTool() {
-    this._panTool.activate();
-  }
-
-  /**
-   * Get the default tool
-   *
-   * @return {ToolInterface}
-   */
-  getDefaultTool() {
-    return this._panTool;
+    ToolDispatcher.dispatchRegister = toolDispatchRegister;
+    ToolDispatcher.dispatch();
   }
 
   /**

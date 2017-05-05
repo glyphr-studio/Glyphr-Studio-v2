@@ -1,71 +1,65 @@
-import AbstractImplementationGuard from "./AbstractImplementationGuard";
-import Destroyable from "./Destroyable"
-import CanvasEventUnit from "./canvasEventStream/CanvasEventUnit";
-import DeveloperError from "./../support/DeveloperError";
-import {storage} from "./../../../lib/storage/Storage";
+/**
+ *  Singleton pattern
+ */
 
-let selection = null;
+let instance;
 
-export default class ToolInterface extends Destroyable {
-  _aig = new AbstractImplementationGuard(this);
+export default class CanvasCursor {
+  _currentCursor = null;
+  _defaultCursor = "";
+  _cursorHistory = [];
+  _canvas = null;
 
   /**
-   * @property {CanvasEventUnit}
+   * Get a cursor manager for the canvas
+   *
+   * @param {HTMLCanvasElement} canvas
+   * @param {function} cursor – returns cursor name & used to revert to previous cursor
    */
-  _observer;
-  _name;
-  _storage = {};
-  _storageKey;
-  _currentCursor = null;
-
-  constructor(canvas, self) {
-    super();
-    let _this = this;
+  constructor(canvas, cursor) {
     this._canvas = canvas;
-    this._currentCursor = canvas.style.cursor;
 
-    /**
-     * Contract
-     */
-    [
-      // Activate this tool
-      {
-        name: "activate",
-        signature: "()"
-      }
-      // {
-      //   name: "tool",
-      //   signature: ""
-      // }
-    ].forEach((method) => {
-      if (typeof _this[method.name] !== "function") {
-        _this._aig.riseImplementationMissing(method.name, method.signature);
-      }
-    });
+    let defaultCursor = () => "default";
 
-    this._storageKey = this.constructor.name;
-    this._name = this.constructor.name;
+    if(typeof instance === "undefined") {
 
-    this._storage.set = (key, value, overwrite = false) => {
-      storage.set(`${this._storageKey}.${key}`, value, overwrite);
-    };
+      instance = this;
+    }
 
-    this._storage.get = (key) => {
-      return storage.get(`${this._storageKey}.${key}`);
-    };
-
-    this._observer = new CanvasEventUnit(this.constructor.name, 3);
+    this.push(cursor || defaultCursor);
   }
 
-  static set selection(selec) {
-    selection = selec;
+  get current() {
+    return instance._currentCursor;
   }
 
-  static get selection() {
-    return selection;
+  hasCursor(handler) {
+    return this._cursorHistory.indexOf(handler) > 0 || this._currentCursor === handler;
   }
 
-  setCursor(name) {
+  /**
+   * Revert back to the previous cursor
+   *
+   * @param {function} handler
+   */
+  pop(handler) {
+    let index = instance._cursorHistory.indexOf(handler);
+    if(typeof instance._cursorHistory[index-1] === "undefined") {
+      throw new Error(`CanvasCursor: no previous cursor found, cursor has not been reverted. instance error might indicate a wrong assumption in your code!`);
+    } else {
+      instance.push(instance._cursorHistory[index-1], true);
+      instance._cursorHistory.splice(index, 1);
+    }
+  }
+
+  /**
+   * Set a cursor
+   *
+   * @param {function} handler – returns handler name as argument
+   * @param {boolean} silent – internal use only
+   */
+  push(handler, silent = false) {
+    console.log(instance)
     let customCursors = {
       // pointer: 'url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAdCAYAAACnmDyCAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAPJJREFUeNpiYNB2/M9ABcAEJqlgGNigLYtmUMEwoAEPv/7/v+Xszf+UGQY1iFLDmJA5uhpqZHuTCV2AXMOYsAmSYxgTLglSDWPCJ0mKYUyEFBBrGBMxzibGMCZiA5OQYUykRDE+w5hITXi4DGMiJztgM4yJ3CyKbhgTJQUHsmEspGiUN3PCKcdCoiHSJBkEs/nhqX2oElf3PyM6QUINMQFhZK8QStksWA25uv8stPRECVii8hqGIUDg7WLvR7yrQBIQbEyoTAdhfHnNBN0lyKAwNT6dlLAiuqbB5Sqi0lF7VVEj0FX1SEImlFamxrjCEiDAABxblO2iGQyVAAAAAElFTkSuQmCC") 0 0, default',
       // pointerCircle: 'url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAfCAYAAAD5h919AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAaJJREFUeNpiYNB2/M9AB8AEJulgGdiiLYtm0MEyoAUPv/7/v+Xszf+0tQxqEa0tY0Lm6Gqo0SwYmdAFaGUZEzZBWljGhEuC2pYx4ZOkpmVMhBRQyzImYhRRwzImYhVSahkTKYopsYyJVA3kWsZETjCQYxkTuZFLqmVMlCRZUixjIcVgeTMnsh3FQqIl0lS1CObyh6f2oUpc3f+MahkWaokJCCMHFd640HYMAOL7YHkIvg8Ww1XDQhUZY5ODy2OxhM/C93/vyh1wdfVz1/wHiaFaBjUMwxIg8M5v8CVY1QNdj2wJDIPEwD6DAkYkjSbAODiLtU2BFFfg4Ly6nxEqJwAk32PEJWo0KALVP2CCxQdWS4CgMDU+nei4wg6EgeqFmcAW4LAEBPoLEmahZ1KkVPgBSD5Ys2Unhr55K9aCqOdQLjtR+ai9qqgR6Kt6JCETZE839k9d/+nLF4akiGCwAMji/tkLQcxeRByR1gY0hvrkLEbyBnoeiBWgIs+hlhyA8h8wMlATaDsqgOMEFbwFJQbqWgSxDGQRO5T3E2jJWxADIMAAQ+gDzqOrNPQAAAAASUVORK5CYII=") 0 0, default',
@@ -85,15 +79,18 @@ export default class ToolInterface extends Destroyable {
       // crosshairs: 'url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAZCAYAAADE6YVjAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAHdJREFUeNpiYCAFaDvOB+L/YJpmAGjBw6///4MtIgEwMdABjFoyasngsWSBvJkTmGYYbIARWkQkEPIBw9X9iViLGSL0MoKLilP78KoCB9HV/YywogWZTYxeFmg4E/YJDMAsQMQR8XoHDxgt6kctGbVkaBf1AAEGAMBRMaRlDAehAAAAAElFTkSuQmCC") 12 12, crosshair',
       // crosshairsCircle: 'url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAASdJREFUeNpiYCAFaDvOB+L/YJquAGjpw6///4MtpxAwMQwQGLV41OJRixfImzmBaYahChihxV8CIZ8yXN2fiLUIJVcvrBjEh1GKSDQ2SXqRAAs03gi7Ggau7mdEi3Pi9Q49MFotjlpMAmChUVoIAJL9QKwAFXkAxIXArLiBdokLaCmfhe//3pU74IVI/dw1/0FiUAfRzOL7yJbCMEgMJEebONZ2FAAFb4iPO4YUVEwBqEZhoKpFYaDlwqRZDKplQGU11toGLP8BlJDWbNmJITVvxVoQ9RzKZWemeooWU3x44tzFCA52NgZDHS2wEMghHVNnM/z89asRmsK/MNIpO4F82gvEB2DZi5GmpQQkIQmjib4FRgmNLYZYDrKYHcr7CbT0LYgBEGAANUzSIEqdxeYAAAAASUVORK5CYII=") 12 12, crosshair',
       // crosshairsSquare: 'url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAK9JREFUeNpiYCAFaDvOB+L/YJquAGjpw6///4MtpxAwMQwQGLV41OJRixfImzmBaYahChihxV8CIZ8yXN2fiLUIJVcvrBjEh1GKSDQ2SXqRAAs03gi7Ggau7mdEi3Pi9Q49MFotjlpMAmChRTrAKw/Njiy08M3DU/uwikPLeQaaWUwgRKSA5GeWAYheyQGtFknzMaSWSRzNTvhSL+6GAG1TryQO2ee0TNWf8ckBBBgA6OV4hjhWgkEAAAAASUVORK5CYII=") 12 12, crosshair'
-      };
+    };
 
     let defaultCursors = ['auto', 'default', 'none', 'context-menu', 'help', 'pointer', 'progress', 'wait', 'cell', 'crosshair', 'text', 'vertical-text', 'alias', 'copy', 'move', 'no-drop', 'not-allowed', 'e-resize', 'n-resize', 'ne-resize', 'nw-resize', 's-resize', 'se-resize', 'sw-resize', 'w-resize', 'ew-resize', 'ns-resize', 'nesw-resize', 'nwse-resize', 'col-resize', 'row-resize', 'all-scroll', 'zoom-in', 'zoom-out', 'grab', 'grabbing'];
 
-    if (typeof customCursors[name] === "undefined" && defaultCursors.indexOf(name) === -1) {
-      throw new Error(`Cursor "${name}" could not be found`)
+    if (typeof customCursors[handler()] === "undefined" && defaultCursors.indexOf(handler()) === -1) {
+      throw new Error(`Cursor "${handler()}" could not be found`)
     } else {
-      this._canvas.style.cursor = customCursors[name] || name;
-      this._currentCursor = name;
+      instance._canvas.style.cursor = customCursors[handler()] || handler();
+      if(silent === false) {
+        instance._cursorHistory.push(handler);
+      }
+      instance._currentCursor = handler();
     }
   }
 }

@@ -25,36 +25,38 @@ export default class PanTool extends ToolInterface {
 
     let _this = this;
     this._tool = new paper.Tool();
+    this._tool._gsWrapper = this;
+
     this._paper = paper;
     this._canvas = canvas;
     this._storage = new PanToolStorage(unicode, canvas);
     this._unicode = unicode;
 
-    this._tool.onMouseDown = (e) => {
-      this._viewStart = this._paper.view.center;
-      this._mouseStart = new this._paper.paper.Point(e.event.offsetX, e.event.offsetY);
+    this.handleMouseUp = () => {
+      let _this = this;
+      this._storage.setGlyphPanPosition(this._unicode, {x: _this._paper.view.center.x, y: _this._paper.view.center.y});
+      this._mouseStart = null;
+      this._viewStart = null;
     };
 
-    /**
-     * Setup functionality after activation
-     */
-    this._tool.onMouseDrag = (event) => {
+    this.handleMouseDown = (toolEvent) => {
+      this._viewStart = this._paper.view.center;
+      this._mouseStart = new this._paper.paper.Point(toolEvent.event.offsetX, toolEvent.event.offsetY);
+    };
+
+    this.handleMouseMove = (toolEvent) => {
+      // teporary fix: when panning on guides this._mouseStart is null
+      if (!this._mouseStart) return;
+
       let x, y, nativeDelta = new this._paper.Point(
-        x = event.event.offsetX - _this._mouseStart.x,
-        y = event.event.offsetY - _this._mouseStart.y
+        x = toolEvent.event.offsetX - this._mouseStart.x,
+        y = toolEvent.event.offsetY - this._mouseStart.y
       );
 
       // Move into view coordinates to subtract delta, then back into project coords.
       this._paper.view.center = this._paper.view.viewToProject(
         this._paper.view.projectToView(this._viewStart).subtract(nativeDelta)
       );
-    };
-
-    this._tool.onMouseUp = (event) => {
-      let _this = this;
-      this._storage.setGlyphPanPosition(this._unicode, {x: _this._paper.view.center.x, y: _this._paper.view.center.y});
-      this._mouseStart = null;
-      this._viewStart = null;
     }
   }
 

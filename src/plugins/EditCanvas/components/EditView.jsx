@@ -1,11 +1,12 @@
 import CanvasEventUnit from "../support/canvasEventStream/CanvasEventUnit";
 import PluginEventUnit from "./../../../lib/core/pluginEventStream/PluginEventUnit";
-import "./../PenTool";
+import "../tools/PenTool/PenTool_2";
 import "./../tools/PanTool/PanTool";
 import config from "./../../../config/config";
 import EditCanvasStorage from "./EditViewStorage";
 import GlyphCanvas from "./../GlyphCanvas";
 import style from "./../EditCanvas";
+import {ToolDispatcher} from "./../ToolDispatcher";
 
 // GlyphCanvas Event Stream
 let ecee = new CanvasEventUnit("editCanvas", 3);
@@ -48,7 +49,6 @@ export default React.createClass({
 
       _this.setState({paperJsInitialized: true});
       _this.setState({glyphSelected: true});
-      console.log("hiszz");
     };
 
     ecep.on("glyphTile.glyphRecall", glyphSelectHanlder); // plugin-to-plugin event
@@ -74,11 +74,9 @@ export default React.createClass({
         <div ref="canvasView" style={this.state.paperJsInitialized === true && this.state.glyphSelected === true ? {display: "block"} : {display: "none"}}>
           {/* Show controls only when paper.js is initialized */}
           <div>
-            <button onClick={ecee.emit.bind(ecee, "switchTool.penTool")}>Pen Tool</button>
+            <button onClick={() => {ToolDispatcher.selectedTool = "penTool"}}>Pen Tool</button>
             &nbsp;
-            {this.state.glyphCanvas !== null && <button onClick={this.state.glyphCanvas.activatePanTool.bind(this.state.glyphCanvas)}>Pan Tool</button>}
-            &nbsp;
-            <button onClick={this.resetCanvasView}>Reset View</button>
+            {this.state.glyphCanvas !== null && <button onClick={() => {ToolDispatcher.selectedTool = "panTool"}}>Pan Tool</button>}
             &nbsp;
           </div>
           <div className="functionBar">function bar stuff (content depends on the selected tool) ...</div>

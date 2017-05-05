@@ -1,4 +1,4 @@
-import CanvasEventUnit from "./support/canvasEventStream/CanvasEventUnit";
+import CanvasEventUnit from "../../support/canvasEventStream/CanvasEventUnit";
 
 // a simple demo of a bezier tool
 
