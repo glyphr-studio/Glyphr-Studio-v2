@@ -1,6 +1,5 @@
 import CanvasEventUnit from "../support/canvasEventStream/CanvasEventUnit";
 import PluginEventUnit from "./../../../lib/core/pluginEventStream/PluginEventUnit";
-import "../tools/PenTool/PenTool_2";
 import "./../tools/PanTool/PanTool";
 import config from "./../../../config/config";
 import EditCanvasStorage from "./EditViewStorage";

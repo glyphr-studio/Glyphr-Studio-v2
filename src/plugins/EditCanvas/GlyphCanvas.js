@@ -5,6 +5,7 @@ import CanvasEventUnit from "./support/canvasEventStream/CanvasEventUnit";
 import {storage} from "./../../lib/storage/Storage";
 import CanvasCursor from "./support/CanvasCursor";
 import {ToolDispatcher} from "./ToolDispatcher";
+import PEnTool from "./tools/PenTool/PEnTool";
 
 export default class GlyphCanvas extends CanvasInterface {
 
@@ -40,14 +41,13 @@ export default class GlyphCanvas extends CanvasInterface {
     this._canvas = canvas;
 
     this._paper.setup(this._canvas);
-    this.resize(window.innerWidth-400, window.innerHeight-140);
+    this.resize(window.innerWidth - 400, window.innerHeight - 140);
     this._canvasGuideLayer = new CanvasGuideLayer(paper, canvas, unicode);
     this._canvasGuideLayer.drawCanvasGrid();
     this._observer = new CanvasEventUnit("glyphCanvas", 3);
-    this._cursor = new CanvasCursor(canvas);
 
     let windowResizeHandler = () => {
-      this.resize(Math.round(window.innerWidth-400), Math.round(window.innerHeight-140));
+      this.resize(Math.round(window.innerWidth - 400), Math.round(window.innerHeight - 140));
     };
 
     window.addEventListener("resize", windowResizeHandler);
@@ -58,6 +58,7 @@ export default class GlyphCanvas extends CanvasInterface {
     };
 
     let panTool = new PanTool(unicode, paper, canvas);
+    let pEnTool = new PEnTool(unicode, paper, canvas);
 
     // Clean up
     this.onDestroy(() => {
@@ -68,58 +69,109 @@ export default class GlyphCanvas extends CanvasInterface {
       this._observer.destroy();
     });
 
-
-    let toolDispatchRegister = [
-      {
-        selectedTool: null,
-        selectedElement: null,
-        hoveredElement: null,
-        keyboardKeyDown: null,
-        keyboardKeyUp: null,
-        mousemove: false,
-        mousedown: false,
-        mouseup: true,
-        handler: () => {
-          console.info("default handler fired");
+    ToolDispatcher.dispatchRegister =
+      [
+        {
+          selectedTool: null,
+          selectedElement: null,
+          hoveredElement: [],
+          keyboardKeyDown: false,
+          keyboardKeyUp: true,
+          mousemove: true,
+          mousedown: false,
+          mouseup: true,
+          handler: () => {
+            console.info("default handler fired");
+          },
+          cursor: "pointer"
+        },
+        {
+          selectedTool: "panTool",
+          selectedElement: null,
+          hoveredElement: [],
+          keyboardKeyDown: false,
+          keyboardKeyUp: true,
+          mousemove: true,
+          mousedown: false,
+          mouseup: true,
+          handler: () => {},
+          cursor: "pointer"
+        },
+        {
+          selectedTool: "panTool",
+          selectedElement: null,
+          hoveredElement: [],
+          keyboardKeyDown: false,
+          keyboardKeyUp: true,
+          mousemove: false,
+          mousedown: true,
+          mouseup: false,
+          handler: panTool.handleMouseDown,
+          cursor: "pointer"
+        },
+        {
+          selectedTool: "panTool",
+          selectedElement: null,
+          hoveredElement: [],
+          keyboardKeyDown: false,
+          keyboardKeyUp: true,
+          mousemove: true,
+          mousedown: true,
+          mouseup: false,
+          handler: panTool.handleMouseMove,
+          cursor: "pointer"
+        },
+        {
+          selectedTool: "panTool",
+          selectedElement: null,
+          hoveredElement: [],
+          keyboardKeyDown: false,
+          keyboardKeyUp: true,
+          mousemove: false,
+          mousedown: false,
+          mouseup: true,
+          handler: panTool.handleMouseUp,
+          cursor: "pointer"
+        },
+        {
+          selectedTool: "penTool",
+          selectedElement: null,
+          hoveredElement: [],
+          keyboardKeyDown: false,
+          keyboardKeyUp: true,
+          mousemove: true,
+          mousedown: false,
+          mouseup: true,
+          handler: () => {},
+          cursor: "pen"
+        },
+        {
+          selectedTool: "penTool",
+          selectedElement: null,
+          hoveredElement: [],
+          keyboardKeyDown: false,
+          keyboardKeyUp: true,
+          mousemove: false,
+          mousedown: true,
+          mouseup: false,
+          handler: pEnTool.handleMouseDown,
+          cursor: "penSquare"
+        },
+        {
+          selectedTool: "penTool",
+          selectedElement: null,
+          hoveredElement: [],
+          keyboardKeyDown: false,
+          keyboardKeyUp: true,
+          mousemove: true,
+          mousedown: true,
+          mouseup: false,
+          handler: pEnTool.handleMouseMove,
+          cursor: "penCircle"
         }
-      },
-      {
-        selectedTool: "panTool",
-        selectedElement: null,
-        hoveredElement: null,
-        keyboardKeyDown: null,
-        keyboardKeyUp: null,
-        mousemove: false,
-        mousedown: true,
-        mouseup: false,
-        handler: panTool.handleMouseDown
-      },
-      {
-        selectedTool: "panTool",
-        selectedElement: null,
-        hoveredElement: null,
-        keyboardKeyDown: null,
-        keyboardKeyUp: null,
-        mousemove: true,
-        mousedown: true,
-        mouseup: false,
-        handler: panTool.handleMouseMove
-      },
-      {
-        selectedTool: "panTool",
-        selectedElement: null,
-        hoveredElement: null,
-        keyboardKeyDown: null,
-        keyboardKeyUp: null,
-        mousemove: false,
-        mousedown: false,
-        mouseup: true,
-        handler: panTool.handleMouseUp
-      }
-    ];
+      ];
 
-    ToolDispatcher.dispatchRegister = toolDispatchRegister;
-    ToolDispatcher.dispatch();
+    ToolDispatcher.canvas = canvas;
   }
 
   /**
@@ -157,7 +209,7 @@ export default class GlyphCanvas extends CanvasInterface {
    * @return {false}  There was no previous save, the project has not been resumed.
    */
   resumeProject() {
-    if(this.getLatestSave() !== null) {
+    if (this.getLatestSave() !== null) {
       this._paper.project.importJSON(this.getLatestSave());
       return true;
     }

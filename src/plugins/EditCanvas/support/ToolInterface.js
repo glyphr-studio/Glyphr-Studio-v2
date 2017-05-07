@@ -28,11 +28,6 @@ export default class ToolInterface extends Destroyable {
      * Contract
      */
     [
-      // Activate this tool
-      {
-        name: "activate",
-        signature: "()"
-      }
       // {
       //   name: "tool",
       //   signature: ""

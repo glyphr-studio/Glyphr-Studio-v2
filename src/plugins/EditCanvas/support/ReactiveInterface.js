@@ -13,40 +13,30 @@ export default class ReactiveInterface extends Destroyable {
    */
   constructor(canvas, item) {
     super();
-    this.cursor = new CanvasCursor(canvas, () => "default");
 
-    let canvasHandler = () => {
+    let mouseEnterHandler = () => {
+      this._hasHover = true;
       this._onHover.forEach((callback) => {
         callback();
-      })
-    };
-
-    let setHover = () => {
-      this._hasHover = true;
-
-      canvasHandler();
-
-      ["keydown", "keyup", "keypress", "mousedown", "mouseup"].forEach((event) => {
-        canvas.addEventListener(event, canvasHandler);
       });
 
-      item.attach("mouseleave", mouseLeaveHandler)
+      let mouseLeaveHandler = () => {
+        this._hasHover = false;
+        this._onBlur.forEach((callback) => {
+          callback();
+        });
+        item.off("mouseleave", mouseLeaveHandler);
+      };
+
+      item.on("mouseleave", mouseLeaveHandler);
     };
 
-    let mouseLeaveHandler = () => {
-      ["keydown", "keyup", "keypress", "mousedown", "mouseup"].forEach((event) => {
-        canvas.removeEventListener(event, canvasHandler);
-      });
+    item.on("mouseenter", mouseEnterHandler);
 
-      this._hasHover = false;
-
-      this._onBlur.forEach((callback) => {
-        callback();
-      });
-      item.detach("mouseleave", mouseLeaveHandler);
-    };
-
-    item.attach("mouseenter", setHover);
+    this.onDestroy(() => {
+      item.off("mouseenter", mouseEnterHandler);
+      item.off("mouseleave", mouseLeaveHandler);
+    })
   }
 
   get hasHover() {

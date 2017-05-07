@@ -24,8 +24,6 @@ export default class PanTool extends ToolInterface {
     super(canvas);
 
     let _this = this;
-    this._tool = new paper.Tool();
-    this._tool._gsWrapper = this;
 
     this._paper = paper;
     this._canvas = canvas;
@@ -40,13 +38,22 @@ export default class PanTool extends ToolInterface {
     };
 
     this.handleMouseDown = (toolEvent) => {
+      // temporary fix: preventing an error to occur is some instances, which would crash the app
+      if (!toolEvent || !toolEvent.event.offsetX) {
+        console.warn("PenTool: skipping mousedown to prevent app error")
+        return;
+      }
+
       this._viewStart = this._paper.view.center;
       this._mouseStart = new this._paper.paper.Point(toolEvent.event.offsetX, toolEvent.event.offsetY);
     };
 
     this.handleMouseMove = (toolEvent) => {
       // teporary fix: when panning on guides this._mouseStart is null
-      if (!this._mouseStart) return;
+      if (!this._mouseStart || !this._viewStart || !toolEvent || !toolEvent.event.offsetX) {
+        console.warn("PenTool: skipping mousemove to prevent app error")
+        return;
+      }
 
       let x, y, nativeDelta = new this._paper.Point(
         x = toolEvent.event.offsetX - this._mouseStart.x,
@@ -58,21 +65,6 @@ export default class PanTool extends ToolInterface {
         this._paper.view.projectToView(this._viewStart).subtract(nativeDelta)
       );
     }
-  }
-
-  activate() {
-    // ready for the user to use
-    this.setCursor("pointer");
-    this._observer.emit("ready");
-    this._tool.activate();
-  }
-
-  /**
-   * Get the tool
-   * @return {PaperJS.Tool}
-   */
-  get tool() {
-    return this._tool;
   }
 
   set unicode(unicode) {

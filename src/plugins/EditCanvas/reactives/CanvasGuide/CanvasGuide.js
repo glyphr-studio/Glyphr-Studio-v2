@@ -1,6 +1,7 @@
 import {storage} from "./../../../../lib/storage/Storage";
 import Destroyable from "./../../support/Destroyable";
 import CanvasGuideReactive from "./CanvasGuideReactive";
+import {ToolDispatcher} from "./../../ToolDispatcher";
 
 export default class CanvasGuide extends Destroyable {
   _guide;
@@ -47,16 +48,23 @@ export default class CanvasGuide extends Destroyable {
 
     this._tresholdRectangle.fillColor = new $.Color(0, 0, 0, 0);
 
+    this._reactive = new CanvasGuideReactive(paper.view.element, this._tresholdRectangle);
+
+
     this.onDestroy(() => {
       // this._guide.remove();
       // this._tresholdRectangle.remove();
     });
 
-    this._reactive = new CanvasGuideReactive($, paper.view.element, this);
-
-    this.onDestroy(() => {
-      this.disableReactiveness();
-    });
+    this._reactive.onHover(() => {
+      // When clicking on
+      if(ToolDispatcher.hasHoveredElement(this) === false) {
+        let hook = ToolDispatcher.pushHoveredElement("CanvasGuide", this);
+        this._reactive.onBlur(() => {
+          ToolDispatcher.removeHoveredElement(hook);
+        })
+      }
+    })
   }
 
   activate() {
