@@ -3,7 +3,6 @@ import PanTool from "./tools/PanTool/PanTool";
 import CanvasInterface from "./support/CanvasInterface";
 import CanvasEventUnit from "./support/canvasEventStream/CanvasEventUnit";
 import {storage} from "./../../lib/storage/Storage";
-import CanvasCursor from "./support/CanvasCursor";
 import {ToolDispatcher} from "./ToolDispatcher";
 import PEnTool from "./tools/PenTool/PEnTool";
 
@@ -67,21 +66,72 @@ export default class GlyphCanvas extends CanvasInterface {
       this._paper.project.remove();
       this._observer.off(saveHandler);
       this._observer.destroy();
+      ToolDispatcher.destroy();
     });
 
     ToolDispatcher.dispatchRegister =
       [
+        // Activate default tool
         {
           selectedTool: null,
           selectedElement: null,
           hoveredElement: [],
           keyboardKeyDown: false,
-          keyboardKeyUp: true,
+          keyboardKey: [],
+          mousemove: true,
+          mousedown: false,
+          mouseup: true,
+          handler: _this.setActiveTool.bind(_this, "panTool"),
+          cursor: "pointer"
+        },
+        {
+          selectedTool: "*",
+          selectedElement: "*",
+          hoveredElement: "*",
+          keyboardKeyDown: "*",
+          keyboardKey: ["F5"],
+          mousemove: "*",
+          mousedown: "*",
+          mouseup: "*",
+          handler: _this.refreshPage,
+          cursor: "pointer"
+        },
+        // Activate pan tool keyshortcut
+        {
+          selectedTool: "*",
+          selectedElement: "*",
+          hoveredElement: "*",
+          keyboardKeyDown: true,
+          keyboardKey: ["KeyT"],
+          mousemove: "*",
+          mousedown: false,
+          mouseup: true,
+          handler: _this.setActiveTool.bind(_this, "panTool"),
+          cursor: "pointer"
+        },
+        // Activate pen tool keyshortcut
+        {
+          selectedTool: "*",
+          selectedElement: "*",
+          hoveredElement: "*",
+          keyboardKeyDown: true,
+          keyboardKey: ["KeyP"],
+          mousemove: "*",
+          mousedown: false,
+          mouseup: true,
+          handler: _this.setActiveTool.bind(_this, "penTool"),
+          cursor: "pen"
+        },
+        {
+          selectedTool: "panTool",
+          selectedElement: null,
+          hoveredElement: [],
+          keyboardKeyDown: false,
+          keyboardKey: [],
           mousemove: true,
           mousedown: false,
           mouseup: true,
           handler: () => {
-            console.info("default handler fired");
           },
           cursor: "pointer"
         },
@@ -90,11 +140,12 @@ export default class GlyphCanvas extends CanvasInterface {
           selectedElement: null,
           hoveredElement: [],
           keyboardKeyDown: false,
-          keyboardKeyUp: true,
+          keyboardKey: [],
           mousemove: true,
           mousedown: false,
           mouseup: true,
-          handler: () => {},
+          handler: () => {
+          },
           cursor: "pointer"
         },
         {
@@ -102,7 +153,33 @@ export default class GlyphCanvas extends CanvasInterface {
           selectedElement: null,
           hoveredElement: [],
           keyboardKeyDown: false,
-          keyboardKeyUp: true,
+          keyboardKey: [],
+          mousemove: false,
+          mousedown: true,
+          mouseup: false,
+          handler: panTool.handleMouseDown,
+          cursor: "pointer"
+        },
+        // Allow panning on canvas guides
+        {
+          selectedTool: "panTool",
+          selectedElement: null,
+          hoveredElement: ["CanvasGuide"],
+          keyboardKeyDown: false,
+          keyboardKey: [],
+          mousemove: true,
+          mousedown: true,
+          mouseup: false,
+          handler: panTool.handleMouseMove,
+          cursor: "pointer"
+        },
+        // Allow panning on canvas guides
+        {
+          selectedTool: "panTool",
+          selectedElement: null,
+          hoveredElement: ["CanvasGuide"],
+          keyboardKeyDown: false,
+          keyboardKey: [],
           mousemove: false,
           mousedown: true,
           mouseup: false,
@@ -114,19 +191,7 @@ export default class GlyphCanvas extends CanvasInterface {
           selectedElement: null,
           hoveredElement: [],
           keyboardKeyDown: false,
-          keyboardKeyUp: true,
-          mousemove: true,
-          mousedown: true,
-          mouseup: false,
-          handler: panTool.handleMouseMove,
-          cursor: "pointer"
-        },
-        {
-          selectedTool: "panTool",
-          selectedElement: null,
-          hoveredElement: [],
-          keyboardKeyDown: false,
-          keyboardKeyUp: true,
+          keyboardKey: [],
           mousemove: false,
           mousedown: false,
           mouseup: true,
@@ -138,11 +203,12 @@ export default class GlyphCanvas extends CanvasInterface {
           selectedElement: null,
           hoveredElement: [],
           keyboardKeyDown: false,
-          keyboardKeyUp: true,
+          keyboardKey: [],
           mousemove: true,
           mousedown: false,
           mouseup: true,
-          handler: () => {},
+          handler: () => {
+          },
           cursor: "pen"
         },
         {
@@ -150,7 +216,7 @@ export default class GlyphCanvas extends CanvasInterface {
           selectedElement: null,
           hoveredElement: [],
           keyboardKeyDown: false,
-          keyboardKeyUp: true,
+          keyboardKey: [],
           mousemove: false,
           mousedown: true,
           mouseup: false,
@@ -162,7 +228,7 @@ export default class GlyphCanvas extends CanvasInterface {
           selectedElement: null,
           hoveredElement: [],
           keyboardKeyDown: false,
-          keyboardKeyUp: true,
+          keyboardKey: [],
           mousemove: true,
           mousedown: true,
           mouseup: false,
@@ -172,6 +238,18 @@ export default class GlyphCanvas extends CanvasInterface {
       ];
 
     ToolDispatcher.canvas = canvas;
+  }
+
+  refreshPage() {
+    window.location.reload();
+  }
+
+  /**
+   *  Set the active tool
+   * @param {string} tool
+   */
+  setActiveTool(tool) {
+    ToolDispatcher.selectedTool = tool;
   }
 
   /**

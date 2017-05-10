@@ -58,7 +58,7 @@ export default class CanvasGuide extends Destroyable {
 
     this._reactive.onHover(() => {
       // When clicking on
-      if(ToolDispatcher.hasHoveredElement(this) === false) {
+      if(ToolDispatcher.hoveredElementExistsInRegister(this) === false) {
         let hook = ToolDispatcher.pushHoveredElement("CanvasGuide", this);
         this._reactive.onBlur(() => {
           ToolDispatcher.removeHoveredElement(hook);

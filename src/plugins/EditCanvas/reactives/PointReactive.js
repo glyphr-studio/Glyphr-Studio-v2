@@ -5,9 +5,11 @@ export default class PointReactive extends Destroyable {
   constructor(arg1, arg2) {
     super();
     let point = new Point(...arguments);
-    let tresholdRectangle = new Path.Rectangle(point, new Size(-8, 8));
+    let tresholdRectangle = new Path.Rectangle({
+      center: point,
+      size: new Size(8, 8)
+    });
     paper.view.draw();
-    tresholdRectangle.center = point;
     tresholdRectangle.fillColor = tresholdRectangle.strokeColor = new Color(0, 0, 0);
 
     let mouseMoveHandler = () => {
@@ -15,7 +17,7 @@ export default class PointReactive extends Destroyable {
     };
 
     let mouseEnterHandler = () => {
-      if (ToolDispatcher.hasHoveredElement(point) === false) {
+      if (ToolDispatcher.hoveredElementExistsInRegister(point) === false) {
         let hook = ToolDispatcher.pushHoveredElement("Point", point);
 
         let mouseLeaveHandler = () => {

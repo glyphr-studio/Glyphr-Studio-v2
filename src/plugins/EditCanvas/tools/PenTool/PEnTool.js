@@ -2,7 +2,7 @@ import CanvasEventUnit from "../../support/canvasEventStream/CanvasEventUnit";
 import ToolInterface from "./../../support/ToolInterface";
 import PointReactive from "./../../reactives/PointReactive";
 
-const _types = ['point', 'handleIn', 'handleOut'];
+const _pointTypes = ['point', 'handleIn', 'handleOut'];
 
 export default class PEnTool extends ToolInterface {
   _currentSegment;
@@ -32,16 +32,18 @@ export default class PEnTool extends ToolInterface {
       }
 
       if (this._path.getFirstSegment() && this._path.segments.length < 2) {
-        let pointText = new PointText(this._path.getFirstSegment().getPoint().subtract(new PointReactive(0, 15)));
+        let pointText = new PointText(this._path.getFirstSegment().getPoint().subtract(0, 15));
         pointText.setContent("click here to end path")
       }
 
-      let result = this._findHandle(new PointReactive(event.point));
+      let handle = this._findHandle(event.point);
 
-      if (result) {
-        this._currentSegment = result.segment;
-        this._type = result.type;
-        if (this._path.segments.length > 1 && result.type === 'point' && result.segment.index == 0) {
+      console.log(handle);
+
+      if (handle !== null) {
+        this._currentSegment = handle.segment;
+        this._type = handle.type;
+        if (this._path.segments.length > 1 && handle.type === 'point' && handle.segment.index == 0) {
           this._mode = 'close';
           this._path.closed = true;
           this._path.selected = false;
@@ -80,7 +82,7 @@ export default class PEnTool extends ToolInterface {
   _findHandle(point) {
     for (let i = 0, l = this._path.segments.length; i < l; i++) {
       for (let j = 0; j < 3; j++) {
-        let type = _types[j];
+        let type = _pointTypes[j];
         let segment = this._path.segments[i];
         let segmentPoint = this._type === 'point' ? segment.point : segment.point.add(segment[type]);
         let distance = (point.subtract(segmentPoint)).length;
