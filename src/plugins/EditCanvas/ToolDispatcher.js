@@ -17,9 +17,14 @@ class ToolDispatcherBlueprint extends Destroyable {
     // todo: integrate reactives
     selectedElement: null,
 
-    // todo: cover ctrl+t case
+    // Element which has been hovered at the moment of mousedown;
+    // Gets reset at mouseup.
+    initialHoveredElement: [],
+
+    // todo: fix double when 1. creating point 2. moving on the point
     hoveredElement: [],
 
+    // todo: cover ctrl+t case
     // todo: support key combinations
     keyboardKeyDown: false,
     keyboardKey: [],
@@ -67,6 +72,7 @@ class ToolDispatcherBlueprint extends Destroyable {
         this._state.keyboardKey.push(event.code);
         keysPushedAndDown.push(event.code);
       }
+
       this.dispatch(event);
     };
 
@@ -79,6 +85,7 @@ class ToolDispatcherBlueprint extends Destroyable {
       }
       keysPushedAndDown.splice(keysPushedAndDown.indexOf(event.code), 1);
       this._state.keyboardKeyDown = false;
+
       this.dispatch(event);
     };
 
@@ -86,6 +93,11 @@ class ToolDispatcherBlueprint extends Destroyable {
       this._state.mouseup = false;
       this._state.mousemove = false;
       this._state.mousedown = true;
+
+      if(this._state.initialHoveredElement.length === 0) { // true only after mouseup or keyup
+        this._state.initialHoveredElement = this._state.hoveredElement[0] || [];
+      }
+
       this.dispatch(event);
     };
 
@@ -93,16 +105,15 @@ class ToolDispatcherBlueprint extends Destroyable {
       this._state.mouseup = true;
       this._state.mousedown = false;
       this._state.mousemove = false;
+
+      this._state.initialHoveredElement = [];
+
       this.dispatch(event);
     };
 
     let dispatchOnMouseMove = (event) => {
       this._state.mousemove = true;
       this.dispatch(event);
-    };
-
-    let mouseDownHandler = (event) => {
-      dispatchOnMouseDown(event)
     };
 
     this._tool.on("mousemove", dispatchOnMouseMove);
@@ -125,40 +136,74 @@ class ToolDispatcherBlueprint extends Destroyable {
    * @param event
    */
   dispatch(event) {
+    if (this._executingDispatch === true) return;
+
+    let stateTemp = this._state;
+    let _this = this;
+
     this._executingDispatch = true;
     console.time("ToolDispatcher: dispatch");
-    console.log("%O", this._state);
-    console.log(this._state.keyboardKey);
+    console.log(stateTemp.initialHoveredElement);
+    console.log(stateTemp.hoveredElement);
+    console.log(JSON.stringify(stateTemp.keyboardKey));
+
+    // todo: prevent state collision
+
     this._dispatchRegister.forEach((entry, i) => {
       let entryLength = Object.values(entry).length;
-      let registerLength = Object.values(this._state).length;
+      let registerLength = Object.values(stateTemp).length;
       if (entryLength - 2 !== registerLength) {
-        console.warn("Entry: :", entry, "Current state: ", this._state, "...");
+        console.warn("Entry: :", entry, "Current state: ", stateTemp, "...");
         throw new Error(`Entry length (${entryLength}) and register length (${registerLength}) must differ by 2 (the handler and cursor)`);
       }
 
       let hitArray = [
         // "*" stands for any possible value
-        entry.selectedTool === this._state.selectedTool || entry.selectedTool === "*",
-        entry.selectedElement === this._state.selectedElement || entry.selectedElement === "*",
-        entry.keyboardKeyDown === this._state.keyboardKeyDown || entry.keyboardKeyDown === "*",
-        entry.mousedown === this._state.mousedown || entry.mousedown === "*",
-        entry.mouseup === this._state.mouseup || entry.mouseup === "*",
-        entry.mousemove === this._state.mousemove || entry.mousemove === "*",
+        entry.selectedTool === stateTemp.selectedTool || entry.selectedTool === "*",
+        entry.selectedElement === stateTemp.selectedElement || entry.selectedElement === "*",
+        entry.keyboardKeyDown === stateTemp.keyboardKeyDown || entry.keyboardKeyDown === "*",
+        entry.mousedown === stateTemp.mousedown || entry.mousedown === "*",
+        entry.mouseup === stateTemp.mouseup || entry.mouseup === "*",
+        entry.mousemove === stateTemp.mousemove || entry.mousemove === "*",
       ];
+
+
+      if (entry.initialHoveredElement === "*") {
+        hitArray.push(true);
+      }
+      else if (entry.initialHoveredElement.length !== stateTemp.initialHoveredElement.length) {
+        hitArray.push(false);
+      }
+      else if (Array.isArray(entry.initialHoveredElement) === true) {
+        stateTemp.initialHoveredElement.forEach((initialHoveredElement) => {
+          let found = false;
+          entry.initialHoveredElement.forEach((element) => {
+            if (initialHoveredElement.type === element) {
+              found = true;
+            }
+          });
+          hitArray.push(found);
+        });
+      }
+      else {
+        throw new Error("Unexpected state");
+      }
 
       /**
        * Since we allow multiple elements to be hovered silmutaneously we must go
        * through checking the match for all of them.
        */
-      if(entry.hoveredElement === "*") {
+      if (entry.hoveredElement === "*") {
         hitArray.push(true);
       }
-      else if(Array.isArray(entry.hoveredElement) === true) {
-        this._state.hoveredElement.forEach((hoveredElement) => {
+      else if (entry.hoveredElement.length !== stateTemp.hoveredElement.length) {
+        hitArray.push(false);
+      }
+      else if (Array.isArray(entry.hoveredElement) === true) {
+        stateTemp.hoveredElement.forEach((hoveredElement) => {
           let found = false;
           entry.hoveredElement.forEach((element) => {
-            if(hoveredElement.type === element) {
+            if (hoveredElement.type === element) {
               found = true;
             }
           });
@@ -194,23 +239,23 @@ class ToolDispatcherBlueprint extends Destroyable {
        * +-----+-------+-------------------------+------------------------------------------------------------+
        */
       // A
-      if(entry.keyboardKey === "*") {
+      if (entry.keyboardKey === "*") {
         hitArray.push(true);
       }
       // B
-      else if (Array.isArray(entry.keyboardKey) && entry.keyboardKey.length !== this._state.keyboardKey.length) {
+      else if (Array.isArray(entry.keyboardKey) && entry.keyboardKey.length !== stateTemp.keyboardKey.length) {
         hitArray.push(false);
       }
       // C
-      else if(entry.keyboardKey !== "*" && Array.isArray(entry.keyboardKey) === false) {
+      else if (entry.keyboardKey !== "*" && Array.isArray(entry.keyboardKey) === false) {
         throw new TypeError(`Expected "*" or an Array, got ${typeof entry.keyboardKey}`);
       }
       // D
-      else if(Array.isArray(entry.keyboardKey) && entry.keyboardKey.length  === this._state.keyboardKey.length) {
-        this._state.keyboardKey.forEach((currentKeyCode) => {
+      else if (Array.isArray(entry.keyboardKey) && entry.keyboardKey.length === stateTemp.keyboardKey.length) {
+        stateTemp.keyboardKey.forEach((currentKeyCode) => {
           let match = false;
           entry.keyboardKey.forEach((entryKeyCode) => {
-            if(currentKeyCode === entryKeyCode) match = true;
+            if (currentKeyCode === entryKeyCode) match = true;
           });
           hitArray.push(match);
         });
@@ -222,7 +267,7 @@ class ToolDispatcherBlueprint extends Destroyable {
        * Find a hit, call the handler and apply the cursor...
        */
       if (hitArray.indexOf(false) === -1) {
-        entry.handler(event, this, this._state);
+        entry.handler(event, this);
         CanvasCursor.set(entry.cursor, this._canvas);
       }
     });
@@ -234,13 +279,12 @@ class ToolDispatcherBlueprint extends Destroyable {
    *  Sets selectedTool of the current state
    *
    * @param {string} name
-   * @param {bool} dispatch
    */
   set selectedTool(name) {
     this._state.selectedTool = name;
-    if(this._executingDispatch === false) {
-      this.dispatch();
-    }
+
+    this._state.mousemove = true;
+    this.dispatch();
   }
 
 
@@ -252,6 +296,8 @@ class ToolDispatcherBlueprint extends Destroyable {
    */
   pushSelectedElement(name, instance) {
     this._state.selectedElement = {name: name, instance: instance};
+
+    this._state.mousemove = true;
     this.dispatch();
   }
 
@@ -264,7 +310,7 @@ class ToolDispatcherBlueprint extends Destroyable {
    */
   removeSelectedElement(name, instance) {
     let elementTemp;
-    if(this._state.selectedElement.instance === instance) {
+    if (this._state.selectedElement.instance === instance) {
       elementTemp = instance;
       this._state.selectedElement = null;
     }
@@ -290,6 +336,12 @@ class ToolDispatcherBlueprint extends Destroyable {
   pushHoveredElement(type, instance) {
     let element = {type: type, instance: instance};
     this._state.hoveredElement.push(element);
+
+    if(this._state.initialHoveredElement.length === 0) { // true only after mouseup or keyup
+      this._state.initialHoveredElement.push(element);
+    }
+
+    this._state.mousemove = true;
     this.dispatch();
     return element;
   }
@@ -303,6 +355,10 @@ class ToolDispatcherBlueprint extends Destroyable {
     let index = this._state.hoveredElement.indexOf(element);
     if (index !== -1) {
       this._state.hoveredElement.splice(index, 1);
+
+      if(this._state.mousedown === false) {
+        this._state.initialHoveredElement = [];
+      }
       this.dispatch(); // State has now changed, hence we dispatch...
     }
   }
@@ -310,7 +366,7 @@ class ToolDispatcherBlueprint extends Destroyable {
   hoveredElementExistsInRegister(instance) {
     let found = false;
     this._state.hoveredElement.forEach((registerEntry) => {
-      if(Array.isArray(registerEntry) === true) {
+      if (Array.isArray(registerEntry) === true) {
         registerEntry.hoveredElement.forEach((element) => {
           if (element.instance === instance) found = true;
         });
@@ -321,10 +377,84 @@ class ToolDispatcherBlueprint extends Destroyable {
 
   set canvas(canvas) {
     this._canvas = canvas;
+
+    this._state.mousemove = true;
     this.dispatch();
   }
+
+  /**
+   *
+   * @return {string}
+   */
+  get selectedTool() {
+    return this._state.selectedTool;
+  }
+
+  /**
+   *
+   * @return {object}
+   */
+  get selectedElement() {
+    return this._state.selectedElement;
+  }
+
+  /**
+   *
+   * @return {Array}
+   */
+  get hoveredElement() {
+    return this._state.hoveredElement;
+  }
+
+  /**
+   *
+   * @return {Array}
+   */
+  get initialHoveredElement() {
+    return this._state.initialHoveredElement;
+  }
+
+  /**
+   *
+   * @return {boolean}
+   */
+  get keyboardKeyDown() {
+    return this._state.keyboardKeyDown;
+  }
+
+  /**
+   *
+   * @return {Array}
+   */
+  get keyboardKey() {
+    return this._state.keyboardKey;
+  }
+
+  /**
+   *
+   * @return {boolean}
+   */
+  get mousedown() {
+    return this._state.mousedown;
+  }
+
+  /**
+   *
+   * @return {boolean}
+   */
+  get mouseup() {
+    return this._state.mouseup;
+  }
+
+  /**
+   *
+   * @return {boolean}
+   */
+  get mousemove() {
+    return this._state.mousemove;
+  }
+
 }
 
 window.ToolDispatcher = new ToolDispatcherBlueprint(window.paper);
-
 export let ToolDispatcher = window.ToolDispatcher;

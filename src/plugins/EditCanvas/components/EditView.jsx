@@ -3,9 +3,10 @@ import PluginEventUnit from "./../../../lib/core/pluginEventStream/PluginEventUn
 import "./../tools/PanTool/PanTool";
 import config from "./../../../config/config";
 import EditCanvasStorage from "./EditViewStorage";
-import GlyphCanvas from "./../GlyphCanvas";
+import UnicodeGlyphCanvas from "../UnicodeGlyphCanvas";
 import style from "./../EditCanvas";
 import {ToolDispatcher} from "./../ToolDispatcher";
+import "./../support/SetupPaperJsWrapper";
 
 // GlyphCanvas Event Stream
 let ecee = new CanvasEventUnit("editCanvas", 3);
@@ -42,9 +43,9 @@ export default React.createClass({
       }
 
       // temporary fix for #6 (initializing GlyphCanvas twice)
-        let glyphCanvas = new GlyphCanvas(unicode, window.paper, canvas);
+        let glyphCanvas = new UnicodeGlyphCanvas(unicode, window.paper, canvas);
         glyphCanvas.destroy();
-        this.setState({glyphCanvas: new GlyphCanvas(unicode, window.paper, canvas)});
+        this.setState({glyphCanvas: new UnicodeGlyphCanvas(unicode, window.paper, canvas)});
 
       _this.setState({paperJsInitialized: true});
       _this.setState({glyphSelected: true});

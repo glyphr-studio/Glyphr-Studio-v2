@@ -10,6 +10,10 @@ export let config = {
     glyph: '0x0041'
   },
   index_url: "/",
+  defaultGlyphCanvasTool: "panTool",
+  // integer larger than 0
+  handleSize: 8,
+
   storagePath: {
     glyphAttribute(signHex) {
       return ['glyph', 'attribute', signHex].join('.');

@@ -37,7 +37,7 @@ export default class PanTool extends ToolInterface {
       this._viewStart = null;
     };
 
-    this.handleMouseDown = (toolEvent) => {
+    this.addPathSegment = (toolEvent) => {
       // temporary fix: preventing an error to occur is some instances, which would crash the app
       if (!toolEvent || !toolEvent.event.offsetX) {
         console.warn("PenTool: skipping mousedown to prevent app error")

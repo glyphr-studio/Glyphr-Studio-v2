@@ -5,6 +5,7 @@ import CanvasEventUnit from "./support/canvasEventStream/CanvasEventUnit";
 import {storage} from "./../../lib/storage/Storage";
 import {ToolDispatcher} from "./ToolDispatcher";
 import PEnTool from "./tools/PenTool/PEnTool";
+import {config} from "./../../config/config";
 
 export default class GlyphCanvas extends CanvasInterface {
 
@@ -40,6 +41,9 @@ export default class GlyphCanvas extends CanvasInterface {
     this._canvas = canvas;
 
     this._paper.setup(this._canvas);
+
+    this._paper.settings.handleSize = config.handleSize;
+
     this.resize(window.innerWidth - 400, window.innerHeight - 140);
     this._canvasGuideLayer = new CanvasGuideLayer(paper, canvas, unicode);
     this._canvasGuideLayer.drawCanvasGrid();
@@ -75,18 +79,20 @@ export default class GlyphCanvas extends CanvasInterface {
         {
           selectedTool: null,
           selectedElement: null,
+          initialHoveredElement: "*",
           hoveredElement: [],
           keyboardKeyDown: false,
           keyboardKey: [],
           mousemove: true,
           mousedown: false,
           mouseup: true,
-          handler: _this.setActiveTool.bind(_this, "panTool"),
+          handler: _this.setActiveTool.bind(_this, config.defaultGlyphCanvasTool),
           cursor: "pointer"
         },
         {
           selectedTool: "*",
           selectedElement: "*",
+          initialHoveredElement: "*",
           hoveredElement: "*",
           keyboardKeyDown: "*",
           keyboardKey: ["F5"],
@@ -100,6 +106,7 @@ export default class GlyphCanvas extends CanvasInterface {
         {
           selectedTool: "*",
           selectedElement: "*",
+          initialHoveredElement: "*",
           hoveredElement: "*",
           keyboardKeyDown: true,
           keyboardKey: ["KeyT"],
@@ -113,6 +120,7 @@ export default class GlyphCanvas extends CanvasInterface {
         {
           selectedTool: "*",
           selectedElement: "*",
+          initialHoveredElement: "*",
           hoveredElement: "*",
           keyboardKeyDown: true,
           keyboardKey: ["KeyP"],
@@ -125,6 +133,7 @@ export default class GlyphCanvas extends CanvasInterface {
         {
           selectedTool: "panTool",
           selectedElement: null,
+          initialHoveredElement: "*",
           hoveredElement: [],
           keyboardKeyDown: false,
           keyboardKey: [],
@@ -138,6 +147,7 @@ export default class GlyphCanvas extends CanvasInterface {
         {
           selectedTool: "panTool",
           selectedElement: null,
+          initialHoveredElement: "*",
           hoveredElement: [],
           keyboardKeyDown: false,
           keyboardKey: [],
@@ -151,20 +161,21 @@ export default class GlyphCanvas extends CanvasInterface {
         {
           selectedTool: "panTool",
           selectedElement: null,
+          initialHoveredElement: "*",
           hoveredElement: [],
           keyboardKeyDown: false,
           keyboardKey: [],
           mousemove: false,
           mousedown: true,
           mouseup: false,
-          handler: panTool.handleMouseDown,
+          handler: panTool.addPathSegment,
           cursor: "pointer"
         },
-        // Allow panning on canvas guides
         {
           selectedTool: "panTool",
           selectedElement: null,
-          hoveredElement: ["CanvasGuide"],
+          initialHoveredElement: "*",
+          hoveredElement: [],
           keyboardKeyDown: false,
           keyboardKey: [],
           mousemove: true,
@@ -177,18 +188,33 @@ export default class GlyphCanvas extends CanvasInterface {
         {
           selectedTool: "panTool",
           selectedElement: null,
+          initialHoveredElement: "*",
+          hoveredElement: ["CanvasGuide"],
+          keyboardKeyDown: false,
+          keyboardKey: [],
+          mousemove: true,
+          mousedown: true,
+          mouseup: false,
+          handler: panTool.handleMouseMove,
+          cursor: "pointer"
+        },
+        {
+          selectedTool: "panTool",
+          selectedElement: null,
+          initialHoveredElement: "*",
           hoveredElement: ["CanvasGuide"],
           keyboardKeyDown: false,
           keyboardKey: [],
           mousemove: false,
           mousedown: true,
           mouseup: false,
-          handler: panTool.handleMouseDown,
+          handler: panTool.addPathSegment,
           cursor: "pointer"
         },
         {
           selectedTool: "panTool",
           selectedElement: null,
+          initialHoveredElement: "*",
           hoveredElement: [],
           keyboardKeyDown: false,
           keyboardKey: [],
@@ -201,6 +227,7 @@ export default class GlyphCanvas extends CanvasInterface {
         {
           selectedTool: "penTool",
           selectedElement: null,
+          initialHoveredElement: "*",
           hoveredElement: [],
           keyboardKeyDown: false,
           keyboardKey: [],
@@ -214,25 +241,161 @@ export default class GlyphCanvas extends CanvasInterface {
         {
           selectedTool: "penTool",
           selectedElement: null,
+          initialHoveredElement: "*",
+          hoveredElement: [],
+          keyboardKeyDown: true,
+          keyboardKey: ["ShiftLeft"],
+          mousemove: false,
+          mousedown: true,
+          mouseup: false,
+          handler: pEnTool.straightLine,
+          cursor: "penSquare"
+        },
+        {
+          // Hovering about a point
+          selectedTool: "penTool",
+          selectedElement: null,
+          initialHoveredElement: "*",
+          hoveredElement: ["Segment"],
+          keyboardKeyDown: false,
+          keyboardKey: [],
+          mousemove: true,
+          mousedown: false,
+          mouseup: true,
+          handler: () => {},
+          cursor: "penSquare"
+        },
+        {
+          // Hovering about a point
+          selectedTool: "penTool",
+          selectedElement: null,
+          initialHoveredElement: "*",
+          hoveredElement: ["FirstPathSegment"],
+          keyboardKeyDown: false,
+          keyboardKey: [],
+          mousemove: true,
+          mousedown: false,
+          mouseup: true,
+          handler: () => {},
+          cursor: "penCircle"
+        },
+        {
+          // Prevent segment collision
+          selectedTool: "penTool",
+          selectedElement: null,
+          initialHoveredElement: "*",
+          hoveredElement: ["Segment"],
+          keyboardKeyDown: false,
+          keyboardKey: [],
+          mousemove: false,
+          mousedown: true,
+          mouseup: false,
+          handler: pEnTool.exclusiveSelectSegment,
+          cursor: "penSquare"
+        },
+        {
+          // Prevent segment collision
+          selectedTool: "penTool",
+          selectedElement: null,
+          initialHoveredElement: "*",
+          hoveredElement: ["FirstPathSegment"],
+          keyboardKeyDown: false,
+          keyboardKey: [],
+          mousemove: false,
+          mousedown: true,
+          mouseup: false,
+          handler: pEnTool.exclusiveSelectSegment,
+          cursor: "penSquare"
+        },
+        {
+          selectedTool: "penTool",
+          selectedElement: null,
+          initialHoveredElement: "*",
+          hoveredElement: "*",
+          keyboardKeyDown: "*",
+          keyboardKey: "*",
+          mousemove: false,
+          mousedown: true,
+          mouseup: false,
+          handler: pEnTool.setMouseDownPoint,
+          cursor: "penSquare"
+        },
+        {
+          selectedTool: "penTool",
+          selectedElement: null,
+          initialHoveredElement: "*",
           hoveredElement: [],
           keyboardKeyDown: false,
           keyboardKey: [],
           mousemove: false,
           mousedown: true,
           mouseup: false,
-          handler: pEnTool.handleMouseDown,
+          handler: pEnTool.addPathSegment,
           cursor: "penSquare"
         },
         {
           selectedTool: "penTool",
           selectedElement: null,
-          hoveredElement: [],
+          initialHoveredElement: ["FirstPathSegment"],
+          hoveredElement: "*",
           keyboardKeyDown: false,
           keyboardKey: [],
           mousemove: true,
           mousedown: true,
           mouseup: false,
-          handler: pEnTool.handleMouseMove,
+          handler: pEnTool.setHandles,
+          cursor: "penCircle"
+        },
+        {
+          selectedTool: "penTool",
+          selectedElement: null,
+          initialHoveredElement: ["Segment"],
+          hoveredElement: "*",
+          keyboardKeyDown: false,
+          keyboardKey: [],
+          mousemove: true,
+          mousedown: true,
+          mouseup: false,
+          handler: pEnTool.setHandles,
+          cursor: "penCircle"
+        },
+        {
+          selectedTool: "penTool",
+          selectedElement: null,
+          initialHoveredElement: ["FirstPathSegment"],
+          hoveredElement: "*",
+          keyboardKeyDown: true,
+          keyboardKey: ["ControlLeft"],
+          mousemove: true,
+          mousedown: true,
+          mouseup: false,
+          handler: pEnTool.moveSegment,
+          cursor: "penCircle"
+        },
+        {
+          selectedTool: "penTool",
+          selectedElement: null,
+          initialHoveredElement: ["Segment"],
+          hoveredElement: "*",
+          keyboardKeyDown: true,
+          keyboardKey: ["ControlLeft"],
+          mousemove: true,
+          mousedown: true,
+          mouseup: false,
+          handler: pEnTool.moveSegment,
+          cursor: "penCircle"
+        },
+        {
+          selectedTool: "penTool",
+          selectedElement: null,
+          initialHoveredElement: ["FirstPathSegment"],
+          hoveredElement: ["FirstPathSegment"],
+          keyboardKeyDown: false,
+          keyboardKey: [],
+          mousemove: false,
+          mousedown: true,
+          mouseup: false,
+          handler: pEnTool.closePath,
           cursor: "penCircle"
         }
       ];
