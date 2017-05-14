@@ -9,6 +9,7 @@ export default class SegmentReactive extends Destroyable {
     this._segment = new paper.Segment(point, handleIn, handleOut);
     let tresholdRectangle = new paper.Path.Rectangle(new paper.Point(point.x+4, point.y+4), new paper.Point(point.x-4, point.y-4));
     this._tresholdRectangle = tresholdRectangle;
+    tresholdRectangle.bringToFront();
     tresholdRectangle.fillColor = tresholdRectangle.strokeColor = new paper.Color(0, 0);
     paper.view.draw();
 

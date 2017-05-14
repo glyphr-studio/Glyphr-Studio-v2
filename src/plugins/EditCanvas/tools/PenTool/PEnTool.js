@@ -3,7 +3,7 @@ import ToolInterface from "./../../support/ToolInterface";
 const _pointTypes = ['point', 'handleIn', 'handleOut'];
 
 export default class PEnTool extends ToolInterface {
-  _path = new paper.Path;
+  _path = null;
   _onNextMouseDown = [];
   _mouseDownPoint = null;
 
@@ -11,7 +11,7 @@ export default class PEnTool extends ToolInterface {
     super(canvas);
 
     this.setMouseDownPoint = (event) => {
-      if(! event) return;
+      if (!event) return;
       console.log(`PenTool: setMouseDownPoint`);
 
       this._mouseDownPoint = event.point;
@@ -24,7 +24,13 @@ export default class PEnTool extends ToolInterface {
 
       let segment;
 
-      if(this._path.segments.length === 0) {
+      if(this._path === null) {
+        this._path = new Path({
+          fillColor: "black"
+        });
+      }
+
+      if (this._path.segments.length === 0) {
         segment = new FirstPathSegment(event.point);
       } else {
         segment = new Segment(event.point)
@@ -38,21 +44,46 @@ export default class PEnTool extends ToolInterface {
 
     };
 
+    this.movePath = (event, dispatcher) => {
+      if(! event || ! event.delta) return;
+
+      let path = dispatcher.initialHoveredElement[0].instance;
+
+      path.segments.forEach((segment) => {
+        let segmentPosPoint = segment.point.add(event.delta);
+        segment.point = segmentPosPoint;
+
+        if(segment.reactive) {
+          segment.reactive.center = segmentPosPoint;
+        }
+      })
+    };
+
+    this.removePath = (event, dispatcher) => {
+      let segment = dispatcher.initialHoveredElement[0].instance;
+
+      if(this._path !== null) {
+        this._path.remove();
+        this._path = null; // revert to the initial condition
+      }
+    };
+
+    this.removeSegment = (event, dispatcher) => {
+      let segment = dispatcher.initialHoveredElement[0].instance;
+
+      if(segment.selected === true) {
+        segment.previous.selected = true;
+      }
+      segment.remove();
+    };
+
     this.closePath = (event, dispatcher) => {
       let segment = dispatcher.initialHoveredElement[0].instance;
 
-      if(this._path.segments.length >= 2) {
+      if (this._path.segments.length >= 2) {
         this._path.closePath();
       }
 
-    };
-
-    this.selectPoint = (event, dispatcher) => {
-      let segment = dispatcher.initialHoveredElement[0].instance;
-
-      this.unSelectAllSegments(() => {
-        segment.selected = true;
-      });
     };
 
     /**
@@ -105,10 +136,15 @@ export default class PEnTool extends ToolInterface {
      * @param {ToolDispatcher} dispatcher
      */
     this.exclusiveSelectSegment = (event, dispatcher) => {
-      this.unSelectAllSegments(() => {
-        let segment = dispatcher.hoveredElement[0].instance;
-        segment.selected = true;
-      });
+      let segment = dispatcher.initialHoveredElement[0].instance;
+
+      if (segment.selected === false) {
+        this.unSelectAllSegments(() => {
+          segment.selected = true;
+        });
+      } else {
+        segment.selected = false;
+      }
     }
   }
 

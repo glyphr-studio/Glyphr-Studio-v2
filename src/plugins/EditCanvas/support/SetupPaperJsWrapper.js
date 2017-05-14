@@ -1,6 +1,7 @@
 import {ToolDispatcher} from "./../ToolDispatcher";
 import SegmentReactive from "./../reactives/SegmentReactive";
 import FirstPathSegmentReactive from "../reactives/FirstPathSegmentReactive";
+import PathReactive from "../reactives/PathReactive";
 
 // todo: implement ReactiveTypes
 // Point = (arg1, arg2) => {
@@ -34,4 +35,15 @@ window.FirstPathSegment = (arg1, arg2, arg3) => {
   };
 
   return reactiveSegment.reactive;
+};
+
+window.Path = (arg) => {
+  let reactivePath = new PathReactive(arg);
+
+  reactivePath.remove = () => {
+    reactivePath.destroy();
+    reactivePath.segment.remove();
+  };
+
+  return reactivePath.reactive;
 };

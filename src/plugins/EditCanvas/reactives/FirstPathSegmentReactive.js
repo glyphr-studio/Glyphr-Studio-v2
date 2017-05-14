@@ -38,7 +38,6 @@ export default class FirstPathSegmentReactive extends Destroyable {
 
     this.onDestroy(() => {
       tresholdRectangle.off("mouseenter", mouseEnterHandler);
-
     });
 
     this._segment.reactive = this;

@@ -94,8 +94,8 @@ class ToolDispatcherBlueprint extends Destroyable {
       this._state.mousemove = false;
       this._state.mousedown = true;
 
-      if(this._state.initialHoveredElement.length === 0) { // true only after mouseup or keyup
-        this._state.initialHoveredElement = this._state.hoveredElement[0] || [];
+      if(this._state.initialHoveredElement.length === 0 && this._state.hoveredElement.length !== 0) { // true only after mouseup
+        this._state.initialHoveredElement = [this._state.hoveredElement[0]] || [];
       }
 
       this.dispatch(event);
@@ -106,7 +106,9 @@ class ToolDispatcherBlueprint extends Destroyable {
       this._state.mousedown = false;
       this._state.mousemove = false;
 
-      this._state.initialHoveredElement = [];
+      if(this._state.hoveredElement.length === 0) {
+        this._state.initialHoveredElement = [];
+      }
 
       this.dispatch(event);
     };
@@ -337,7 +339,7 @@ class ToolDispatcherBlueprint extends Destroyable {
     let element = {type: type, instance: instance};
     this._state.hoveredElement.push(element);
 
-    if(this._state.initialHoveredElement.length === 0) { // true only after mouseup or keyup
+    if(this._state.initialHoveredElement.length === 0) { // true only after mouseup
       this._state.initialHoveredElement.push(element);
     }
 

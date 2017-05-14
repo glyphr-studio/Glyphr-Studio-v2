@@ -318,7 +318,7 @@ export default class GlyphCanvas extends CanvasInterface {
           mousedown: true,
           mouseup: false,
           handler: pEnTool.setMouseDownPoint,
-          cursor: "penSquare"
+          cursor: "pen"
         },
         {
           selectedTool: "penTool",
@@ -397,6 +397,113 @@ export default class GlyphCanvas extends CanvasInterface {
           mouseup: false,
           handler: pEnTool.closePath,
           cursor: "penCircle"
+        },
+        {
+          // Revert cursorMinus
+          selectedTool: "penTool",
+          selectedElement: null,
+          initialHoveredElement: [],
+          hoveredElement: [],
+          keyboardKeyDown: true,
+          keyboardKey: ["AltLeft"],
+          mousemove: true,
+          mousedown: false,
+          mouseup: true,
+          handler: () => {},
+          cursor: "pen"
+        },
+        {
+          // Revert cursorMinus
+          selectedTool: "penTool",
+          selectedElement: null,
+          initialHoveredElement: [],
+          hoveredElement: [],
+          keyboardKeyDown: true,
+          keyboardKey: ["AltLeft"],
+          mousemove: true,
+          mousedown: false,
+          mouseup: true,
+          handler: () => {},
+          cursor: "pen"
+        },
+        {
+          selectedTool: "penTool",
+          selectedElement: null,
+          initialHoveredElement: ["Segment"],
+          hoveredElement: ["Segment"],
+          keyboardKeyDown: true,
+          keyboardKey: ["AltLeft"],
+          mousemove: true,
+          mousedown: false,
+          mouseup: true,
+          handler: () => {},
+          cursor: "penMinus"
+        },
+        {
+          selectedTool: "penTool",
+          selectedElement: null,
+          initialHoveredElement: ["FirstPathSegment"],
+          hoveredElement: ["FirstPathSegment"],
+          keyboardKeyDown: true,
+          keyboardKey: ["AltLeft"],
+          mousemove: true,
+          mousedown: false,
+          mouseup: true,
+          handler: () => {},
+          cursor: "penMinus"
+        },
+        {
+          selectedTool: "penTool",
+          selectedElement: null,
+          initialHoveredElement: ["Segment"],
+          hoveredElement: ["Segment"],
+          keyboardKeyDown: true,
+          keyboardKey: ["AltLeft"],
+          mousemove: false,
+          mousedown: true,
+          mouseup: false,
+          handler: pEnTool.removeSegment,
+          cursor: "pen"
+        },
+        {
+          selectedTool: "penTool",
+          selectedElement: null,
+          initialHoveredElement: ["FirstPathSegment"],
+          hoveredElement: ["FirstPathSegment"],
+          keyboardKeyDown: true,
+          keyboardKey: ["AltLeft"],
+          mousemove: false,
+          mousedown: true,
+          mouseup: false,
+          handler: pEnTool.removePath,
+          cursor: "pen"
+        },
+        {
+          selectedTool: "penTool",
+          selectedElement: null,
+          initialHoveredElement: ["Path"],
+          hoveredElement: "*",
+          keyboardKeyDown: true,
+          keyboardKey: ["ControlLeft"],
+          mousemove: true,
+          mousedown: true,
+          mouseup: false,
+          handler: pEnTool.movePath,
+          cursor: "pointer"
+        },
+        {
+          // Revert pointer cursor
+          selectedTool: "penTool",
+          selectedElement: null,
+          initialHoveredElement: ["Path"],
+          hoveredElement: ["Path"],
+          keyboardKeyDown: false,
+          keyboardKey: [],
+          mousemove: true,
+          mousedown: false,
+          mouseup: true,
+          handler: () => {},
+          cursor: "pen"
         }
       ];
 
