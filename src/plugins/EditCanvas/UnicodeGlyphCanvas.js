@@ -151,20 +151,6 @@ export default class GlyphCanvas extends CanvasInterface {
           hoveredElement: [],
           keyboardKeyDown: false,
           keyboardKey: [],
-          mousemove: true,
-          mousedown: false,
-          mouseup: true,
-          handler: () => {
-          },
-          cursor: "pointer"
-        },
-        {
-          selectedTool: "panTool",
-          selectedElement: null,
-          initialHoveredElement: "*",
-          hoveredElement: [],
-          keyboardKeyDown: false,
-          keyboardKey: [],
           mousemove: false,
           mousedown: true,
           mouseup: false,
@@ -237,47 +223,6 @@ export default class GlyphCanvas extends CanvasInterface {
           handler: () => {
           },
           cursor: "pen"
-        },
-        {
-          selectedTool: "penTool",
-          selectedElement: null,
-          initialHoveredElement: "*",
-          hoveredElement: [],
-          keyboardKeyDown: true,
-          keyboardKey: ["ShiftLeft"],
-          mousemove: false,
-          mousedown: true,
-          mouseup: false,
-          handler: pEnTool.straightLine,
-          cursor: "penSquare"
-        },
-        {
-          // Hovering about a point
-          selectedTool: "penTool",
-          selectedElement: null,
-          initialHoveredElement: "*",
-          hoveredElement: ["Segment"],
-          keyboardKeyDown: false,
-          keyboardKey: [],
-          mousemove: true,
-          mousedown: false,
-          mouseup: true,
-          handler: () => {},
-          cursor: "penSquare"
-        },
-        {
-          // Hovering about a point
-          selectedTool: "penTool",
-          selectedElement: null,
-          initialHoveredElement: "*",
-          hoveredElement: ["FirstPathSegment"],
-          keyboardKeyDown: false,
-          keyboardKey: [],
-          mousemove: true,
-          mousedown: false,
-          mouseup: true,
-          handler: () => {},
-          cursor: "penCircle"
         },
         {
           // Prevent segment collision
@@ -386,6 +331,62 @@ export default class GlyphCanvas extends CanvasInterface {
           cursor: "penCircle"
         },
         {
+        // Hovering about a point
+        selectedTool: "penTool",
+        selectedElement: null,
+        initialHoveredElement: "*",
+        hoveredElement: ["Segment"],
+        keyboardKeyDown: true,
+        keyboardKey: ["ControlLeft"],
+        mousemove: true,
+        mousedown: false,
+        mouseup: true,
+        handler: () => {},
+        cursor: "penSquare"
+      },
+        {
+          // Hovering about a point
+          selectedTool: "penTool",
+          selectedElement: null,
+          initialHoveredElement: [],
+          hoveredElement: [],
+          keyboardKeyDown: true,
+          keyboardKey: ["ControlLeft"],
+          mousemove: true,
+          mousedown: false,
+          mouseup: true,
+          handler: () => {},
+          cursor: "pen"
+        },
+        {
+          // Hovering about a point
+          selectedTool: "penTool",
+          selectedElement: null,
+          initialHoveredElement: "*",
+          hoveredElement: ["FirstPathSegment"],
+          keyboardKeyDown: true,
+          keyboardKey: ["ControlLeft"],
+          mousemove: true,
+          mousedown: false,
+          mouseup: true,
+          handler: () => {},
+          cursor: "penCircle"
+        },
+        {
+          // Hovering about a point
+          selectedTool: "penTool",
+          selectedElement: null,
+          initialHoveredElement: [],
+          hoveredElement: ["FirstPathSegment"],
+          keyboardKeyDown: true,
+          keyboardKey: ["ControlLeft"],
+          mousemove: true,
+          mousedown: false,
+          mouseup: true,
+          handler: () => {},
+          cursor: "pen"
+        },
+        {
           selectedTool: "penTool",
           selectedElement: null,
           initialHoveredElement: ["FirstPathSegment"],
@@ -429,7 +430,7 @@ export default class GlyphCanvas extends CanvasInterface {
         {
           selectedTool: "penTool",
           selectedElement: null,
-          initialHoveredElement: ["Segment"],
+          initialHoveredElement: "*",
           hoveredElement: ["Segment"],
           keyboardKeyDown: true,
           keyboardKey: ["AltLeft"],
@@ -442,7 +443,7 @@ export default class GlyphCanvas extends CanvasInterface {
         {
           selectedTool: "penTool",
           selectedElement: null,
-          initialHoveredElement: ["FirstPathSegment"],
+          initialHoveredElement: "*",
           hoveredElement: ["FirstPathSegment"],
           keyboardKeyDown: true,
           keyboardKey: ["AltLeft"],
@@ -477,6 +478,103 @@ export default class GlyphCanvas extends CanvasInterface {
           mouseup: false,
           handler: pEnTool.removePath,
           cursor: "pen"
+        },
+        {
+          // Set cursor for when 1. released key 2. released mouse
+          selectedTool: "penTool",
+          selectedElement: null,
+          initialHoveredElement: "*",
+          hoveredElement: "*",
+          keyboardKeyDown: false,
+          keyboardKey: [],
+          mousemove: false,
+          mousedown: false,
+          mouseup: true,
+          handler: () => {},
+          cursor: "pen"
+        },
+        {
+          // Set cursor for when 1. released mouse 2. moved mouse 3. released key
+          selectedTool: "penTool",
+          selectedElement: null,
+          initialHoveredElement: "*",
+          hoveredElement: "*",
+          keyboardKeyDown: false,
+          keyboardKey: [],
+          mousemove: true,
+          mousedown: false,
+          mouseup: true,
+          handler: () => {},
+          cursor: "pen"
+        },
+        {
+          // Hovering about a point
+          selectedTool: "penTool",
+          selectedElement: null,
+          initialHoveredElement: "*",
+          hoveredElement: ["FirstPathSegment"],
+          keyboardKeyDown: false,
+          keyboardKey: [],
+          mousemove: true,
+          mousedown: false,
+          mouseup: true,
+          handler: () => {},
+          cursor: "penCircle"
+        },
+        {
+          // Hovering about a point
+          selectedTool: "penTool",
+          selectedElement: null,
+          initialHoveredElement: "*",
+          hoveredElement: ["Segment"],
+          keyboardKeyDown: false,
+          keyboardKey: [],
+          mousemove: true,
+          mousedown: false,
+          mouseup: true,
+          handler: () => {},
+          cursor: "penSquare"
+        },
+        {
+          // Set cursor when 1. released mouse 2. released key
+          selectedTool: "penTool",
+          selectedElement: null,
+          initialHoveredElement: "*",
+          hoveredElement: "*",
+          keyboardKeyDown: false,
+          keyboardKey: [],
+          mousemove: false,
+          mousedown: true,
+          mouseup: false,
+          handler: () => {},
+          cursor: "pen"
+        },
+        {
+          // Set cursor
+          selectedTool: "penTool",
+          selectedElement: null,
+          initialHoveredElement: ["Path"],
+          hoveredElement: "*",
+          keyboardKeyDown: true,
+          keyboardKey: ["ControlLeft"],
+          mousemove: false,
+          mousedown: true,
+          mouseup: false,
+          handler: () => {},
+          cursor: "pointer"
+        },
+        {
+          selectedTool: "penTool",
+          selectedElement: null,
+          initialHoveredElement: ["Path"],
+          hoveredElement: "*",
+          keyboardKeyDown: true,
+          keyboardKey: ["ControlLeft"],
+          mousemove: true,
+          mousedown: false,
+          mouseup: true,
+          handler: () => {},
+          cursor: "pointer"
         },
         {
           selectedTool: "penTool",

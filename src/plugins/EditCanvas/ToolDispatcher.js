@@ -94,10 +94,6 @@ class ToolDispatcherBlueprint extends Destroyable {
       this._state.mousemove = false;
       this._state.mousedown = true;
 
-      if(this._state.initialHoveredElement.length === 0 && this._state.hoveredElement.length !== 0) { // true only after mouseup
-        this._state.initialHoveredElement = [this._state.hoveredElement[0]] || [];
-      }
-
       this.dispatch(event);
     };
 
@@ -106,15 +102,26 @@ class ToolDispatcherBlueprint extends Destroyable {
       this._state.mousedown = false;
       this._state.mousemove = false;
 
-      if(this._state.hoveredElement.length === 0) {
-        this._state.initialHoveredElement = [];
-      }
-
+      // Guaranteed that after mouseup initialHoveredElement will be empty
+      this._state.initialHoveredElement = [];
       this.dispatch(event);
+      /**
+       * After dispatch, sync back with hoveredElement; hence
+       *    1. the next dispatch is not guaranteed to be empty;
+       *    2. the dispatch after mouseUp is guarateed to be synced with hoveredElement.
+       */
+      if(this._state.initialHoveredElement.length === 0 && this._state.hoveredElement.length !== 0) { // true only after mouseup
+        this._state.initialHoveredElement = [this._state.hoveredElement[0]] || [];
+      }
     };
 
     let dispatchOnMouseMove = (event) => {
       this._state.mousemove = true;
+
+      if(this._state.initialHoveredElement.length === 0 && this._state.hoveredElement.length !== 0) { // true only after mouseup
+        this._state.initialHoveredElement = [this._state.hoveredElement[0]] || [];
+      }
+
       this.dispatch(event);
     };
 
@@ -148,6 +155,7 @@ class ToolDispatcherBlueprint extends Destroyable {
     console.log(stateTemp.initialHoveredElement);
     console.log(stateTemp.hoveredElement);
     console.log(JSON.stringify(stateTemp.keyboardKey));
+    let dispatched = false;
 
     // todo: prevent state collision
 
@@ -269,6 +277,10 @@ class ToolDispatcherBlueprint extends Destroyable {
        * Find a hit, call the handler and apply the cursor...
        */
       if (hitArray.indexOf(false) === -1) {
+        if(dispatched !== false) {
+          console.warn("State collision", i, entry, dispatched.index, dispatched.entry);
+        }
+        dispatched = {entry: entry, index: i};
         entry.handler(event, this);
         CanvasCursor.set(entry.cursor, this._canvas);
       }
@@ -368,12 +380,8 @@ class ToolDispatcherBlueprint extends Destroyable {
   hoveredElementExistsInRegister(instance) {
     let found = false;
     this._state.hoveredElement.forEach((registerEntry) => {
-      if (Array.isArray(registerEntry) === true) {
-        registerEntry.hoveredElement.forEach((element) => {
-          if (element.instance === instance) found = true;
-        });
-      }
-    });
+        if(registerEntry.instance === instance) found = true;
+      });
     return found;
   }
 

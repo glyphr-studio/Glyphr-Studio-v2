@@ -11,7 +11,7 @@ export default class PEnTool extends ToolInterface {
     super(canvas);
 
     this.setMouseDownPoint = (event) => {
-      if (!event) return;
+      if (!event || !event.point) return;
       console.log(`PenTool: setMouseDownPoint`);
 
       this._mouseDownPoint = event.point;
@@ -19,7 +19,7 @@ export default class PEnTool extends ToolInterface {
     };
 
     this.addPathSegment = (event, dispatcher) => {
-      if (!event) return;
+      if (!event || !event.point) return;
       console.log(`PenTool: handleMouseDown`);
 
       let segment;

@@ -13,8 +13,6 @@ export default class SegmentReactive extends Destroyable {
     tresholdRectangle.fillColor = tresholdRectangle.strokeColor = new paper.Color(0, 0);
     paper.view.draw();
 
-
-    // todo: fix ghosting
     let mouseEnterHandler = () => {
       if (ToolDispatcher.hoveredElementExistsInRegister(this._segment) === false) {
         let hook = ToolDispatcher.pushHoveredElement("Segment", this._segment);
