@@ -347,12 +347,17 @@ class ToolDispatcherBlueprint extends Destroyable {
    * @param {*} instance  – whatever the handler will need to process
    * @return {{type: *, instance: *}}
    */
-  pushHoveredElement(type, instance) {
-    let element = {type: type, instance: instance};
+  pushHoveredElement(type, instance, priority) {
+    let element = {type: type, instance: instance, priority: priority};
     this._state.hoveredElement.push(element);
 
     if(this._state.initialHoveredElement.length === 0) { // true only after mouseup
       this._state.initialHoveredElement.push(element);
+    }
+    else if(this._state.mousemove === true && this._state.mousedown === false) {
+      if(this._state.initialHoveredElement[0].priority > element.priority) {
+        this._state.initialHoveredElement[0] = element;
+      }
     }
 
     this._state.mousemove = true;

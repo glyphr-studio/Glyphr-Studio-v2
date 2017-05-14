@@ -15,7 +15,7 @@ export default class SegmentReactive extends Destroyable {
 
     let mouseEnterHandler = () => {
       if (ToolDispatcher.hoveredElementExistsInRegister(this._segment) === false) {
-        let hook = ToolDispatcher.pushHoveredElement("Segment", this._segment);
+        let hook = ToolDispatcher.pushHoveredElement("Segment", this._segment, 1);
 
         let mouseMoveHandler = (event) => {
           if(tresholdRectangle.contains(event.point) === false) {

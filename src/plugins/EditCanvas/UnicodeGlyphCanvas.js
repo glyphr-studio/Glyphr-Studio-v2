@@ -536,6 +536,20 @@ export default class GlyphCanvas extends CanvasInterface {
           cursor: "penSquare"
         },
         {
+          // Hovering about a point
+          selectedTool: "penTool",
+          selectedElement: null,
+          initialHoveredElement: ["Segment"],
+          hoveredElement: ["Path", "Segment"],
+          keyboardKeyDown: false,
+          keyboardKey: [],
+          mousemove: true,
+          mousedown: false,
+          mouseup: true,
+          handler: () => {},
+          cursor: "penSquare"
+        },
+        {
           // Set cursor when 1. released mouse 2. released key
           selectedTool: "penTool",
           selectedElement: null,

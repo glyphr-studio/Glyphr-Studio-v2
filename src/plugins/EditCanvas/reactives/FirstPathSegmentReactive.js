@@ -14,7 +14,7 @@ export default class FirstPathSegmentReactive extends Destroyable {
 
     let mouseEnterHandler = () => {
       if (ToolDispatcher.hoveredElementExistsInRegister(this._segment) === false) {
-        let hook = ToolDispatcher.pushHoveredElement("FirstPathSegment", this._segment);
+        let hook = ToolDispatcher.pushHoveredElement("FirstPathSegment", this._segment, 1);
 
         let mouseMoveHandler = (event) => {
           if(tresholdRectangle.contains(event.point) === false) {
