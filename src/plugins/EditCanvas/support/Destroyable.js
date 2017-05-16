@@ -6,10 +6,10 @@ export default class Destroyable {
   }
 
   destroy() {
-    this._onDestroy.forEach((callback) => {
+    this._onDestroy.forEach((callback, i) => {
       callback();
-    });
 
-    this._onDestroy = [];
+      this._onDestroy.splice(i, 1);
+    });
   }
 }

@@ -13,7 +13,7 @@ export default class PathReactive extends Destroyable {
     // todo: fix ghosting
     let mouseEnterHandler = () => {
       if (ToolDispatcher.hoveredElementExistsInRegister(this._path) === false) {
-        let hook = ToolDispatcher.pushHoveredElement("Path", this._path, 2);
+        let hook = ToolDispatcher.pushHoveredElement("Path", this._path, 3);
 
         let mouseMoveHandler = (event) => {
           if(this._path.contains(event.point) === false) {

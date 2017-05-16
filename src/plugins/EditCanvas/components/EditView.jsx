@@ -6,7 +6,6 @@ import EditCanvasStorage from "./EditViewStorage";
 import UnicodeGlyphCanvas from "../UnicodeGlyphCanvas";
 import style from "./../EditCanvas";
 import {ToolDispatcher} from "./../ToolDispatcher";
-import "./../support/SetupPaperJsWrapper";
 
 // GlyphCanvas Event Stream
 let ecee = new CanvasEventUnit("editCanvas", 3);

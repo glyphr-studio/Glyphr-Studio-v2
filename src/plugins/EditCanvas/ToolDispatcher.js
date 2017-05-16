@@ -28,24 +28,7 @@ class ToolDispatcherBlueprint extends Destroyable {
     // todo: support key combinations
     keyboardKeyDown: false,
     keyboardKey: [],
-
-    /**
-     * 2^3 giving 8 possibilities as far as mouse events are concerned.
-     * Out of all 8 possibilities only 4 will occur during the execution of the program.
-     *
-     * up |down| move| desc
-     * ---------------------------------------------------------------------------------
-     *  T | T  |  T  | does not occur; mouseup and mousedown do not occur simultaneously
-     *  T | T  |  F  | does not occur; mouseup and mousedown do not occur simultaneously
-     *  T | F  |  T  | occurs while moving the mouse on the canvas with no mouse buttons pressed in
-     *  F | T  |  T  | occurs while dragging the mouse with one or more buttons pressed in
-     *  T | F  |  F  | occurs just after a mouse button has been released
-     *  F | T  |  F  | occurs just after a mouse button has been pressed
-     *  F | F  |  T  | does not occur
-     *  F | F  |  F  | does not occur; by default mouseup is true
-     */
     mousedown: false,
-    mouseup: true,
     mousemove: false
   };
 
@@ -90,7 +73,6 @@ class ToolDispatcherBlueprint extends Destroyable {
     };
 
     let dispatchOnMouseDown = (event) => {
-      this._state.mouseup = false;
       this._state.mousemove = false;
       this._state.mousedown = true;
 
@@ -98,7 +80,6 @@ class ToolDispatcherBlueprint extends Destroyable {
     };
 
     let dispatchOnMouseUp = (event) => {
-      this._state.mouseup = true;
       this._state.mousedown = false;
       this._state.mousemove = false;
 
@@ -110,8 +91,14 @@ class ToolDispatcherBlueprint extends Destroyable {
        *    1. the next dispatch is not guaranteed to be empty;
        *    2. the dispatch after mouseUp is guarateed to be synced with hoveredElement.
        */
-      if(this._state.initialHoveredElement.length === 0 && this._state.hoveredElement.length !== 0) { // true only after mouseup
+      if(this._state.hoveredElement.length !== 0) { // true only after mouseup
         this._state.initialHoveredElement = [this._state.hoveredElement[0]] || [];
+
+        this._state.hoveredElement.forEach((element) => {
+          if(this._state.initialHoveredElement[0].priority > element.priority) {
+            this._state.initialHoveredElement[0] = element;
+          }
+        })
       }
     };
 
@@ -120,6 +107,12 @@ class ToolDispatcherBlueprint extends Destroyable {
 
       if(this._state.initialHoveredElement.length === 0 && this._state.hoveredElement.length !== 0) { // true only after mouseup
         this._state.initialHoveredElement = [this._state.hoveredElement[0]] || [];
+
+        this._state.hoveredElement.forEach((element) => {
+          if(this._state.initialHoveredElement[0].priority > element.priority) {
+            this._state.initialHoveredElement[0] = element;
+          }
+        })
       }
 
       this.dispatch(event);
@@ -173,7 +166,6 @@ class ToolDispatcherBlueprint extends Destroyable {
         entry.selectedElement === stateTemp.selectedElement || entry.selectedElement === "*",
         entry.keyboardKeyDown === stateTemp.keyboardKeyDown || entry.keyboardKeyDown === "*",
         entry.mousedown === stateTemp.mousedown || entry.mousedown === "*",
-        entry.mouseup === stateTemp.mouseup || entry.mouseup === "*",
         entry.mousemove === stateTemp.mousemove || entry.mousemove === "*",
       ];
 

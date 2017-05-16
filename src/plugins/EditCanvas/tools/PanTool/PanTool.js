@@ -2,7 +2,6 @@ import CanvasEventUnit from "../../support/canvasEventStream/CanvasEventUnit";
 import PanToolStorage from "./PanToolStorage";
 import ToolInterface from "./../../support/ToolInterface";
 
-
 export default class PanTool extends ToolInterface {
 
   _tool;
@@ -37,7 +36,7 @@ export default class PanTool extends ToolInterface {
       this._viewStart = null;
     };
 
-    this.addPathSegment = (toolEvent) => {
+    this.setMouseDownPoint = (toolEvent) => {
       // temporary fix: preventing an error to occur is some instances, which would crash the app
       if (!toolEvent || !toolEvent.event.offsetX) {
         console.warn("PenTool: skipping mousedown to prevent app error")
@@ -50,8 +49,9 @@ export default class PanTool extends ToolInterface {
 
     this.handleMouseMove = (toolEvent) => {
       // teporary fix: when panning on guides this._mouseStart is null
+
       if (!this._mouseStart || !this._viewStart || !toolEvent || !toolEvent.event.offsetX) {
-        console.warn("PenTool: skipping mousemove to prevent app error")
+        console.warn("PanTool: skipping mousemove to prevent app error")
         return;
       }
 

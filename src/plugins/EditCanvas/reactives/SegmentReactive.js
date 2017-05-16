@@ -10,7 +10,7 @@ export default class SegmentReactive extends Destroyable {
     let tresholdRectangle = new paper.Path.Rectangle(new paper.Point(point.x+4, point.y+4), new paper.Point(point.x-4, point.y-4));
     this._tresholdRectangle = tresholdRectangle;
     tresholdRectangle.bringToFront();
-    tresholdRectangle.fillColor = tresholdRectangle.strokeColor = new paper.Color(0, 0);
+    tresholdRectangle.fillColor = tresholdRectangle.strokeColor = new paper.Color(0, 0, 255);
     paper.view.draw();
 
     let mouseEnterHandler = () => {
@@ -25,8 +25,8 @@ export default class SegmentReactive extends Destroyable {
         };
 
         this.onDestroy(() => {
+          ToolDispatcher.removeHoveredElement(hook);
           paper.view.off("mousemove", mouseMoveHandler);
-          tresholdRectangle.remove();
         });
 
         paper.view.on("mousemove", mouseMoveHandler);
@@ -37,7 +37,7 @@ export default class SegmentReactive extends Destroyable {
 
     this.onDestroy(() => {
       tresholdRectangle.off("mouseenter", mouseEnterHandler);
-
+      tresholdRectangle.remove();
     });
 
     this._segment.reactive = this;

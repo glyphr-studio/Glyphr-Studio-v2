@@ -24,8 +24,8 @@ export default class FirstPathSegmentReactive extends Destroyable {
         };
 
         this.onDestroy(() => {
+          ToolDispatcher.removeHoveredElement(hook);
           paper.view.off("mousemove", mouseMoveHandler);
-          tresholdRectangle.remove();
         });
 
         paper.view.on("mousemove", mouseMoveHandler);
@@ -36,6 +36,7 @@ export default class FirstPathSegmentReactive extends Destroyable {
 
     this.onDestroy(() => {
       tresholdRectangle.off("mouseenter", mouseEnterHandler);
+      tresholdRectangle.remove();
     });
 
     this._segment.reactive = this;
