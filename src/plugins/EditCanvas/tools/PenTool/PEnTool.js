@@ -102,6 +102,16 @@ export default class PEnTool extends ToolInterface {
 
       if(segment.selected === true) {
         segment.previous.selected = true;
+
+        if(segment.previous.hasHandles()) {
+          if(typeof segment.previous.handleIn.reactive === "undefined") {
+            segment.previous.handleIn.reactive = new Elements.HandleIn(segment.previous.handleIn.add(segment.previous.point));
+          }
+
+          if(typeof segment.previous.handleOut.reactive === "undefined") {
+            segment.previous.handleOut.reactive = new Elements.HandleOut(segment.previous.handleOut.add(segment.previous.point));
+          }
+        }
       }
 
       if(typeof segment.reactive !== "undefined") {
@@ -267,6 +277,70 @@ export default class PEnTool extends ToolInterface {
         }
       }
     }
+
+    this.moveHandleIn = (event, dispatcher) => {
+      if(! event || ! event.delta) return;
+
+      let handle = dispatcher.initialHoveredElement[0].instance;
+
+      this._path.segments.forEach((segment) => {
+        if(segment.selected === true) {
+          segment.handleIn = segment.handleIn.add(event.delta);
+          segment.handleIn.reactive.reactive.center = segment.handleIn.add(segment.point);
+        }
+      })
+    };
+
+    this.moveHandleOut = (event, dispatcher) => {
+      if(! event || ! event.delta) return;
+
+      let handle = dispatcher.initialHoveredElement[0].instance;
+
+      this._path.segments.forEach((segment) => {
+        if(segment.selected === true) {
+          segment.handleOut = segment.handleOut.add(event.delta);
+          segment.handleOut.reactive.reactive.center = segment.handleOut.add(segment.point);
+        }
+      })
+    };
+
+    this.moveHandleInSymmetric =  (event, dispatcher) => {
+      if(! event || ! event.delta) return;
+
+      let handle = dispatcher.initialHoveredElement[0].instance;
+
+      this._path.segments.forEach((segment) => {
+        if(segment.selected === true) {
+          segment.handleIn = segment.handleIn.add(event.delta);
+          segment.handleIn.reactive.reactive.center = segment.handleIn.add(segment.point);
+
+
+          if(segment.handleOut) {
+            segment.handleOut = segment.handleIn.multiply(-1);
+            segment.handleOut.reactive.reactive.center = segment.handleIn.multiply(-1).add(segment.point);
+          }
+        }
+      })
+    };
+
+    this.moveHandleOutSymmetric =  (event, dispatcher) => {
+      if(! event || ! event.delta) return;
+
+      let handle = dispatcher.initialHoveredElement[0].instance;
+
+      this._path.segments.forEach((segment) => {
+        if(segment.selected === true) {
+          segment.handleOut = segment.handleOut.add(event.delta);
+          segment.handleOut.reactive.reactive.center = segment.handleOut.add(segment.point);
+
+
+          if(segment.handleIn) {
+            segment.handleIn = segment.handleOut.multiply(-1);
+            segment.handleIn.reactive.reactive.center = segment.handleOut.multiply(-1).add(segment.point);
+          }
+        }
+      })
+    };
   }
 
   activate() {

@@ -10,7 +10,7 @@ export default class PointReactive extends Destroyable {
     this._tresholdRectangle = tresholdRectangle;
 
     tresholdRectangle.bringToFront();
-    tresholdRectangle.fillColor = tresholdRectangle.strokeColor = new paper.Color(0, 0, 0);
+    tresholdRectangle.fillColor = tresholdRectangle.strokeColor = new paper.Color(0, 0);
     paper.view.draw();
 
     let mouseEnterHandler = () => {

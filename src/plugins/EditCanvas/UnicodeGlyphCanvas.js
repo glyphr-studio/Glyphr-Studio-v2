@@ -637,16 +637,75 @@ export default class GlyphCanvas extends CanvasInterface {
           cursor: "penSquare"
         },
         {
-          // Show point drag cursor instead of pointer
           selectedTool: "penTool",
           selectedElement: null,
-          initialHoveredElement: ["FirstPathSegment"],
-          hoveredElement: ["Path", "FirstPathSegment"],
-          keyboardKeyDown: true,
-          keyboardKey: ["ControlLeft"],
+          initialHoveredElement: ["HandleIn"],
+          hoveredElement: "*",
+          keyboardKeyDown: false,
+          keyboardKey: [],
           mousemove: true,
           mousedown: false,
           handler: () => {},
+          cursor: "penCircle"
+        },
+        {
+          selectedTool: "penTool",
+          selectedElement: null,
+          initialHoveredElement: ["HandleOut"],
+          hoveredElement: "*",
+          keyboardKeyDown: false,
+          keyboardKey: [],
+          mousemove: true,
+          mousedown: false,
+          handler: () => {},
+          cursor: "penCircle"
+        },
+        {
+          selectedTool: "penTool",
+          selectedElement: null,
+          initialHoveredElement: ["HandleIn"],
+          hoveredElement: "*",
+          keyboardKeyDown: false,
+          keyboardKey: [],
+          mousemove: true,
+          mousedown: true,
+          handler: pEnTool.moveHandleIn,
+          cursor: "penCircle"
+        },
+        {
+          selectedTool: "penTool",
+          selectedElement: null,
+          initialHoveredElement: ["HandleOut"],
+          hoveredElement: "*",
+          keyboardKeyDown: false,
+          keyboardKey: [],
+          mousemove: true,
+          mousedown: true,
+          handler: pEnTool.moveHandleOut,
+          cursor: "penCircle"
+        },
+        {
+          selectedTool: "penTool",
+          selectedElement: null,
+          initialHoveredElement: ["HandleIn"],
+          hoveredElement: "*",
+          keyboardKeyDown: true,
+          keyboardKey: ["ControlLeft"],
+          mousemove: true,
+          mousedown: true,
+          handler: pEnTool.moveHandleInSymmetric,
+          cursor: "penCircle"
+        },
+        {
+          selectedTool: "penTool",
+          selectedElement: null,
+          initialHoveredElement: ["HandleOut"],
+          hoveredElement: "*",
+          keyboardKeyDown: true,
+          keyboardKey: ["ControlLeft"],
+          mousemove: true,
+          mousedown: true,
+          handler: pEnTool.moveHandleOutSymmetric,
           cursor: "penCircle"
         },
       ];
