@@ -11,6 +11,8 @@ export default class PanTool extends ToolInterface {
   _storage;
   _unicode;
 
+  _lastCoordinatesText = null;
+
   _viewStart = null;
 
   /**
@@ -45,6 +47,27 @@ export default class PanTool extends ToolInterface {
 
       this._viewStart = this._paper.view.center;
       this._mouseStart = new this._paper.paper.Point(toolEvent.event.offsetX, toolEvent.event.offsetY);
+    };
+
+    this.drawCoordinates = (event) => {
+      if(! event || ! event.point) return;
+
+      if(this._lastCoordinatesText !== null) {
+        this._lastCoordinatesText.remove();
+      }
+
+      if(typeof event.selectedTool === "undefined") {
+        this._lastCoordinatesText = new paper.PointText({
+          point: [event.point.x, event.point.y+60],
+          content: `(${Math.round(event.point.x)}, ${Math.round(event.point.y)})`
+        });
+      }
+    };
+
+    this.removeCoordinatesText = (event) => {
+      if(event && event.selectedTool) {
+        this._lastCoordinatesText.remove();
+      }
     };
 
     this.handleMouseMove = (toolEvent) => {

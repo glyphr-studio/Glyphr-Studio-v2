@@ -37,11 +37,13 @@ export default class CanvasGuide extends Destroyable {
     if(isVertical === true) {
       from = from.add(new $.Point(-this._treshold,0));
       to = to.add(new $.Point(this._treshold, 0));
+      this._guide.data.type = "canvas-guide-vertical";
 
       this._tresholdRectangle = new $.Path.Rectangle(from, to);
     } else {
       from = from.add(new $.Point(0,-this._treshold));
       to = to.add(new $.Point(0, this._treshold));
+      this._guide.data.type = "canvas-guide-horizontal";
 
       this._tresholdRectangle = new $.Path.Rectangle(from, to);
     }
@@ -49,22 +51,6 @@ export default class CanvasGuide extends Destroyable {
     this._tresholdRectangle.fillColor = new $.Color(0, 0, 0, 0);
 
     this._reactive = new CanvasGuideReactive(paper.view.element, this._tresholdRectangle);
-
-
-    this.onDestroy(() => {
-      // this._guide.remove();
-      // this._tresholdRectangle.remove();
-    });
-
-    this._reactive.onHover(() => {
-      // When clicking on
-      if(ToolDispatcher.hoveredElementExistsInRegister(this) === false) {
-        let hook = ToolDispatcher.pushHoveredElement("CanvasGuide", this);
-        this._reactive.onBlur(() => {
-          ToolDispatcher.removeHoveredElement(hook);
-        })
-      }
-    })
   }
 
   activate() {

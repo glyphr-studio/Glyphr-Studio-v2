@@ -1,11 +1,14 @@
 import Destroyable from "./support/Destroyable";
 import {CanvasCursor} from "./support/CanvasCursor";
+import HoveredElementArray from "./HoveredElementArray";
+import HoveredElement from "./HoveredElement";
 
 class ToolDispatcherBlueprint extends Destroyable {
   _tool;
   _dispatchRegister = null;
   _paper;
   _canvas;
+  _mousedownPoint = null;
 
   // Used to prevent nesting of dispatch direcives.
   // I.e. a handler of an event can't force a dispatch
@@ -19,10 +22,14 @@ class ToolDispatcherBlueprint extends Destroyable {
 
     // Element which has been hovered at the moment of mousedown;
     // Gets reset at mouseup.
-    initialHoveredElement: [],
+
+    /**
+     * @type {HoveredElement|null}
+     */
+    initialHoveredElement: null,
 
     // todo: fix double when 1. creating point 2. moving on the point
-    hoveredElement: [],
+    hoveredElement: new HoveredElementArray(),
 
     // todo: cover ctrl+t case
     // todo: support key combinations
@@ -48,6 +55,10 @@ class ToolDispatcherBlueprint extends Destroyable {
 
     this._tool = new paper.Tool();
     this._paper = paper;
+
+    let updateHoveredElementOnMouseMove = (event) => {
+      this._state.hoveredElement = new HoveredElementArray(paper.project.hitTestAll(event.point, {fill: true, stroke: true, segments: true, tolerance: 8}));
+    };
 
     let dispatchOnKeyDown = (event) => {
       this._state.keyboardKeyDown = true;
@@ -75,6 +86,8 @@ class ToolDispatcherBlueprint extends Destroyable {
     let dispatchOnMouseDown = (event) => {
       this._state.mousemove = false;
       this._state.mousedown = true;
+      this._mousedownPoint = event.point;
+      this._state.initialHoveredElement = this._state.hoveredElement.highestPriorityElement;
 
       this.dispatch(event);
     };
@@ -84,40 +97,22 @@ class ToolDispatcherBlueprint extends Destroyable {
       this._state.mousemove = false;
 
       // Guaranteed that after mouseup initialHoveredElement will be empty
-      this._state.initialHoveredElement = [];
-      this.dispatch(event);
-      /**
-       * After dispatch, sync back with hoveredElement; hence
-       *    1. the next dispatch is not guaranteed to be empty;
-       *    2. the dispatch after mouseUp is guarateed to be synced with hoveredElement.
-       */
-      if(this._state.hoveredElement.length !== 0) { // true only after mouseup
-        this._state.initialHoveredElement = [this._state.hoveredElement[0]] || [];
+      this._state.initialHoveredElement = null;
 
-        this._state.hoveredElement.forEach((element) => {
-          if(this._state.initialHoveredElement[0].priority > element.priority) {
-            this._state.initialHoveredElement[0] = element;
-          }
-        })
-      }
+      this.dispatch(event);
+
+
+      this._state.hoveredElement = new HoveredElementArray(paper.project.hitTestAll(event.point, {fill: true, stroke: true, segments: true, tolerance: 8}));
+      this._state.initialHoveredElement = this._state.hoveredElement.highestPriorityElement;
     };
 
     let dispatchOnMouseMove = (event) => {
       this._state.mousemove = true;
 
-      if(this._state.initialHoveredElement.length === 0 && this._state.hoveredElement.length !== 0) { // true only after mouseup
-        this._state.initialHoveredElement = [this._state.hoveredElement[0]] || [];
-
-        this._state.hoveredElement.forEach((element) => {
-          if(this._state.initialHoveredElement[0].priority > element.priority) {
-            this._state.initialHoveredElement[0] = element;
-          }
-        })
-      }
-
       this.dispatch(event);
     };
 
+    this._tool.on("mousemove", updateHoveredElementOnMouseMove);
     this._tool.on("mousemove", dispatchOnMouseMove);
     window.addEventListener("keydown", dispatchOnKeyDown);
     window.addEventListener("keyup", dispatchOnKeyUp);
@@ -134,20 +129,45 @@ class ToolDispatcherBlueprint extends Destroyable {
   }
 
   /**
+   * Check whether the target matches current state's keyboardKey
+   *
+   * @private
+   * @param {"*"|Array<String>} target
+   * @return {Boolean} target matches current state
+   */
+  _matchKeyboardKey(target) {
+    if(target === "*") {
+      return true;
+    }
+    else if(Array.isArray(target) === true && target.length !== this._state.keyboardKey.length) {
+      return false;
+    }
+    else if(Array.isArray(target) === true && target.length === this._state.keyboardKey.length) {
+      for(let i=0; i<target.length; i++) {
+        if(target[i] !== this._state.keyboardKey[i]) {
+          return false;
+        }
+      }
+
+      return true;
+    }
+    else {
+      throw new TypeError(`Expected "*" or Array<String> got ${typeof target}`);
+    }
+  }
+
+  /**
    * Check if there is a state match for the current canvas state in respect to tools
    * @param event
    */
   dispatch(event) {
     if (this._executingDispatch === true) return;
 
-    let stateTemp = this._state;
-    let _this = this;
+    const stateTemp = this._state;
+    const _this = this;
 
     this._executingDispatch = true;
     console.time("ToolDispatcher: dispatch");
-    console.log(stateTemp.initialHoveredElement);
-    console.log(stateTemp.hoveredElement);
-    console.log(JSON.stringify(stateTemp.keyboardKey));
     let dispatched = false;
 
     // todo: prevent state collision
@@ -156,125 +176,41 @@ class ToolDispatcherBlueprint extends Destroyable {
       let entryLength = Object.values(entry).length;
       let registerLength = Object.values(stateTemp).length;
       if (entryLength - 2 !== registerLength) {
-        console.warn("Entry: :", entry, "Current state: ", stateTemp, "...");
+        console.warn(entry, this._state);
         throw new Error(`Entry length (${entryLength}) and register length (${registerLength}) must differ by 2 (the handler and cursor)`);
       }
 
-      let hitArray = [
+      let hitArray = {
         // "*" stands for any possible value
-        entry.selectedTool === stateTemp.selectedTool || entry.selectedTool === "*",
-        entry.selectedElement === stateTemp.selectedElement || entry.selectedElement === "*",
-        entry.keyboardKeyDown === stateTemp.keyboardKeyDown || entry.keyboardKeyDown === "*",
-        entry.mousedown === stateTemp.mousedown || entry.mousedown === "*",
-        entry.mousemove === stateTemp.mousemove || entry.mousemove === "*",
-      ];
+        "selectedTool": entry.selectedTool === stateTemp.selectedTool || entry.selectedTool === "*",
+        "selectedElement": entry.selectedElement === stateTemp.selectedElement || entry.selectedElement === "*",
+        "keyboardKeyDown": entry.keyboardKeyDown === stateTemp.keyboardKeyDown || entry.keyboardKeyDown === "*",
+        "mousedown": entry.mousedown === stateTemp.mousedown || entry.mousedown === "*",
+        "mousemove": entry.mousemove === stateTemp.mousemove || entry.mousemove === "*",
+    };
 
-
-      if (entry.initialHoveredElement === "*") {
-        hitArray.push(true);
+      if(entry.initialHoveredElement === "*") {
+        hitArray["initialHoveredElement"] = true;
       }
-      else if (entry.initialHoveredElement.length !== stateTemp.initialHoveredElement.length) {
-        hitArray.push(false);
-      }
-      else if (Array.isArray(entry.initialHoveredElement) === true) {
-        stateTemp.initialHoveredElement.forEach((initialHoveredElement) => {
-          let found = false;
-          entry.initialHoveredElement.forEach((element) => {
-            if (initialHoveredElement.type === element) {
-              found = true;
-            }
-          });
-          hitArray.push(found);
-        });
+      else if(this._state.initialHoveredElement === null || entry.initialHoveredElement === null) {
+        hitArray["initialHoveredElement"] = (this._state.initialHoveredElement === entry.initialHoveredElement);
       }
       else {
-        throw new Error("Unexpected state");
+        hitArray["initialHOveredElement"] = this._state.initialHoveredElement.test(entry.initialHoveredElement);
       }
 
-      /**
-       * Since we allow multiple elements to be hovered silmutaneously we must go
-       * through checking the match for all of them.
-       */
-      if (entry.hoveredElement === "*") {
-        hitArray.push(true);
-      }
-      else if (entry.hoveredElement.length !== stateTemp.hoveredElement.length) {
-        hitArray.push(false);
-      }
-      else if (Array.isArray(entry.hoveredElement) === true) {
-        stateTemp.hoveredElement.forEach((hoveredElement) => {
-          let found = false;
-          entry.hoveredElement.forEach((element) => {
-            if (hoveredElement.type === element) {
-              found = true;
-            }
-          });
-          hitArray.push(found);
-        });
-      }
-      else {
-        throw new Error("Unexpected state");
-      }
+      hitArray["hoveredElement"] = this._state.hoveredElement.equals(entry.hoveredElement);
+      hitArray["keyboardKey"] = this._matchKeyboardKey(entry.keyboardKey);
 
-      /**
-       * Check if entry's keyboardKey matches current state's keyboardKey
-       *
-       * All possibilities are:
-       * +-----+-------+-------------------------+------------------------------------------------------------+
-       * | "*" | array | equivalent array length | description                                                |
-       * +-----+-------+-------------------------+------------------------------------------------------------+
-       * | T   | T     | T                       | does not occur;                                            |
-       * +-----+-------+-------------------------+------------------------------------------------------------+
-       * | T   | T     | F                       | does not occur;                                            |
-       * +-----+-------+-------------------------+------------------------------------------------------------+
-       * | T   | F     | T                       | does not occur;                                            |
-       * +-----+-------+-------------------------+------------------------------------------------------------+
-       * | F   | T     | T                       | D: check whether all keys exist and are in the right order |
-       * +-----+-------+-------------------------+------------------------------------------------------------+
-       * | T   | F     | F                       | A: passes                                                  |
-       * +-----+-------+-------------------------+------------------------------------------------------------+
-       * | F   | F     | T                       | does not occur;                                            |
-       * +-----+-------+-------------------------+------------------------------------------------------------+
-       * | F   | T     | F                       | B: fails                                                   |
-       * +-----+-------+-------------------------+------------------------------------------------------------+
-       * | F   | F     | F                       | C: throw an Error; unexpected token                        |
-       * +-----+-------+-------------------------+------------------------------------------------------------+
-       */
-      // A
-      if (entry.keyboardKey === "*") {
-        hitArray.push(true);
-      }
-      // B
-      else if (Array.isArray(entry.keyboardKey) && entry.keyboardKey.length !== stateTemp.keyboardKey.length) {
-        hitArray.push(false);
-      }
-      // C
-      else if (entry.keyboardKey !== "*" && Array.isArray(entry.keyboardKey) === false) {
-        throw new TypeError(`Expected "*" or an Array, got ${typeof entry.keyboardKey}`);
-      }
-      // D
-      else if (Array.isArray(entry.keyboardKey) && entry.keyboardKey.length === stateTemp.keyboardKey.length) {
-        stateTemp.keyboardKey.forEach((currentKeyCode) => {
-          let match = false;
-          entry.keyboardKey.forEach((entryKeyCode) => {
-            if (currentKeyCode === entryKeyCode) match = true;
-          });
-          hitArray.push(match);
-        });
-      } else {
-        throw new Error("Unexpected state");
-      }
 
-      /**
-       * Find a hit, call the handler and apply the cursor...
-       */
-      if (hitArray.indexOf(false) === -1) {
-        if(dispatched !== false) {
+      console.log(JSON.stringify(this._state), JSON.stringify(hitArray));
+      if (Object.values(hitArray).indexOf(false) === -1) {
+        if (dispatched !== false) {
           console.warn("State collision", i, entry, dispatched.index, dispatched.entry);
         }
         dispatched = {entry: entry, index: i};
-        entry.handler(event, this);
         CanvasCursor.set(entry.cursor, this._canvas);
+        entry.handler(event, this);
       }
     });
     console.timeEnd("ToolDispatcher: dispatch");
@@ -287,9 +223,11 @@ class ToolDispatcherBlueprint extends Destroyable {
    * @param {string} name
    */
   set selectedTool(name) {
-    this._state.selectedTool = name;
+    this.dispatch({selectedTool: name});
 
+    this._state.selectedTool = name;
     this._state.mousemove = true;
+
     this.dispatch();
   }
 
@@ -333,53 +271,12 @@ class ToolDispatcherBlueprint extends Destroyable {
   }
 
   /**
-   *  Add a hovered element to the current state
+   * Check whether the element is hovered
    *
-   * @param {string} type
-   * @param {*} instance  – whatever the handler will need to process
-   * @return {{type: *, instance: *}}
+   * @param {HoveredElement} element
    */
-  pushHoveredElement(type, instance, priority) {
-    let element = {type: type, instance: instance, priority: priority};
-    this._state.hoveredElement.push(element);
-
-    if(this._state.initialHoveredElement.length === 0) { // true only after mouseup
-      this._state.initialHoveredElement.push(element);
-    }
-    else if(this._state.mousemove === true && this._state.mousedown === false) {
-      if(this._state.initialHoveredElement[0].priority > element.priority) {
-        this._state.initialHoveredElement[0] = element;
-      }
-    }
-
-    this._state.mousemove = true;
-    this.dispatch();
-    return element;
-  }
-
-  /**
-   *  Remove a hovered element from the current state
-   *
-   * @param {object} element – output of ToolDispatcher.pushHoveredElement
-   */
-  removeHoveredElement(element) {
-    let index = this._state.hoveredElement.indexOf(element);
-    if (index !== -1) {
-      this._state.hoveredElement.splice(index, 1);
-
-      if(this._state.mousedown === false) {
-        this._state.initialHoveredElement = [];
-      }
-      this.dispatch(); // State has now changed, hence we dispatch...
-    }
-  }
-
-  hoveredElementExistsInRegister(instance) {
-    let found = false;
-    this._state.hoveredElement.forEach((registerEntry) => {
-        if(registerEntry.instance === instance) found = true;
-      });
-    return found;
+  isHovered(element) {
+    return this._state.hoveredElement.indexOf(element);
   }
 
   set canvas(canvas) {
@@ -415,7 +312,7 @@ class ToolDispatcherBlueprint extends Destroyable {
 
   /**
    *
-   * @return {Array}
+   * @return {null|HoveredElement}
    */
   get initialHoveredElement() {
     return this._state.initialHoveredElement;
@@ -459,6 +356,15 @@ class ToolDispatcherBlueprint extends Destroyable {
    */
   get mousemove() {
     return this._state.mousemove;
+  }
+
+  /**
+   * Get the mousedown point
+   *
+   * @return {Point}
+   */
+  get mousedownPoint() {
+    return this._mousedownPoint;
   }
 
 }

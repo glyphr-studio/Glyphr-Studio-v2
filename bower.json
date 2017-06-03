@@ -18,6 +18,6 @@
   ],
   "dependencies": {
     "tooltipster": "^3.3.0",
-    "paper": "^0.9.25"
+    "paper": "^0.11.0"
   }
 }
