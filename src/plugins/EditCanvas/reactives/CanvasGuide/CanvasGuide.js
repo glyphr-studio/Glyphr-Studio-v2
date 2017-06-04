@@ -21,7 +21,7 @@ export default class CanvasGuide extends Destroyable {
    * @param {string} colorHex
    * @param {Number} treshold
    */
-  constructor(paper, unicode, from, to, isVertical=true, colorHex, treshold=8) {
+  constructor(paper, unicode, from, to, isVertical=true, colorHex, treshold=16) {
     super();
 
     this._isVertical = isVertical;
@@ -37,13 +37,15 @@ export default class CanvasGuide extends Destroyable {
     if(isVertical === true) {
       from = from.add(new $.Point(-this._treshold,0));
       to = to.add(new $.Point(this._treshold, 0));
-      this._guide.data.type = "canvas-guide-vertical";
+      this._guide.data.type = "vertical-canvas-guide";
+      this._guide.data.guide = this;
 
       this._tresholdRectangle = new $.Path.Rectangle(from, to);
     } else {
       from = from.add(new $.Point(0,-this._treshold));
       to = to.add(new $.Point(0, this._treshold));
-      this._guide.data.type = "canvas-guide-horizontal";
+      this._guide.data.type = "horizontal-canvas-guide";
+      this._guide.data.guide = this;
 
       this._tresholdRectangle = new $.Path.Rectangle(from, to);
     }
@@ -52,6 +54,8 @@ export default class CanvasGuide extends Destroyable {
 
     this._reactive = new CanvasGuideReactive(paper.view.element, this._tresholdRectangle);
   }
+
+
 
   activate() {
     this._reactive.activate();

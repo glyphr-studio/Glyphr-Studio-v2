@@ -34,6 +34,35 @@ export default class PEnTool extends ToolInterface {
 
       hitResult.segment.selected = true;
     };
+
+    this.addHandles = () => {
+
+    };
+
+    this.snapToHorizontalGuide = (event, dispatcher) => {
+      const segmentHit = dispatcher.initialHoveredElement.instance;
+      const guide = dispatcher.hoveredElement.getByType("horizontal-canvas-guide")[0].instance;
+      segmentHit.segment.point = new Point(segmentHit.segment.point.x, guide.item.position.y);
+
+    };
+
+    this.snapToVerticalGuide = (event, dispatcher) => {
+      const segmentHit = dispatcher.initialHoveredElement.instance;
+      const guide = dispatcher.hoveredElement.getByType("vertical-canvas-guide")[0].instance;
+      segmentHit.segment.point = new Point(guide.item.position.x, segmentHit.segment.point.y);
+
+    };
+
+    this.moveSegment = (event, dispatcher) => {
+      let hitResult = dispatcher.initialHoveredElement.instance;
+      hitResult.segment.point = event.point;
+    };
+
+    this.removeSegment = (event, dispatcher) => {
+      let hitResult = dispatcher.initialHoveredElement.instance;
+      console.warn("shitt")
+      hitResult.segment.remove();
+    }
   }
 
   activate() {

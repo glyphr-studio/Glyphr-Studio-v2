@@ -1,4 +1,5 @@
 import HoveredElement from "./HoveredElement";
+import HoveredElementSelector from "./HoveredElementSelector";
 
 export default class HoveredElementArray {
   /**
@@ -42,11 +43,16 @@ export default class HoveredElementArray {
    * @private
    */
   _determineResult(result) {
-    if (result.segment instanceof Segment && result.segment.isFirst() === true) {
-      return new HoveredElement(result, "first-segment");
-    }
-    else if (result.segment instanceof Segment && result.segment.isLast() === true) {
-      return new HoveredElement(result, "last-segment");
+    if (result.segment instanceof Segment) {
+      let selectors = [];
+      const segment = result.segment;
+
+      if(segment.isFirst() === true) selectors.push("first");
+      if(segment.hasHandles() === true) selectors.push("handles");
+      if(segment.isLast() === true) selectors.push("last");
+      if(segment.selected === true) selectors.push("selected");
+
+      return new HoveredElement(result, selectors.length > 0 ? `segment#${selectors.join(",")}` : `segment`);
     }
     else {
       return new HoveredElement(result, result.item.data.type || result.type);
@@ -118,6 +124,21 @@ export default class HoveredElementArray {
   }
 
   /**
+   * Get first hit
+   * @param {String} type
+   * @return {null|HoveredElement}
+   */
+  getFirstByType(type) {
+    this._hoveredElementBag.forEach((element) => {
+      if (element.type === type) {
+        return element;
+      }
+    });
+
+    return null;
+  }
+
+  /**
    * Get an element by name
    *
    * @param {string} tag
@@ -146,6 +167,7 @@ export default class HoveredElementArray {
 
     this._hoveredElementBag.forEach((element) => {
       if (element.priority > priority) {
+        priority = element.priority;
         result = element;
       }
     });
@@ -191,48 +213,54 @@ export default class HoveredElementArray {
     return this._hoveredElementBag.length;
   }
 
-  /**
-   * Check whether an element matches the target; returns the matched elements
-   * Single element may match multiple times
-   *
-   * @param {"*"|String|Array<String>} target
-   * @return {Array} found matches
-   */
-  testAll(target) {
-    const matches = [];
+  get matchedTypes() {
+    const matchedTypes = [];
 
     this._hoveredElementBag.forEach((element) => {
-      if (element.test(target) === true && matches.indexOf(element) === -1) {
-        matches.push(element);
-      }
+      element.matchedTypes.forEach((type) => {
+        matchedTypes.push(type);
+      })
     });
 
-    return matches
+    return matchedTypes;
   }
 
   /**
    * Check whether the target is similar to current instance; checking is order-sensitive
    *
-   * @param {"*"|Array<String>} target
+   * @param {"*"|String} target
+   * @returns {Boolean}
    */
   equals(target) {
     if (target === "*") {
       return true;
     }
-    else if (Array.isArray(target) === true && target.length !== this.length) {
-      return false;
-    }
-    else if (Array.isArray(target) === true && target.length === this.length) {
-      for (let i = 0; i < target.length; i++) {
-        if (this._hoveredElementBag[i].test(target[i]) === false) {
-          return false;
-        }
-      }
-
+    else if(target === null && this.length === 0) {
       return true;
     }
+    else if(target === null && this.length !== 0) {
+      return false;
+    }
+    /**
+     * "?segment" should be equivalent to both null and "segment"
+     */
+    else if(typeof target === "string" && target.split(" ").length === (target.match(/\?/g) || 0).length && this.length === 0) {
+      return true;
+    }
+    else if(typeof target === "string") {
+      const selector = new HoveredElementSelector(target);
+      let isMatching = false;
+
+      this.matchedTypes.forEach((type) => {
+        if(selector.isMatching(type) === true) {
+          isMatching = true;
+        }
+      });
+
+      return isMatching;
+    }
     else {
-      throw new TypeError(`Expected "*" or Array<String>, got ${typeof target}`);
+      throw new TypeError(`Expected "*" or String, got ${typeof target}`);
     }
   }
 }

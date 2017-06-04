@@ -103,7 +103,6 @@ class ToolDispatcherBlueprint extends Destroyable {
 
 
       this._state.hoveredElement = new HoveredElementArray(paper.project.hitTestAll(event.point, {fill: true, stroke: true, segments: true, tolerance: 8}));
-      this._state.initialHoveredElement = this._state.hoveredElement.highestPriorityElement;
     };
 
     let dispatchOnMouseMove = (event) => {
@@ -132,27 +131,20 @@ class ToolDispatcherBlueprint extends Destroyable {
    * Check whether the target matches current state's keyboardKey
    *
    * @private
-   * @param {"*"|Array<String>} target
+   * @param {"*"|Array<String>} keyboardKey
    * @return {Boolean} target matches current state
    */
-  _matchKeyboardKey(target) {
-    if(target === "*") {
-      return true;
-    }
-    else if(Array.isArray(target) === true && target.length !== this._state.keyboardKey.length) {
+  _matchKeyboardKey(keyboardKey) {
+    if(this._state.keyboardKey.length !== keyboardKey.length) {
       return false;
-    }
-    else if(Array.isArray(target) === true && target.length === this._state.keyboardKey.length) {
-      for(let i=0; i<target.length; i++) {
-        if(target[i] !== this._state.keyboardKey[i]) {
+    } else {
+      for(let i=0; i<keyboardKey.length; i++) {
+        if(this._state.keyboardKey[i] !== keyboardKey[i]) {
           return false;
         }
       }
 
       return true;
-    }
-    else {
-      throw new TypeError(`Expected "*" or Array<String> got ${typeof target}`);
     }
   }
 
@@ -164,15 +156,12 @@ class ToolDispatcherBlueprint extends Destroyable {
     if (this._executingDispatch === true) return;
 
     const stateTemp = this._state;
-    const _this = this;
-
-    this._executingDispatch = true;
     console.time("ToolDispatcher: dispatch");
+
     let dispatched = false;
-
-    // todo: prevent state collision
-
     this._dispatchRegister.forEach((entry, i) => {
+      this._executingDispatch = true;
+
       let entryLength = Object.values(entry).length;
       let registerLength = Object.values(stateTemp).length;
       if (entryLength - 2 !== registerLength) {
@@ -196,14 +185,18 @@ class ToolDispatcherBlueprint extends Destroyable {
         hitArray["initialHoveredElement"] = (this._state.initialHoveredElement === entry.initialHoveredElement);
       }
       else {
-        hitArray["initialHOveredElement"] = this._state.initialHoveredElement.test(entry.initialHoveredElement);
+        hitArray["initialHoveredElement"] = this._state.initialHoveredElement.test(entry.initialHoveredElement);
       }
 
       hitArray["hoveredElement"] = this._state.hoveredElement.equals(entry.hoveredElement);
+
+      if((entry.keyboardKey.length === 0 && entry.keyboardKeyDown === true) || entry.keyboardKey.length > 0 && entry.keyboardKeyDown === false) {
+        console.warn(entry);
+        throw new Error("Dispatch request contradicts itself, please inspect keyboardKey and keyboardKeyDown in the entry logged above.");
+      }
+
       hitArray["keyboardKey"] = this._matchKeyboardKey(entry.keyboardKey);
 
-
-      console.log(JSON.stringify(this._state), JSON.stringify(hitArray));
       if (Object.values(hitArray).indexOf(false) === -1) {
         if (dispatched !== false) {
           console.warn("State collision", i, entry, dispatched.index, dispatched.entry);
@@ -213,8 +206,9 @@ class ToolDispatcherBlueprint extends Destroyable {
         entry.handler(event, this);
       }
     });
-    console.timeEnd("ToolDispatcher: dispatch");
+
     this._executingDispatch = false;
+    console.timeEnd("ToolDispatcher: dispatch");
   }
 
   /**

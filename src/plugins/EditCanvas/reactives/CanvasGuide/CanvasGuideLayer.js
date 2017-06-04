@@ -46,6 +46,7 @@ export default class CanvasGuideLayer extends Destroyable {
       }
 
       path = new $.Path.Line(from, to);
+      path.data.type = "grid-guide";
       path.strokeColor = color;
     };
 
