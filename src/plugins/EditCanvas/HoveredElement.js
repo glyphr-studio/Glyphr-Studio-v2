@@ -9,12 +9,16 @@ export default class HoveredElement {
     'segment#first,last': 509,
     'segment#first,last,selected': 508,
     'segment#first,handles,selected': 506,
-    'segment#last,handles,selected': 506,
+    'segment#handles,selected': 506,
+    'segment#first,handles,last': 506,
+    'segment#first,handles,last,selected': 506,
+    'segment#handles,last,selected': 506,
     'segment#first,selected': 506,
     'segment#last,selected': 506,
     'segment#selected': 506,
     'segment#first,handles': 505,
-    'segment#last,handles': 505,
+    'segment#handles,last': 505,
+    'segment#handles': 504,
     'segment#first': 502,
     'segment#last': 501,
     'segment': 500,
@@ -38,7 +42,7 @@ export default class HoveredElement {
    * @param {String} type
    * @param {Number=} priority
    */
-  constructor(instance, type, priority) {
+  constructor(instance, type) {
     this._instance = instance;
     this._type = type;
     this._rootType = type.split("#")[0];

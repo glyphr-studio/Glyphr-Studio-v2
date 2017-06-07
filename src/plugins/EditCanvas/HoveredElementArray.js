@@ -29,7 +29,7 @@ export default class HoveredElementArray {
       this._hoveredElementBag.push(this._determineResult(result));
 
     } else {
-      throw new TypeError(`Expected Array or HitResult got ${typeof result}`);
+      throw new TypeError(`Expected Array<HitResult> or HitResult got ${typeof result}`);
     }
 
     return this;
@@ -43,10 +43,11 @@ export default class HoveredElementArray {
    * @private
    */
   _determineResult(result) {
-    if (result.segment instanceof Segment) {
+    if (result.type === "segment") {
       let selectors = [];
       const segment = result.segment;
 
+      // note: elements are pushed in alphabetical order
       if(segment.isFirst() === true) selectors.push("first");
       if(segment.hasHandles() === true) selectors.push("handles");
       if(segment.isLast() === true) selectors.push("last");
@@ -122,38 +123,32 @@ export default class HoveredElementArray {
   has(instance) {
     return this._hoveredElementBag.indexOf(instance) !== -1;
   }
-
-  /**
-   * Get first hit
-   * @param {String} type
-   * @return {null|HoveredElement}
-   */
-  getFirstByType(type) {
-    this._hoveredElementBag.forEach((element) => {
-      if (element.type === type) {
-        return element;
-      }
-    });
-
-    return null;
-  }
-
   /**
    * Get an element by name
    *
-   * @param {string} tag
-   * @return {Array} found elements
+   * @param {String} type
+   * @return {Array<HoveredElement>} found elements
    */
   getByType(type) {
     const result = [];
 
     this._hoveredElementBag.forEach((element) => {
-      if (element.type === type) {
+      if (element.type === type || element.rootType === type) {
         result.push(element);
       }
     });
 
     return result;
+  }
+
+  /**
+   * Get first element with a specific type from all matched elements
+   *
+   * @param {String} type
+   * @return {HoveredElement}
+   */
+  getFirstByType(type) {
+    return this.getByType(type)[0];
   }
 
   /**

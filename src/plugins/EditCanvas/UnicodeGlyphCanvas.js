@@ -81,7 +81,9 @@ export default class GlyphCanvas extends CanvasInterface {
         {
           selectedTool: null,
           selectedElement: null,
-          initialHoveredElement: null,
+          downBeforeElement: null,
+          downAfterElement: "*",
+          downMoveElement: null,
           hoveredElement: null,
           keyboardKeyDown: false,
           keyboardKey: [],
@@ -93,7 +95,9 @@ export default class GlyphCanvas extends CanvasInterface {
         {
           selectedTool: "*",
           selectedElement: "*",
-          initialHoveredElement: "*",
+          downBeforeElement: "*",
+          downAfterElement: "*",
+          downMoveElement: null,
           hoveredElement: "*",
           keyboardKeyDown: "*",
           keyboardKey: ["F5"],
@@ -106,7 +110,9 @@ export default class GlyphCanvas extends CanvasInterface {
         {
           selectedTool: "*",
           selectedElement: "*",
-          initialHoveredElement: "*",
+          downBeforeElement: "*",
+          downAfterElement: "*",
+          downMoveElement: null,
           hoveredElement: "*",
           keyboardKeyDown: true,
           keyboardKey: ["KeyT"],
@@ -119,7 +125,9 @@ export default class GlyphCanvas extends CanvasInterface {
         {
           selectedTool: "*",
           selectedElement: "*",
-          initialHoveredElement: "*",
+          downBeforeElement: "*",
+          downAfterElement: "*",
+          downMoveElement: null,
           hoveredElement: "*",
           keyboardKeyDown: true,
           keyboardKey: ["KeyP"],
@@ -131,7 +139,9 @@ export default class GlyphCanvas extends CanvasInterface {
         {
           selectedTool: "panTool",
           selectedElement: null,
-          initialHoveredElement: "*",
+          downBeforeElement: "*",
+          downAfterElement: "*",
+          downMoveElement: null,
           hoveredElement: null,
           keyboardKeyDown: false,
           keyboardKey: [],
@@ -144,7 +154,9 @@ export default class GlyphCanvas extends CanvasInterface {
         {
           selectedTool: "panTool",
           selectedElement: null,
-          initialHoveredElement: "*",
+          downBeforeElement: "*",
+          downAfterElement: "*",
+          downMoveElement: "*",
           hoveredElement: "*",
           keyboardKeyDown: false,
           keyboardKey: [],
@@ -157,7 +169,9 @@ export default class GlyphCanvas extends CanvasInterface {
           // Pan idependently of what is hovered
           selectedTool: "panTool",
           selectedElement: null,
-          initialHoveredElement: "*",
+          downBeforeElement: "*",
+          downAfterElement: "*",
+          downMoveElement: "*",
           hoveredElement: "*",
           keyboardKeyDown: false,
           keyboardKey: [],
@@ -169,7 +183,9 @@ export default class GlyphCanvas extends CanvasInterface {
         {
           selectedTool: "panTool",
           selectedElement: null,
-          initialHoveredElement: "*",
+          downBeforeElement: "*",
+          downAfterElement: "*",
+          downMoveElement: null,
           hoveredElement: null,
           keyboardKeyDown: false,
           keyboardKey: [],
@@ -181,7 +197,9 @@ export default class GlyphCanvas extends CanvasInterface {
         {
           selectedTool: "penTool",
           selectedElement: null,
-          initialHoveredElement: null,
+          downBeforeElement: null,
+          downAfterElement: "*",
+          downMoveElement: null,
           hoveredElement: null,
           keyboardKeyDown: false,
           keyboardKey: [],
@@ -193,7 +211,23 @@ export default class GlyphCanvas extends CanvasInterface {
         {
           selectedTool: "penTool",
           selectedElement: null,
-          initialHoveredElement: "segment",
+          downBeforeElement: null,
+          downAfterElement: "segment",
+          downMoveElement: "*",
+          hoveredElement: "*",
+          keyboardKeyDown: false,
+          keyboardKey: [],
+          mousemove: true,
+          mousedown: true,
+          handler: pEnTool.makeHandlesAfterAddSegment,
+          cursor: "penSquare"
+        },
+        {
+          selectedTool: "penTool",
+          selectedElement: null,
+          downBeforeElement: "segment",
+          downAfterElement: "*",
+          downMoveElement: null,
           hoveredElement: "*",
           keyboardKeyDown: false,
           keyboardKey: [],
@@ -205,7 +239,9 @@ export default class GlyphCanvas extends CanvasInterface {
         {
           selectedTool: "penTool",
           selectedElement: null,
-          initialHoveredElement: "segment",
+          downBeforeElement: "segment",
+          downAfterElement: "*",
+          downMoveElement: "*",
           hoveredElement: "*",
           keyboardKeyDown: false,
           keyboardKey: [],
@@ -217,7 +253,9 @@ export default class GlyphCanvas extends CanvasInterface {
         {
           selectedTool: "penTool",
           selectedElement: null,
-          initialHoveredElement: "segment",
+          downBeforeElement: "segment",
+          downAfterElement: "*",
+          downMoveElement: "*",
           hoveredElement: "?grid-guide ?segment horizontal-canvas-guide",
           keyboardKeyDown: false,
           keyboardKey: [],
@@ -229,7 +267,9 @@ export default class GlyphCanvas extends CanvasInterface {
         {
           selectedTool: "penTool",
           selectedElement: null,
-          initialHoveredElement: "segment",
+          downBeforeElement: "segment",
+          downAfterElement: "*",
+          downMoveElement: "*",
           hoveredElement: "?grid-guide ?segment vertical-canvas-guide",
           keyboardKeyDown: false,
           keyboardKey: [],
@@ -241,7 +281,9 @@ export default class GlyphCanvas extends CanvasInterface {
         {
           selectedTool: "penTool",
           selectedElement: null,
-          initialHoveredElement: null,
+          downBeforeElement: "*",
+          downAfterElement: "*",
+          downMoveElement: null,
           hoveredElement: "?grid-guide ?horizontal-canvas-guide ?vertical-canvas-guide",
           keyboardKeyDown: false,
           keyboardKey: [],
@@ -253,7 +295,9 @@ export default class GlyphCanvas extends CanvasInterface {
         {
           selectedTool: "penTool",
           selectedElement: null,
-          initialHoveredElement: null,
+          downBeforeElement: null,
+          downAfterElement: "*",
+          downMoveElement: null,
           hoveredElement: "segment",
           keyboardKeyDown: false,
           keyboardKey: [],
@@ -265,7 +309,9 @@ export default class GlyphCanvas extends CanvasInterface {
         {
           selectedTool: "penTool",
           selectedElement: null,
-          initialHoveredElement: null,
+          downBeforeElement: null,
+          downAfterElement: "*",
+          downMoveElement: null,
           hoveredElement: "*",
           keyboardKeyDown: true,
           keyboardKey: ["AltLeft"],
@@ -277,7 +323,9 @@ export default class GlyphCanvas extends CanvasInterface {
         {
           selectedTool: "penTool",
           selectedElement: null,
-          initialHoveredElement: "segment",
+          downBeforeElement: "segment",
+          downAfterElement: "*",
+          downMoveElement: null,
           hoveredElement: "*",
           keyboardKeyDown: true,
           keyboardKey: ["AltLeft"],
@@ -285,7 +333,8 @@ export default class GlyphCanvas extends CanvasInterface {
           mousedown: true,
           handler: pEnTool.removeSegment,
           cursor: "penMinus"
-        }
+        },
+
       ];
 
     ToolDispatcher.canvas = canvas;

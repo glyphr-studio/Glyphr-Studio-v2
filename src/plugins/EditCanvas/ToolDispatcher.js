@@ -26,7 +26,9 @@ class ToolDispatcherBlueprint extends Destroyable {
     /**
      * @type {HoveredElement|null}
      */
-    initialHoveredElement: null,
+    downBeforeElement: null,
+    downAfterElement: null,
+    downMoveElement: null,
 
     // todo: fix double when 1. creating point 2. moving on the point
     hoveredElement: new HoveredElementArray(),
@@ -57,7 +59,7 @@ class ToolDispatcherBlueprint extends Destroyable {
     this._paper = paper;
 
     let updateHoveredElementOnMouseMove = (event) => {
-      this._state.hoveredElement = new HoveredElementArray(paper.project.hitTestAll(event.point, {fill: true, stroke: true, segments: true, tolerance: 8}));
+      this._state.hoveredElement = new HoveredElementArray(paper.project.hitTestAll(event.point, {fill: true, stroke: true, handles: true, segments: true, tolerance: 8}));
     };
 
     let dispatchOnKeyDown = (event) => {
@@ -87,9 +89,12 @@ class ToolDispatcherBlueprint extends Destroyable {
       this._state.mousemove = false;
       this._state.mousedown = true;
       this._mousedownPoint = event.point;
-      this._state.initialHoveredElement = this._state.hoveredElement.highestPriorityElement;
+      this._state.downBeforeElement = this._state.hoveredElement.highestPriorityElement;
 
       this.dispatch(event);
+
+      const result = new HoveredElementArray(paper.project.hitTestAll(event.point, {fill: true, stroke: true, handles: true, segments: true, tolerance: 8}));
+      this._state.downAfterElement = result.highestPriorityElement;
     };
 
     let dispatchOnMouseUp = (event) => {
@@ -97,16 +102,22 @@ class ToolDispatcherBlueprint extends Destroyable {
       this._state.mousemove = false;
 
       // Guaranteed that after mouseup initialHoveredElement will be empty
-      this._state.initialHoveredElement = null;
+      this._state.downBeforeElement = null;
+      this._state.downAfterElement = null;
+      this._state.downMoveElement = null;
 
       this.dispatch(event);
 
-
-      this._state.hoveredElement = new HoveredElementArray(paper.project.hitTestAll(event.point, {fill: true, stroke: true, segments: true, tolerance: 8}));
+      this._state.hoveredElement = new HoveredElementArray(paper.project.hitTestAll(event.point, {fill: true, stroke: true, segments: true, handles: true, tolerance: 8}));
     };
 
     let dispatchOnMouseMove = (event) => {
       this._state.mousemove = true;
+
+      if(this._state.mousedown === true && this._state.hoveredElement.highestPriorityElement !== null
+        && (this.downMoveElement === null || this._state.hoveredElement.highestPriorityElement.priority > this._state.downMoveElement.priority)) {
+        this._state.downMoveElement = this._state.hoveredElement.highestPriorityElement;
+      }
 
       this.dispatch(event);
     };
@@ -125,6 +136,74 @@ class ToolDispatcherBlueprint extends Destroyable {
       // this._tool.off("mousedown", mouseDownHandler);
       // this._tool.off("mousemove", mouseDownHandler);
     })
+  }
+
+  /**
+   * Check whether the object is valid
+   *
+   * @param {Object} state
+   * @return {Array|Array<String>}
+   * @private
+   */
+  _validate(state) {
+    let errorMessage = [];
+
+    if(state.selectedTool !== null && typeof state.selectedTool !== "string") {
+      errorMessage.push(`selectedTool must be "*", null or string`);
+    }
+
+    if(state.selectedElement !== null && state.selectedElement !== "*") {
+      errorMessage.push(`selectedElement must be either "*" or null`);
+    }
+
+    if(state.downBeforeElement !== null && typeof state.downBeforeElement !== "string") {
+      errorMessage.push(`downBeforeElement must be "*", null or String`);
+    }
+
+    if(state.downAfterElement !== null && typeof state.downAfterElement !== "string") {
+      errorMessage.push(`downAfterElement must be "*", null or String`);
+    }
+
+    if(state.downMoveElement !== null && typeof state.downMoveElement !== "string") {
+      errorMessage.push(`downMoveElement must be "*", null or String`);
+    }
+
+    if(state.hoveredElement !== null && typeof state.hoveredElement !== "string") {
+      // todo: low pri, check whether the selector is valid
+      errorMessage.push(`hoveredElement must be either "*" or null`);
+    }
+
+    if(Array.isArray(state.keyboardKey) === false) {
+      errorMessage.push("keyboardKey must be Array<String>");
+    } else {
+      state.keyboardKey.forEach((element, i) => {
+        if(typeof element !== "string") {
+          errorMessage.push(`keyboardKey must be Array<string>; expected string at index ${i} but got ${typeof element} instead`);
+        }
+      });
+    }
+
+    if(typeof state.keyboardKeyDown !== "boolean" && state.keyboardKeyDown !== "*") {
+      errorMessage.push(`keyboardKeyDown must be either "*" or boolean`);
+    }
+
+    if(typeof state.mousedown !== "boolean" && state.mousedown !== "*") {
+      errorMessage.push(`mousedown must be either "*" or boolean`);
+    }
+
+    if(typeof state.mousemove !== "boolean" && state.mousemove !== "*") {
+      errorMessage.push(`mousemove must be either "*" or boolean`);
+    }
+
+    if(typeof state.handler !== "function") {
+      errorMessage.push(`handler must be a function`);
+    }
+
+    if(typeof state.cursor !== "string") {
+      errorMessage.push(`cursor must be a string`);
+    }
+
+    return errorMessage;
   }
 
   /**
@@ -178,14 +257,24 @@ class ToolDispatcherBlueprint extends Destroyable {
         "mousemove": entry.mousemove === stateTemp.mousemove || entry.mousemove === "*",
     };
 
-      if(entry.initialHoveredElement === "*") {
-        hitArray["initialHoveredElement"] = true;
+      if(entry.downBeforeElement === "*") {
+        hitArray["downBeforeElement"] = true;
       }
-      else if(this._state.initialHoveredElement === null || entry.initialHoveredElement === null) {
-        hitArray["initialHoveredElement"] = (this._state.initialHoveredElement === entry.initialHoveredElement);
+      else if(this._state.downBeforeElement === null || entry.downBeforeElement === null) {
+        hitArray["downBeforeElement"] = (this._state.downBeforeElement === entry.downBeforeElement);
       }
       else {
-        hitArray["initialHoveredElement"] = this._state.initialHoveredElement.test(entry.initialHoveredElement);
+        hitArray["downBeforeElement"] = this._state.downBeforeElement.test(entry.downBeforeElement);
+      }
+
+      if(entry.downMoveElement === "*") {
+        hitArray["downMoveElement"] = true;
+      }
+      else if(this._state.downMoveElement === null || entry.downMoveElement === null) {
+        hitArray["downMoveElement"] = (this._state.downMoveElement === entry.downMoveElement);
+      }
+      else {
+        hitArray["downMoveElement"] = this._state.downMoveElement.test(entry.downMoveElement);
       }
 
       hitArray["hoveredElement"] = this._state.hoveredElement.equals(entry.hoveredElement);
@@ -258,9 +347,29 @@ class ToolDispatcherBlueprint extends Destroyable {
   /**
    *  An array of states to match against the current state
    *
-   * @param {array} register
+   * @param {Array<String>} register
    */
   set dispatchRegister(register) {
+    let errorMessages = [];
+
+    register.forEach((state, i) => {
+      const validationResult = this._validate(state);
+      if(validationResult.length > 0) {
+        errorMessages.push({
+          validation: validationResult,
+          stateIndex: i
+        });
+      }
+    });
+
+    if(errorMessages.length > 0) {
+      const message = errorMessages.map((msg) => {
+        return `State at index ${msg.stateIndex} is invalid. Found problems are: ${msg.validation.join(", ")};`;
+      }).join("\n");
+
+      throw new Error(message);
+    }
+
     this._dispatchRegister = register;
   }
 
@@ -281,7 +390,9 @@ class ToolDispatcherBlueprint extends Destroyable {
   }
 
   /**
+   * Read-only
    *
+   * @readonly
    * @return {string}
    */
   get selectedTool() {
@@ -289,7 +400,9 @@ class ToolDispatcherBlueprint extends Destroyable {
   }
 
   /**
+   * Read-only
    *
+   * @readonly
    * @return {object}
    */
   get selectedElement() {
@@ -297,64 +410,100 @@ class ToolDispatcherBlueprint extends Destroyable {
   }
 
   /**
+   * Read-only
    *
-   * @return {Array}
+   * @readonly
+   * @return {HoveredElementArray}
    */
   get hoveredElement() {
     return this._state.hoveredElement;
   }
 
   /**
+   * Read-only
    *
+   * @readonly
    * @return {null|HoveredElement}
    */
-  get initialHoveredElement() {
-    return this._state.initialHoveredElement;
+  get downMoveElement() {
+    return this._state.downMoveElement;
   }
 
   /**
+   * Read-only
    *
-   * @return {boolean}
+   * @readonly
+   * @return {null|HoveredElement}
+   */
+  get downBeforeElement() {
+    return this._state.downBeforeElement;
+  }
+
+  /**
+   * Read-only
+   *
+   * @readonly
+   * @return {null|HoveredElement}
+   */
+  get downAfterElement() {
+    return this._state.downAfterElement;
+  };
+
+  /**
+   * Read-only
+   *
+   * @readonly
+   * @return {Boolean}
    */
   get keyboardKeyDown() {
     return this._state.keyboardKeyDown;
   }
 
   /**
+   * Read-only
    *
-   * @return {Array}
+   * @readonly
+   * @return {Array<String>}
    */
   get keyboardKey() {
     return this._state.keyboardKey;
   }
 
   /**
+   * Read-only
    *
-   * @return {boolean}
+   * @readonly
+   * @return {Boolean}
    */
   get mousedown() {
     return this._state.mousedown;
   }
 
   /**
+   * Read-only
    *
-   * @return {boolean}
+   * @readonly
+   * @return {Boolean}
    */
   get mouseup() {
     return this._state.mouseup;
   }
 
   /**
+   * Read-only
    *
-   * @return {boolean}
+   * @readonly
+   * @return {Boolean}
    */
   get mousemove() {
     return this._state.mousemove;
   }
 
   /**
-   * Get the mousedown point
+   * Get the mousedown point;
+   * Read-only
    *
+   * @readonly
    * @return {Point}
    */
   get mousedownPoint() {

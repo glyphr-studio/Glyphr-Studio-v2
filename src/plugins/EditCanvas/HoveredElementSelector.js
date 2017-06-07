@@ -1,5 +1,7 @@
 import Combinatorics from "js-combinatorics";
 
+window.comb = Combinatorics;
+
 export default class HoveredElementSelector {
   _rawSelector;
 
