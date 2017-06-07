@@ -257,6 +257,9 @@ class ToolDispatcherBlueprint extends Destroyable {
         "mousemove": entry.mousemove === stateTemp.mousemove || entry.mousemove === "*",
     };
 
+      /**
+       * this._state.downBeforeElement
+       */
       if(entry.downBeforeElement === "*") {
         hitArray["downBeforeElement"] = true;
       }
@@ -267,6 +270,22 @@ class ToolDispatcherBlueprint extends Destroyable {
         hitArray["downBeforeElement"] = this._state.downBeforeElement.test(entry.downBeforeElement);
       }
 
+      /**
+       * this._state.downAfterElement
+       */
+      if(entry.downAfterElement === "*") {
+        hitArray["downAfterElement"] = true;
+      }
+      else if(this._state.downAfterElement === null || entry.downAfterElement === null) {
+        hitArray["downAfterElement"] = (this._state.downAfterElement === entry.downAfterElement);
+      }
+      else {
+        hitArray["downAfterElement"] = this._state.downAfterElement.test(entry.downAfterElement);
+      }
+
+      /**
+       * this._state.downMoveElement
+       */
       if(entry.downMoveElement === "*") {
         hitArray["downMoveElement"] = true;
       }
